@@ -13,6 +13,9 @@ type Leader = {
   role: string;
 };
 
+// Generated once on module load to bypass browser image caching safely without violating React purity
+const CACHE_BUSTER = Date.now();
+
 const epochDetails: Record<number, { years: string; subtitle: string; description: string }> = {
   0: {
     years: "Late 19th - Early 20th Century",
@@ -41,9 +44,7 @@ export default function LeadershipImage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   
-  // Reference for the story card to enable smooth mobile auto-scrolling
   const storyCardRef = useRef<HTMLDivElement>(null);
-  
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -64,7 +65,6 @@ export default function LeadershipImage() {
     fetchLeaders();
   }, []);
 
-  // Handler to update active index and smoothly scroll to the description on mobile
   const handleSelectLeader = (index: number) => {
     setActiveIndex(index);
     if (window.innerWidth < 1024 && storyCardRef.current) {
@@ -135,11 +135,13 @@ export default function LeadershipImage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
             {leaders.map((leader, index) => {
-              const imageUrl = leader.image_url
+              const rawUrl = leader.image_url
                 ? supabase.storage
                     .from("hierarchical_leadership_photos")
                     .getPublicUrl(leader.image_url).data.publicUrl
                 : "";
+              
+              const imageUrl = rawUrl ? `${rawUrl}?t=${CACHE_BUSTER}` : "";
 
               const isSelected = activeIndex === index;
 
@@ -168,39 +170,12 @@ export default function LeadershipImage() {
                       
                       <div className="w-full h-full rounded-full overflow-hidden relative bg-[#070605]">
                         {imageUrl ? (
-                          <>
-                            {/* Epoch 4 Special: Stacked layered approach to blur the background elements */}
-                            {index === 3 ? (
-                              <>
-                                {/* Layer 1: Blurred Background Image */}
-                                <img
-                                  src={imageUrl}
-                                  alt=""
-                                  aria-hidden="true"
-                                  className="absolute inset-0 w-full h-full object-cover object-center scale-150 filter blur-[4px] opacity-60 pointer-events-none"
-                                />
-                                {/* Layer 2: Clean Focused Foreground Crop on the Leader */}
-                                <img
-                                  src={imageUrl}
-                                  alt={leader.name || "Guardian"}
-                                  className="relative z-10 w-full h-full object-cover object-top scale-[1.35] filter grayscale-[25%] sepia-[15%] group-hover:grayscale-0 group-hover:sepia-0 transition-all duration-700 group-hover:scale-145"
-                                />
-                              </>
-                            ) : (
-                              /* Standard/Other Epochs */
-                              <img
-                                src={imageUrl}
-                                alt={leader.name || "Guardian"}
-                                className={`w-full h-full object-cover filter grayscale-[25%] sepia-[15%] group-hover:grayscale-0 group-hover:sepia-0 transition-all duration-700 group-hover:scale-110 ${
-                                  index === 1 
-                                    ? "object-top scale-[1.25]" /* Epoch 2: Adjusted zoom-out */
-                                    : index === 2 
-                                    ? "object-contain p-1" /* Epoch 3: Fit properly */
-                                    : "object-top"
-                                }`}
-                              />
-                            )}
-                          </>
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
+                            src={imageUrl}
+                            alt={leader.name || "Guardian"}
+                            className="w-full h-full object-cover object-top filter grayscale-[25%] sepia-[15%] group-hover:grayscale-0 group-hover:sepia-0 transition-all duration-700 group-hover:scale-110"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-[9px] font-mono text-gray-500">
                             ARCHIVE
@@ -236,54 +211,54 @@ export default function LeadershipImage() {
           </div>
         </div>
 
-        {/* Expanded Epoch Story Card with ref for mobile auto-scrolling */}
+        {/* Expanded Epoch Story Card */}
         <div ref={storyCardRef}>
           <motion.div
             key={activeIndex}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-3xl p-8 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden"
+            className="relative bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-2xl md:rounded-3xl p-5 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#d07f05]/5 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-900/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-              <div className="lg:col-span-8 space-y-6">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-3.5 py-1 rounded-full font-bold shadow-[0_0_15px_rgba(208,127,5,0.3)]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
+              <div className="lg:col-span-8 space-y-4 md:space-y-6">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="text-[9px] md:text-[10px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-3 py-0.5 md:px-3.5 md:py-1 rounded-full font-bold shadow-[0_0_15px_rgba(208,127,5,0.3)]">
                     {activeLeader.epoch || `Epoch ${activeIndex + 1}`}
                   </span>
-                  <span className="text-xs font-mono text-gray-400 tracking-wider flex items-center space-x-1">
+                  <span className="text-[11px] md:text-xs font-mono text-gray-400 tracking-wider flex items-center space-x-1">
                     <span>⏳</span>
                     <span>{activeEpochInfo.years}</span>
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl md:text-4xl font-serif font-normal text-white mb-2">
+                  <h3 className="text-xl md:text-4xl font-serif font-normal text-white mb-1.5 md:mb-2">
                     {activeLeader.name}
                   </h3>
-                  <p className="text-[#d07f05] text-sm md:text-base font-serif italic tracking-wide">
+                  <p className="text-[#d07f05] text-xs md:text-base font-serif italic tracking-wide">
                     {activeEpochInfo.subtitle}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-[#d07f05]/20">
-                  <p className="text-gray-300 text-sm md:text-base font-light leading-relaxed">
+                <div className="pt-3 md:pt-4 border-t border-[#d07f05]/20">
+                  <p className="text-gray-300 text-xs md:text-base font-light leading-relaxed">
                     {activeEpochInfo.description}
                   </p>
                 </div>
               </div>
 
-              <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[#0e0c0a]/80 border border-[#d07f05]/20 rounded-2xl p-6 text-center shadow-inner">
-                <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05] mb-2">
+              <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[#0e0c0a]/80 border border-[#d07f05]/20 rounded-xl md:rounded-2xl p-4 md:p-6 text-center shadow-inner">
+                <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05] mb-1.5 md:mb-2">
                   Custodianship Status
                 </span>
-                <div className="w-12 h-12 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 flex items-center justify-center text-[#d07f05] mb-3">
-                  <Shield className="w-5 h-5" />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 flex items-center justify-center text-[#d07f05] mb-2 md:mb-3">
+                  <Shield className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
-                <p className="text-xs text-gray-300 font-light leading-relaxed">
+                <p className="text-[11px] md:text-xs text-gray-300 font-light leading-relaxed">
                   Preserved across generations within the foundational memory and written archives of The Werjih Society.
                 </p>
               </div>
