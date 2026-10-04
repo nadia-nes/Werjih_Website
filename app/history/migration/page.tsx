@@ -376,7 +376,7 @@ export default function MigrationPage() {
             href="/" 
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-gray-300 text-xs font-mono tracking-widest uppercase border border-[#333] bg-[#111] hover:bg-[#D66D13] hover:text-black hover:border-[#D66D13] transition-all duration-300 cursor-pointer no-underline shadow-lg"
           >
-            <span>←</span> Return to Home page
+            <span>←</span> Return to Home Chronicle
           </Link>
         </footer>
 

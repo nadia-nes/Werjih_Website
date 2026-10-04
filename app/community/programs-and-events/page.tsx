@@ -251,15 +251,16 @@ export default function ProgramsAndEventsPage() {
           </div>
         </section>
 
-        {/* Return Navigation */}
-        <div className="pt-8 text-center pb-12">
+        
+        {/* FOOTER NAV RETURN */}
+        <footer className="mt-28 text-center pt-10 border-t border-[#222]">
           <Link 
             href="/" 
-            className="inline-flex items-center space-x-3 text-xs font-mono uppercase tracking-[0.25em] text-[#d07f05] hover:text-white transition-colors border-b border-[#d07f05] pb-1"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-gray-300 text-xs font-mono tracking-widest uppercase border border-[#333] bg-[#111] hover:bg-[#D66D13] hover:text-black hover:border-[#D66D13] transition-all duration-300 cursor-pointer no-underline shadow-lg"
           >
-            <span>&larr; Return to Home Archive</span>
+            <span>←</span> Return to Home Chronicle
           </Link>
-        </div>
+        </footer>
 
       </div>
     </motion.div>

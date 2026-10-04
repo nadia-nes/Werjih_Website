@@ -193,15 +193,16 @@ export default function MemorialPage() {
         </button>
       </div>
 
-      {/* Return to Home Page Boxed Button */}
-      <div className="max-w-4xl mx-auto mt-12 text-center">
-        <Link
-          href="/"
-          className="inline-block px-8 py-3 bg-[#141210] border border-[#D97706]/40 text-[#D97706] font-mono text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-[#D97706] hover:text-black transition-all shadow-md"
-        >
-          &larr; Return to Home Page
-        </Link>
-      </div>
+      {/* FOOTER NAV RETURN */}
+<footer className="mt-28 text-center pt-10 border-t border-[#222]">
+  <Link 
+    href="/" 
+    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-xs font-mono tracking-widest uppercase border border-[#d07f05]/40 bg-[#14100c] hover:bg-[#d07f05] hover:text-black hover:border-[#d07f05] transition-all duration-300 cursor-pointer no-underline shadow-lg"
+  >
+    <span>←</span> Return to Home Chronicle
+  </Link>
+</footer>
+
 
       {/* Interactive Modal Popup */}
       <AnimatePresence>
