@@ -55,7 +55,7 @@ export default function ProgramsAndEventsPage() {
     fetchEvents();
   }, []);
 
-  const fanCards = events.slice(0, 5);
+  const fanCards = events.slice(0, 10);
 
   return (
     <motion.div 

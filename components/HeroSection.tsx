@@ -206,13 +206,13 @@ export default function HeroSection({
             initial={{ opacity: 0, filter: "blur(10px)", y: 15 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
-            className="relative max-w-5xl w-full mx-auto rounded-3xl overflow-hidden mb-8 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_25px_70px_rgba(0,0,0,0.95)] p-8 md:p-12 backdrop-blur-md"
+            className="relative max-w-5xl w-full mx-auto rounded-3xl overflow-hidden mb-8 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_25px_70px_rgba(0,0,0,0.95)] p-6 sm:p-12 backdrop-blur-md"
           >
             {/* Subtle corner accents */}
             <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
 
-            {/* Crisp Pure White Title with Amber-Gold "WERJIH" Accent */}
+            {/* Responsive Clean Title Layout */}
             <motion.h1 
               initial="hidden"
               animate="visible"
@@ -223,47 +223,39 @@ export default function HeroSection({
                   transition: { staggerChildren: 0.08, delayChildren: 0.15 }
                 }
               }}
-              className="text-3xl sm:text-5xl md:text-6xl font-serif tracking-tight leading-[1.2] text-center text-white"
+              className="text-2xl sm:text-4xl md:text-6xl font-serif tracking-tight leading-[1.3] text-center text-white"
             >
-              {/* Inside */}
-              <span className="inline-block overflow-hidden mr-3">
+              {/* Top line on mobile: Inside THE */}
+              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
-                  className="inline-block font-light text-white"
+                  className="font-light text-white"
                 >
                   Inside
                 </motion.span>
-              </span>
-
-              {/* THE */}
-              <span className="inline-block overflow-hidden mr-3">
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
-                  className="inline-block font-light text-white"
+                  className="font-light text-white"
                 >
                   THE
                 </motion.span>
-              </span>
 
-              {/* WERJIH (Brilliant Amber-Gold Gradient Accent) */}
-              <span className="inline-block overflow-hidden mr-3 relative">
+                {/* WERJIH (Earthy Brownish-Amber Gradient Accent) */}
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: "easeOut" } } }}
-                  className="inline-block italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] via-[#f59e0b] to-[#d97706] drop-shadow-[0_4px_20px_rgba(245,158,11,0.4)] px-2"
+                  className="italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#b47525] via-[#d9822b] to-[#915412] drop-shadow-[0_4px_20px_rgba(180,117,37,0.35)] px-1 sm:px-2"
                 >
                   WERJIH
                 </motion.span>
-              </span>
 
-              {/* World */}
-              <span className="block sm:inline-block overflow-hidden mt-1 sm:mt-0">
+                {/* World */}
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
-                  className="inline-block font-light text-white"
+                  className="font-light text-white"
                 >
                   World
                 </motion.span>
-              </span>
+              </div>
             </motion.h1>
           </motion.div>
 
@@ -279,7 +271,7 @@ export default function HeroSection({
 
             <div className="relative px-8 py-7">
               <p className="text-[#d4cbb8]/90 text-base md:text-lg font-light leading-relaxed tracking-wide text-center">
-                Unveiling centuries of history, resilience, and trade roots. Journey through the ancestral legacy, culture, and documented chapters of the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] via-[#f59e0b] to-[#d97706] font-normal italic">WERJIH</span> people.
+                Unveiling centuries of history, resilience, and trade roots. Journey through the ancestral legacy, culture, and documented chapters of the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b47525] via-[#d9822b] to-[#915412] font-normal italic">WERJIH</span> people.
               </p>
             </div>
           </motion.div>
@@ -319,7 +311,7 @@ export default function HeroSection({
 
         </motion.div>
 
-        {/* Right-Side Slide-In Transmission Panel (Pauses auto-collapse on hover) */}
+        {/* Right-Side Slide-In Transmission Panel */}
         {isCallOpen && (
           <motion.div 
             initial={{ opacity: 0, x: 50, scale: 0.95 }}
