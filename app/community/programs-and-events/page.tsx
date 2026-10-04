@@ -130,7 +130,7 @@ export default function ProgramsAndEventsPage() {
               To the <strong>Werji diaspora</strong>, thank you. You are far from the land, yet you never stopped carrying it in your hearts. You gave your support, your resources, your encouragement and your belief when this was still only an idea. Distance did not make you forget. It made you hold on tighter. This book belongs to you as much as to those who stayed.
             </p>
             <p>
-              What we dreamed of has become real. The first part is a <strong>336-page book in Amharic</strong> that tells of the golden age of the Werji people, their struggles and their trade, the Ulamas remembered in poetry, and the heroes, merchants and well-known figures who carried our name. People who had only heard fragments saw the names of their ancestors printed on a page. Elders wept. Young people asked, &ldquo;Is this really us?&rdquo; And the answer was yes: we existed, we mattered, and we built.
+              What we dreamed of has become real. The first part is a <strong>336-page book in Amharic</strong> that tells of the golden age of the Werji people, their struggles and their trade, the Ulamas remembered in poetry, and the heroes, merchants and well known figures who carried our name. People who had only heard fragments saw the names of their ancestors printed on a page. Elders wept. Young people asked, &ldquo;Is this really us?&rdquo; And the answer was yes: we existed, we mattered, and we built.
             </p>
           </div>
         </section>

@@ -15,7 +15,7 @@ export default function MarriageTraditionPage() {
       num: "02",
       title: "The Meeting of the Two Fathers",
       amharic: "የሁለት አባት መገናኛ",
-      content: `The bride's family prepares an intimate feast, welcoming close relatives, uncles, and aunts. The groom's father—or a designated paternal representative—arrives alongside key elders. They are received with deep hospitality, sharing traditional Anababo bread with Deka sauce and coffee, formally cementing family ties before setting the engagement ring date.`,
+      content: `The bride's family prepares an intimate feast, welcoming close relatives, uncles, and aunts. The groom's father or a designated paternal representative—arrives alongside key elders. They are received with deep hospitality, sharing traditional Anebabero bread with Deka sauce and coffee, formally cementing family ties before setting the engagement ring date.`,
       verse: null
     },
     {
@@ -43,7 +43,7 @@ export default function MarriageTraditionPage() {
       num: "06",
       title: "The Groom's House Preparation",
       amharic: "የሙሽራው ቤት ስነስርዓት",
-      content: `At the groom's household, female relatives known as Kuli (sisters and aunts) prepare traditional dishes like Chuko and injera, arriving with joyous songs and ululations. The groom undergoes his own preparation and nail-cutting ritual while surrounded by his groomsmen and family.`,
+      content: `At the groom's household, female relatives known as Kuli (sisters and aunts) prepare traditional dishes like Chuko and injera, arriving with joyous songs and ululations. The groom undergoes his own preparation and nail cutting ritual while surrounded by his groomsmen and family.`,
       verse: "«እልል በይ ወፌ እልል በይ አሞራ ከእከለሊት... ኦ ኡስኮባይ እከሊት ዘበናይ»"
     },
     {

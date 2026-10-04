@@ -123,7 +123,7 @@ export default function MemorialPage() {
             The Red Terror and the Silence of Grief (1969 E.C.)
           </h2>
           <p className="mb-4 text-xs md:text-sm leading-relaxed">
-            As students and youth rose in passionate protest in 1969 E.C., the Derg&apos;s state machinery retaliated with calculated, brutal terror. The brightest minds of the Werjih generation scholars, dreamers, and future leaders—were snatched away.
+            As students and youth rose in passionate protest in 1969 E.C., the Derg&apos;s state machinery retaliated with calculated, brutal terror. The brightest minds of the Werjih generation scholars, dreamers, and future leaders were snatched away.
           </p>
           <p className="mb-4 text-xs md:text-sm leading-relaxed">
             The cruelty was compounded by silence. Parents were forbidden from mourning openly. Many never discovered where their children were buried or how they drew their final breath. 

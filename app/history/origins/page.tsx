@@ -2,16 +2,53 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+interface OldMap {
+  id: number;
+  title?: string;
+  description?: string;
+  'image-url'?: string;
+}
 
 export default function OriginsPage() {
   const [expandedCards, setExpandedCards] = useState<{ [key: string]: boolean }>({});
+  const [maps, setMaps] = useState<OldMap[]>([]);
+  const [loadingMaps, setLoadingMaps] = useState(false);
 
   const toggleCard = (cardKey: string) => {
+    if (cardKey === 'card6' && maps.length === 0) {
+      fetchMaps();
+    }
     setExpandedCards(prev => ({
       ...prev,
       [cardKey]: !prev[cardKey]
     }));
   };
+
+  async function fetchMaps() {
+    setLoadingMaps(true);
+    try {
+      const { data, error } = await supabase
+        .from('old-maps')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching from old-maps:', error.message);
+      } else if (data) {
+        setMaps(data);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    } finally {
+      setLoadingMaps(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#070707] text-[#c5c5c5] selection:bg-[#D66D13] selection:text-black font-sans relative">
@@ -39,7 +76,7 @@ export default function OriginsPage() {
           
           <div className="max-w-2xl mx-auto border-t border-b border-[#222] py-6 my-6">
             <p className="text-sm md:text-base text-gray-400 font-light leading-relaxed italic">
-              Before written history, there was a word—and the word already explained everything.
+              Before written history, there was a word and the word already explained everything.
             </p>
           </div>
         </header>
@@ -67,7 +104,7 @@ export default function OriginsPage() {
                 </div>
 
                 <p className="text-sm md:text-base text-gray-300 font-light leading-relaxed">
-                  How &quot;Tigri-Werji&quot; defines a trade-bound identity and why they speak the languages of the road.
+                  How &quot;Tigri-Werjih&quot; defines a trade bound identity and why they speak the languages of the road.
                 </p>
 
                 <div className="pt-1">
@@ -80,9 +117,9 @@ export default function OriginsPage() {
                   
                   {expandedCards['card1'] && (
                     <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                      <p><strong className="text-white">Tigri-Werji:</strong> Long before written chronicles, identity and occupation were one. &quot;Tigri&quot; originates from the Arabic word for merchant. Put simply, <strong className="text-white">Tigri-Werji</strong> means <em className="text-[#D66D13]">&quot;merchant of Werji.&quot;</em> To be Werji was to be a trader—building life out of routes, cross-border commerce, and movement rather than stone walls.</p>
+                      <p><strong className="text-white">Tigri Werjih:</strong> Long before written chronicles, identity and occupation were one. &quot;Tigri&quot; originates from the Arabic word for merchant. Put simply, <strong className="text-white">Tigri-Werjih</strong> means <em className="text-[#D66D13]">&quot;merchant of Werji.&quot;</em> To be Werjih was to be a trader building life out of routes, cross-border commerce, and movement rather than stone walls.</p>
                       
-                      <p><strong className="text-white">A People Without a Single Bound Language:</strong> This explains why the Werji are uniquely one of the only ethnic groups in Ethiopia without a standalone native tongue. Those who make their living on the open road learn whatever language the road requires. Today, Werji communities fluently speak <strong className="text-white">Afaan Oromoo</strong> and <strong className="text-white">Amharic</strong>, holding faith, name, and collective memory as their true core.</p>
+                      <p><strong className="text-white">A People Without a Single Bound Language:</strong> This explains why the Werjih are uniquely one of the only ethnic groups in Ethiopia without a standalone native tongue. Those who make their living on the open road learn whatever language the road requires. Today, Werjih communities fluently speak <strong className="text-white">Amharic</strong> and <strong className="text-white">Affan Oromo</strong>, holding faith, name, and collective memory as their true core.</p>
                     </div>
                   )}
                 </div>
@@ -115,9 +152,9 @@ export default function OriginsPage() {
                   
                   {expandedCards['card2'] && (
                     <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                      <p>Ask Werji elders where their ancestors originated, and two narratives emerge, carried forward side by side rather than argued into one:</p>
+                      <p>Ask Werjih elders where their ancestors originated, and two narratives emerge, carried forward side by side rather than argued into one:</p>
                       <ul className="list-disc pl-5 space-y-2 text-gray-300">
-                        <li><strong className="text-white">The Northern Branch:</strong> Traces back north to Tigray (preserving the distinct name <em className="text-[#D66D13]">Tigray-Werji</em>).</li>
+                        <li><strong className="text-white">The Northern Branch:</strong> Traces back north to Tigray (preserving the distinct name <em className="text-[#D66D13]">Tigray-Werjih</em>).</li>
                         <li><strong className="text-white">The Eastern Branch:</strong> Traces east to the ancient plateau of Harar (distinctly separating themselves from a related trading community called the <em className="text-[#D66D13]">Tegri</em> or <em className="text-[#D66D13]">Warjih Tegri</em>).</li>
                       </ul>
                       <p>Oral history points to the exact historical intersection: the <strong className="text-white">early 16th century</strong> in the highlands of north Shewa. Two historical currents meeting to form a single, enduring identity.</p>
@@ -153,9 +190,9 @@ export default function OriginsPage() {
                   
                   {expandedCards['card3'] && (
                     <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                      <p>Long before Islam swept across the wider Horn of Africa, the Werji had already made it their foundational faith. Historical and academic accounts place their conversion as early as the <strong className="text-white">8th century</strong>, placing them inside the powerful orbit of the <strong className="text-white">Sultanate of Shewa</strong> by the 9th century.</p>
+                      <p>Long before Islam swept across the wider Horn of Africa, the Werjih had already made it their foundational faith. Historical and academic accounts place their conversion as early as the <strong className="text-white">8th century</strong>, placing them inside the powerful orbit of the <strong className="text-white">Sultanate of Shewa</strong> by the 9th century.</p>
                       
-                      <p>Alongside the ancient Gebel people (ancestors of the Argobba), the Werji carried Semitic language elements, faith, and high-altitude custom down from the Harari plateau directly into the Shewa plains—weaving a cultural thread that outlived regional kingdoms.</p>
+                      <p>Alongside the ancient Gebel people (ancestors of the Argobba), the Werji carried Semitic language elements, faith, and high altitude custom down from the Harari plateau directly into the Shewa plains weaving a cultural thread that outlived regional kingdoms.</p>
                     </div>
                   )}
                 </div>
@@ -188,9 +225,9 @@ export default function OriginsPage() {
                   
                   {expandedCards['card4'] && (
                     <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                      <p><strong className="text-white">Defended Corridors:</strong> By the 19th century, Werji trade networks controlled critical passages through the Awash valley, reaching west toward the Kingdom of Ennarea, the court of King Aba Jifar in Jimma, and Agaro. Trade was never a side job; it was the vessel that carried survival across turbulent centuries.</p>
+                      <p><strong className="text-white">Defended Corridors:</strong> By the 19th century, Werjih trade networks controlled critical passages through the Awash valley, reaching west toward the Kingdom of Ennarea, the court of King Aba Jifar in Jimma, and Agaro. Trade was never a side job; it was the vessel that carried survival across turbulent centuries.</p>
                       
-                      <p><strong className="text-white">Structural Political Influence:</strong> In Gibe-region kingdoms, the position of <em className="text-[#D66D13]">nagadras</em> (chief of trade and markets)—often doubling as provincial governors—was entrusted to master merchants. Werji traders stepped naturally into these roles because commerce was their lived legacy.</p>
+                      <p><strong className="text-white">Structural Political Influence:</strong> In Gibe region kingdoms, the position of <em className="text-[#D66D13]">nagadras</em> (chief of trade and markets) often doubling as provincial governors was entrusted to master merchants. Werjih traders stepped naturally into these roles because commerce was their lived legacy.</p>
                     </div>
                   )}
                 </div>
@@ -236,7 +273,7 @@ export default function OriginsPage() {
                   
                   {expandedCards['card5'] && (
                     <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                      <p><strong className="text-white">Population Scale:</strong> Ethiopian census tracking places the Werji population between roughly <strong className="text-white">13,000 and 20,500 people</strong> (with <strong className="text-white">20,536</strong> logged in the 1994 census). A striking reminder that immense historical footprint does not require massive headcounts.</p>
+                      <p><strong className="text-white">Population Scale:</strong> Ethiopian census tracking places the Werjih population between roughly <strong className="text-white">13,000 and 20,500 people</strong> (with <strong className="text-white">20,536</strong> logged in the 1994 census). A striking reminder that immense historical footprint does not require massive headcounts.</p>
                       
                       <p><strong className="text-white">Where They Reside Today:</strong></p>
                       <ul className="list-disc pl-5 space-y-2 text-gray-300">
@@ -251,7 +288,7 @@ export default function OriginsPage() {
               </div>
             </div>
 
-            {/* Card 6 */}
+            {/* Card 6 - DYNAMIC SUPABASE MAPS */}
             <div className="relative group">
               <div className="absolute -left-[31px] md:-left-[47px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#070707] border-2 border-[#D66D13] group-hover:bg-[#D66D13] transition-all duration-300 shadow-[0_0_10px_rgba(214,109,19,0.3)]" />
               
@@ -278,32 +315,46 @@ export default function OriginsPage() {
                   {expandedCards['card6'] && (
                     <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
                       <p className="text-center text-[#e68a33] italic">
-                        &quot;Before Danu, before Ture Waro, before Addis Ababa took its name from a flower: two horizons, one people, and a name that means merchant.&quot;
+                        &quot;Before Danu, before Turio Wario, before Addis Ababa took its name from a flower: two horizons, one people, and a name that means merchant.&quot;
                       </p>
 
-                      <div className="rounded-xl overflow-hidden border border-[#222] bg-[#0c0c0c] p-2">
-                        <img 
-                          src="origin-pictures/IMAGE 2026-08-13 20:06:26.jpg" 
-                          alt="Awash Valley & Gibe Trade Routes" 
-                          onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} 
-                          className="w-full h-auto rounded-lg object-cover"
-                        />
-                        <p className="text-[11px] text-gray-400 text-center mt-2 font-mono">
-                          Figure 2.1: Reconstructed 19th-century trade route corridor connecting the Awash Valley to Jimma and Ennarea.
-                        </p>
-                      </div>
-
-                      <div className="rounded-xl overflow-hidden border border-[#222] bg-[#0c0c0c] p-2 mt-4">
-                        <img 
-                          src="origin-pictures/IMAGE 2026-08-13 20:10:52.jpg" 
-                          alt="Shewa Sultanate Archives" 
-                          onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} 
-                          className="w-full h-auto rounded-lg object-cover"
-                        />
-                        <p className="text-[11px] text-gray-400 text-center mt-2 font-mono">
-                          Figure 2.2: Primary medieval reference documentation tracking 8th-to-9th century Islamic trading settlements in the highlands.
-                        </p>
-                      </div>
+                      {loadingMaps ? (
+                        <div className="text-center py-8 text-xs font-mono tracking-widest text-[#D66D13]">
+                          LOADING ARCHIVED MAPS FROM SUPABASE...
+                        </div>
+                      ) : maps.length === 0 ? (
+                        <div className="text-center py-8 text-xs font-mono text-gray-400">
+                          No maps found in the &apos;old-maps&apos; database table yet.
+                        </div>
+                      ) : (
+                        <div className="space-y-6 mt-4">
+                          {maps.map((map) => {
+                            const imageUrl = map['image-url'];
+                            return (
+                              <div key={map.id} className="rounded-xl overflow-hidden border border-[#222] bg-[#0c0c0c] p-3">
+                                {imageUrl ? (
+                                  <div className="flex justify-center bg-black/40 rounded-lg p-2 overflow-hidden">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img 
+                                      src={imageUrl} 
+                                      alt={map.title || 'Historical Map Archive'} 
+                                      className="max-h-80 w-auto rounded-md object-contain shadow-md"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="py-6 text-center text-xs font-mono text-gray-500">
+                                    [Image URL missing for this record]
+                                  </div>
+                                )}
+                                <p className="text-[11px] text-gray-400 text-center mt-3 font-mono">
+                                  <strong className="text-white uppercase tracking-wider">{map.title || 'Historical Map'}</strong>
+                                  {map.description && <span className="block mt-1 text-gray-400/80">{map.description}</span>}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

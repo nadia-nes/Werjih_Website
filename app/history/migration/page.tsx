@@ -180,7 +180,7 @@ export default function MigrationPage() {
                 {expandedCards['era4'] && (
                   <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
                     <p>Centuries of regional conflict destabilized borders, opening the door for Oromo northward migration into lands previously held by groups like the Werji. While many local communities assimilated, adopting Afaan Oromoo and blending into the social fabric, the Werji retained their distinct ethnic core.</p>
-                    <p>They adopted Afaan Oromoo and Amharic as languages of the road, but preserved their memory—anchored in their historic hometown of <strong className="text-white">Daleti</strong>, Shewa.</p>
+                    <p>They adopted Amharic and Afaan Oromoo as languages of the road, but preserved their memoryanchored in their historic hometown of <strong className="text-white">Daleti</strong>, Shewa.</p>
                   </div>
                 )}
               </div>
@@ -284,7 +284,7 @@ export default function MigrationPage() {
                 
                 {expandedCards['era7'] && (
                   <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                    <p>When the imperial court relocated—first to Entoto under Empress Taytu, then to the newly founded capital of <strong className="text-white">Addis Ababa</strong>—Werji communities farming and trading on those lands were absorbed by urban growth.</p>
+                    <p>When the imperial court relocated first to Entoto under Empress Taytu, then to the newly founded capital of <strong className="text-white">Addis Ababa</strong>—Werji communities farming and trading on those lands were absorbed by urban growth.</p>
                     <p>82 Werji families on Entoto were pressed into royal service, while those refusing were displaced to Yerer Balo as the capital expanded over community land.</p>
                   </div>
                 )}
@@ -318,7 +318,7 @@ export default function MigrationPage() {
                 
                 {expandedCards['era8'] && (
                   <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-4 shadow-inner">
-                    <p>Following Ture Waro’s assassination at Niggad, the Werji population split along profound strategic lines:</p>
+                    <p>Following Turio Warios assassination at Niggad, the Werji population split along profound strategic lines:</p>
                     <ul className="list-disc pl-5 space-y-2 text-gray-300">
                       <li><strong className="text-white">Northern Shewa Werji</strong> (Niggad, Sanzakba, Danu, Karsa, etc.) chose economic resistance, rerouting trade away from central markets toward <strong className="text-white">Sudan and Yemen</strong>.</li>
                       <li><strong className="text-white">Southern/Southwestern Werji</strong> (Salale) chose continued integration with the central economy, building security through internal community cohesion.</li>

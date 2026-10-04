@@ -187,7 +187,7 @@ export default function TimelinePage() {
                     
                     {expandedCards['card3'] && (
                       <div className="mt-4 p-5 rounded-r-xl bg-[#111] border-l-2 border-[#D66D13] text-gray-300 font-serif text-sm leading-relaxed space-y-3 shadow-inner">
-                        <p><strong className="text-white">Detailed Record:</strong> As Muslim power consolidated across the Horn, the Werji stood with it—allied with the Ifat Sultanate during its rise, and subsequently with the Adal Sultanate during the protracted Ethiopian–Adal War.</p>
+                        <p><strong className="text-white">Detailed Record:</strong> As Muslim power consolidated across the Horn, the Werji stood with it—allied with the Ifat Sultanate during its rise, and subsequently with the Adal Sultanate during the protracted Ethiopian Adal War.</p>
                       </div>
                     )}
                   </div>
