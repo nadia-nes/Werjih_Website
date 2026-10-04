@@ -1,256 +1,346 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+type Child = { label: string; href: string };
+type Item = { label: string; href?: string; children?: Child[] };
 
-  const closeAll = () => {
-    setMobileMenuOpen(false);
+const LEFT: Item[] = [
+  { label: 'Home', href: '/' },
+  {
+    label: 'History',
+    children: [
+      { label: 'Origins of the Werji People', href: '/history/origins' },
+      { label: 'Migration History', href: '/history/migration' },
+      { label: 'Historical Timeline', href: '/history/timeline' },
+    ],
+  },
+  {
+    label: 'Culture',
+    children: [
+      { label: 'Traditional Clothing', href: '/culture/clothing' },
+      { label: 'Food & Cuisine', href: '/culture/cuisine' },
+      { label: 'Music & Heritage', href: '/culture/music' },
+      { label: 'Marriage Tradition', href: '/culture/marriage-tradition' },
+    ],
+  },
+];
+
+const RIGHT: Item[] = [
+  {
+    label: 'Community',
+    children: [
+      { label: 'Programs & Events', href: '/community/programs-and-events' },
+      { label: 'Vanguard of Islam', href: '/community/vanguard-of-islam' },
+    ],
+  },
+  { label: 'Memorial', href: '/memorial' },
+  { label: 'Archive', href: '/archive' },
+];
+
+const MOBILE_ORDER = [...LEFT, ...RIGHT];
+
+export default function Navbar() {
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [, startTransition] = useTransition();
+  const pathname = usePathname() ?? '';
+
+  // Close mobile drawer seamlessly on route change via transition
+  useEffect(() => {
+    startTransition(() => {
+      setMobileOpen(false);
+    });
+  }, [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  const isActive = (item: Item): boolean => {
+    if (item.href) {
+      return item.href === '/' ? pathname === '/' : pathname === item.href || pathname.startsWith(item.href + '/');
+    }
+    return !!item.children?.some((c) => pathname === c.href);
   };
 
-  const isActive = (path: string) => pathname === path;
-  const isParentActive = (prefix: string) => pathname?.startsWith(prefix);
+  const childActive = (href: string): boolean => pathname === href;
+
+  const DesktopItem = ({ item }: { item: Item }) => {
+    const active = isActive(item);
+
+    const labelContent = (
+      <span className="relative inline-flex items-center gap-2 px-3.5 py-2">
+        <span
+          className={`text-[11px] font-semibold uppercase tracking-[0.25em] transition-colors duration-300 ${
+            active ? 'text-[#fdf6ec]' : 'text-[#c8b79b] group-hover:text-[#fdf6ec]'
+          }`}
+        >
+          {item.label}
+        </span>
+
+        {item.children && (
+          <svg
+            viewBox="0 0 10 6"
+            className="h-2 w-2.5 text-[#d07f05] transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M1 1l4 4 4-4" />
+          </svg>
+        )}
+
+        <span
+          aria-hidden
+          className={`absolute inset-x-2 -bottom-1 h-0.5 origin-center rounded-full bg-gradient-to-r from-transparent via-[#f0a024] to-transparent transition-all duration-500 ease-out ${
+            active
+              ? 'scale-x-100 opacity-100 shadow-[0_0_14px_3px_rgba(240,160,36,0.6)]'
+              : 'scale-x-0 opacity-0 group-hover:scale-x-75 group-hover:opacity-70'
+          }`}
+        />
+      </span>
+    );
+
+    return (
+      <li className="group relative">
+        {item.href ? (
+          <Link
+            href={item.href}
+            aria-current={active ? 'page' : undefined}
+            className="block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]/60"
+          >
+            {labelContent}
+          </Link>
+        ) : (
+          <>
+            <button
+              type="button"
+              aria-haspopup="menu"
+              className="block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]/60"
+            >
+              {labelContent}
+            </button>
+
+            <div className="invisible absolute left-1/2 top-full z-50 w-80 -translate-x-1/2 translate-y-3 pt-2 opacity-0 transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <div className="relative overflow-hidden rounded-2xl border border-[#d07f05]/30 bg-[#0c0806]/95 p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
+                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#d07f05]/10 blur-2xl pointer-events-none" />
+                
+                <div className="relative flex flex-col gap-1">
+                  {item.children!.map((c) => {
+                    const isChildActive = childActive(c.href);
+                    return (
+                      <Link
+                        key={c.href}
+                        href={c.href}
+                        aria-current={isChildActive ? 'page' : undefined}
+                        className={`group/link relative flex items-center justify-between rounded-xl px-4 py-3 text-[13px] tracking-wide transition-all duration-300 ${
+                          isChildActive
+                            ? 'bg-gradient-to-r from-[#d07f05]/20 to-transparent text-[#fdf6ec] font-medium'
+                            : 'text-[#c8b79b] hover:bg-white/[0.04] hover:text-[#fdf6ec] hover:translate-x-1'
+                        }`}
+                      >
+                        <span className="relative z-10 flex items-center gap-2.5">
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                              isChildActive ? 'bg-[#f0a024] shadow-[0_0_8px_#f0a024]' : 'bg-[#d07f05]/40 group-hover/link:bg-[#f0a024]'
+                            }`}
+                          />
+                          {c.label}
+                        </span>
+
+                        {isChildActive && (
+                          <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-[#f0a024] shadow-[0_0_10px_#f0a024]" />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </li>
+    );
+  };
 
   return (
-    <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-md py-3 sm:py-5 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-        
-        {/* Main 3D Floating Glass Navigation Shell */}
-        <nav className="w-full mx-auto flex items-center justify-between px-4 sm:px-8 h-20 sm:h-24 rounded-2xl bg-gradient-to-b from-[#1c140d] via-[#120d09] to-[#0a0705] backdrop-blur-2xl border border-[#d07f05]/40 shadow-[0_20px_50px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-visible">
-          
-          {/* Subtle Ambient Top Rim Light */}
-          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#d07f05]/60 to-transparent" />
+    <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5 transition-all duration-500">
+      <div className="mx-auto max-w-7xl">
+        <nav
+          aria-label="Main"
+          className={`relative grid grid-cols-[auto_1fr_auto] items-center rounded-2xl border px-4 transition-all duration-500 md:grid-cols-[1fr_auto_1fr] sm:px-8 ${
+            scrolled
+              ? 'h-16 border-[#d07f05]/35 bg-[#0a0705]/90 shadow-[0_16px_50px_rgba(0,0,0,0.8)] backdrop-blur-2xl'
+              : 'h-20 border-[#d07f05]/20 bg-[#0d0906]/70 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl'
+          }`}
+        >
+          <span className="pointer-events-none absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#d07f05]/60 to-transparent" />
 
-          {/* MOBILE LOGO */}
-          <div className="flex md:hidden items-center">
-            <Link href="/" onClick={closeAll} className="font-serif tracking-widest leading-none">
-              <span className="block text-[8px] text-[#d07f05] font-sans tracking-[0.3em] uppercase">THE TIGRI</span>
-              <span className="block text-sm font-bold text-[#f4e8d1] tracking-[0.15em] uppercase">WERJIHS</span>
-            </Link>
-          </div>
-
-          {/* DESKTOP LEFT SECTION: Home, History, Culture */}
-          <ul className="hidden md:flex items-center space-x-4 lg:space-x-6 text-[11px] font-medium tracking-[0.2em] text-[#d8c5a8] relative z-20">
-            <li>
-              <Link 
-                href="/" 
-                className={`px-3 py-2 rounded-xl transition-all duration-300 inline-flex items-center gap-2 ${
-                  isActive('/') && pathname === '/' 
-                    ? 'bg-[#1e140c] text-[#f4e8d1] border border-[#d07f05]/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(208,127,5,0.15)]' 
-                    : 'hover:text-[#f4e8d1] hover:-translate-y-0.5'
-                }`}
-              >
-                <span>HOME</span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isActive('/') && pathname === '/' ? 'bg-[#d07f05] shadow-[0_0_8px_#d07f05] scale-125' : 'bg-transparent'}`} />
-              </Link>
-            </li>
-            
-            {/* History Dropdown */}
-            <li className="relative group py-2">
-              <button className={`px-3 py-2 rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer focus:outline-none ${
-                isParentActive('/history') 
-                  ? 'bg-[#1e140c] text-[#f4e8d1] border border-[#d07f05]/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(208,127,5,0.15)]' 
-                  : 'hover:text-[#f4e8d1] hover:-translate-y-0.5'
-              }`}>
-                <span>HISTORY</span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isParentActive('/history') ? 'bg-[#d07f05] shadow-[0_0_8px_#d07f05] scale-125' : 'bg-[#d07f05]/30 group-hover:bg-[#d07f05]'}`} />
-                <span className="text-[7px] text-[#d07f05]/70 group-hover:rotate-180 transition-transform duration-300">▼</span>
-              </button>
-              
-              <div className="absolute top-full left-0 w-72 bg-[#120d09]/98 border border-[#d07f05]/40 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.95)] py-3 mt-3 z-50 backdrop-blur-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-3 group-hover:translate-y-0">
-                <div className="px-3 space-y-1">
-                  <Link href="/history/origins" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/history/origins') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/history/origins') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Origins of the Werji People
-                  </Link>
-                  <Link href="/history/migration" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/history/migration') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/history/migration') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Migration History
-                  </Link>
-                  <Link href="/history/timeline" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/history/timeline') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/history/timeline') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Historical Timeline
-                  </Link>
-                </div>
-              </div>
-            </li>
-
-            {/* Culture Dropdown */}
-            <li className="relative group py-2">
-              <button className={`px-3 py-2 rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer focus:outline-none ${
-                isParentActive('/culture') 
-                  ? 'bg-[#1e140c] text-[#f4e8d1] border border-[#d07f05]/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(208,127,5,0.15)]' 
-                  : 'hover:text-[#f4e8d1] hover:-translate-y-0.5'
-              }`}>
-                <span>CULTURE</span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isParentActive('/culture') ? 'bg-[#d07f05] shadow-[0_0_8px_#d07f05] scale-125' : 'bg-[#d07f05]/30 group-hover:bg-[#d07f05]'}`} />
-                <span className="text-[7px] text-[#d07f05]/70 group-hover:rotate-180 transition-transform duration-300">▼</span>
-              </button>
-              
-              <div className="absolute top-full left-0 w-72 bg-[#120d09]/98 border border-[#d07f05]/40 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.95)] py-3 mt-3 z-50 backdrop-blur-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-3 group-hover:translate-y-0">
-                <div className="px-3 space-y-1">
-                  <Link href="/culture/clothing" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/culture/clothing') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/culture/clothing') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Traditional Clothing
-                  </Link>
-                  <Link href="/culture/cuisine" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/culture/cuisine') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/culture/cuisine') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Food & Cuisine
-                  </Link>
-                  <Link href="/culture/music" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/culture/music') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/culture/music') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Music & Heritage
-                  </Link>
-                  <Link href="/culture/marriage-tradition" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/culture/marriage-tradition') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/culture/marriage-tradition') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Marriage Tradition
-                  </Link>
-                </div>
-              </div>
-            </li>
+          <ul className="hidden items-center justify-start gap-1 md:flex lg:gap-2">
+            {LEFT.map((i) => (
+              <DesktopItem key={i.label} item={i} />
+            ))}
           </ul>
 
-          {/* DESKTOP CENTER 3D LOGO MEDALLION */}
-          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 -top-6 z-30 pointer-events-auto">
-            <Link 
-              href="/" 
-              onClick={closeAll}
-              className="block px-8 py-3.5 rounded-2xl group transition-all duration-300 hover:scale-105 bg-gradient-to-b from-[#221810] via-[#14100c] to-[#0a0705] border border-[#d07f05]/50 shadow-[0_15px_35px_rgba(0,0,0,0.95),inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            >
-              <div className="text-center font-serif tracking-widest leading-none relative z-10">
-                <span className="block text-[8px] text-[#d07f05] font-sans tracking-[0.4em] uppercase mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  THE TIGRI
-                </span>
-                <span className="block text-sm font-bold text-[#f4e8d1] tracking-[0.25em] uppercase group-hover:text-white transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  WERJIHS
-                </span>
-              </div>
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="group col-start-1 text-left leading-none md:col-start-2 md:text-center outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]/60 rounded-lg p-1"
+          >
+            <span className="block font-sans text-[9px] uppercase tracking-[0.45em] text-[#d07f05] font-semibold transition-colors group-hover:text-[#f0a024]">
+              The Tigri
+            </span>
+            <span className="mt-1 block font-serif text-base font-bold uppercase tracking-[0.25em] text-[#fdf6ec] transition-all duration-300 group-hover:scale-[1.02] group-hover:text-white">
+              Werjihs
+            </span>
+          </Link>
 
-          {/* DESKTOP RIGHT SECTION: Community, Memorial, Archive */}
-          <ul className="hidden md:flex items-center space-x-4 lg:space-x-6 text-[11px] font-medium tracking-[0.2em] text-[#d8c5a8] relative z-20">
-            {/* Community Dropdown */}
-            <li className="relative group py-2">
-              <button className={`px-3 py-2 rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer focus:outline-none ${
-                isParentActive('/community') 
-                  ? 'bg-[#1e140c] text-[#f4e8d1] border border-[#d07f05]/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(208,127,5,0.15)]' 
-                  : 'hover:text-[#f4e8d1] hover:-translate-y-0.5'
-              }`}>
-                <span>COMMUNITY</span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isParentActive('/community') ? 'bg-[#d07f05] shadow-[0_0_8px_#d07f05] scale-125' : 'bg-[#d07f05]/30 group-hover:bg-[#d07f05]'}`} />
-                <span className="text-[7px] text-[#d07f05]/70 group-hover:rotate-180 transition-transform duration-300">▼</span>
-              </button>
-              
-              <div className="absolute top-full right-0 w-72 bg-[#120d09]/98 border border-[#d07f05]/40 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.95)] py-3 mt-3 z-50 backdrop-blur-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-3 group-hover:translate-y-0">
-                <div className="px-3 space-y-1">
-                  <Link href="/community/programs-and-events" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/community/programs-and-events') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/community/programs-and-events') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Programs & Events
-                  </Link>
-                  <Link href="/community/vanguard-of-islam" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-light tracking-wider rounded-xl transition-all group/item ${isActive('/community/vanguard-of-islam') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]' : 'text-[#d8c5a8] hover:bg-[#1a120a] hover:text-[#f4e8d1]'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#d07f05] transition-all ${isActive('/community/vanguard-of-islam') ? 'scale-125 shadow-[0_0_6px_#d07f05]' : 'opacity-0 group-hover/item:opacity-100'}`} />
-                    Vanguard of Islam
-                  </Link>
-                </div>
-              </div>
-            </li>
-
-            {/* Memorial Link */}
-            <li>
-              <Link 
-                href="/memorial" 
-                className={`px-3 py-2 rounded-xl transition-all duration-300 inline-flex items-center gap-2 ${
-                  isActive('/memorial') 
-                    ? 'bg-[#1e140c] text-[#f4e8d1] border border-[#d07f05]/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(208,127,5,0.15)]' 
-                    : 'hover:text-[#f4e8d1] hover:-translate-y-0.5'
-                }`}
-              >
-                <span>MEMORIAL</span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isActive('/memorial') ? 'bg-[#d07f05] shadow-[0_0_8px_#d07f05] scale-125' : 'bg-transparent'}`} />
-              </Link>
-            </li>
-
-            {/* Archive Link */}
-            <li>
-              <Link 
-                href="/archive" 
-                className={`px-3 py-2 rounded-xl transition-all duration-300 inline-flex items-center gap-2 ${
-                  isActive('/archive') 
-                    ? 'bg-[#1e140c] text-[#f4e8d1] border border-[#d07f05]/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(208,127,5,0.15)]' 
-                    : 'hover:text-[#f4e8d1] hover:-translate-y-0.5'
-                }`}
-              >
-                <span>ARCHIVE</span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isActive('/archive') ? 'bg-[#d07f05] shadow-[0_0_8px_#d07f05] scale-125' : 'bg-transparent'}`} />
-              </Link>
-            </li>
+          <ul className="hidden items-center justify-end gap-1 md:flex lg:gap-2">
+            {RIGHT.map((i) => (
+              <DesktopItem key={i.label} item={i} />
+            ))}
           </ul>
 
-          {/* MOBILE HAMBURGER BUTTON */}
-          <div className="flex md:hidden items-center">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-[#d8c5a8] hover:text-[#f4e8d1] p-2 focus:outline-none"
-              aria-label="Toggle Menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-
+          <button
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileOpen}
+            className="col-start-3 flex h-11 w-11 items-center justify-center justify-self-end rounded-xl border border-[#d07f05]/30 bg-white/[0.02] text-[#d8c5a8] transition-all duration-300 hover:border-[#d07f05]/60 hover:bg-[#d07f05]/10 hover:text-[#fdf6ec] md:hidden outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]"
+          >
+            <span className="relative block h-3.5 w-5">
+              <span
+                className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ease-in-out ${
+                  mobileOpen ? 'top-1.5 rotate-45' : 'top-0'
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-1.5 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ease-in-out ${
+                  mobileOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
+                }`}
+              />
+              <span
+                className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ease-in-out ${
+                  mobileOpen ? 'top-1.5 -rotate-45' : 'top-3'
+                }`}
+              />
+            </span>
+          </button>
         </nav>
 
-        {/* MOBILE DROPDOWN MENU DRAWER */}
-        {mobileMenuOpen && (
-          <div className="absolute top-full left-4 right-4 mt-2 bg-[#120d09]/98 border border-[#d07f05]/40 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.95)] p-6 z-50 md:hidden backdrop-blur-2xl">
-            <div className="flex flex-col space-y-4 text-xs font-medium tracking-[0.2em] text-[#d8c5a8]">
-              <div>
-                <Link href="/" onClick={closeAll} className={`block py-2 px-3 rounded-xl ${isActive('/') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30' : 'hover:text-[#f4e8d1]'}`}>HOME</Link>
-              </div>
-              
-              {/* Mobile History Section */}
-              <div className="border-t border-[#d07f05]/20 pt-3 flex flex-col space-y-1.5">
-                <span className="text-[10px] text-[#d07f05] tracking-[0.3em] uppercase block mb-1">History</span>
-                <Link href="/history/origins" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/history/origins') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Origins of the Werji People</Link>
-                <Link href="/history/migration" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/history/migration') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Migration History</Link>
-                <Link href="/history/timeline" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/history/timeline') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Historical Timeline</Link>
-              </div>
+        <div
+          className={`md:hidden grid transition-all duration-300 ease-in-out ${
+            mobileOpen ? 'mt-3 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+          }`}
+        >
+          <div className="overflow-hidden">
+            <div className="max-h-[80vh] overflow-y-auto rounded-2xl border border-[#d07f05]/30 bg-[#0a0705]/95 p-3.5 shadow-[0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-2xl">
+              <div className="flex flex-col gap-1.5">
+                {MOBILE_ORDER.map((item) => {
+                  const active = isActive(item);
+                  const open = openSection === item.label;
 
-              {/* Mobile Culture Section */}
-              <div className="border-t border-[#d07f05]/20 pt-3 flex flex-col space-y-1.5">
-                <span className="text-[10px] text-[#d07f05] tracking-[0.3em] uppercase block mb-1">Culture</span>
-                <Link href="/culture/clothing" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/culture/clothing') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Traditional Clothing</Link>
-                <Link href="/culture/cuisine" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/culture/cuisine') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Food & Cuisine</Link>
-                <Link href="/culture/music" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/culture/music') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Music & Heritage</Link>
-                <Link href="/culture/marriage-tradition" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/culture/marriage-tradition') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Marriage Tradition</Link>
-              </div>
+                  const baseRowClass = `flex w-full items-center justify-between rounded-xl px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-all duration-200 ${
+                    active
+                      ? 'bg-[#d07f05]/15 text-[#fdf6ec] shadow-inner'
+                      : 'text-[#c8b79b] hover:bg-white/[0.04] hover:text-[#fdf6ec]'
+                  }`;
 
-              {/* Mobile Community Section */}
-              <div className="border-t border-[#d07f05]/20 pt-3 flex flex-col space-y-1.5">
-                <span className="text-[10px] text-[#d07f05] tracking-[0.3em] uppercase block mb-1">Community</span>
-                <Link href="/community/programs-and-events" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/community/programs-and-events') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Programs & Events</Link>
-                <Link href="/community/vanguard-of-islam" onClick={closeAll} className={`block py-2 px-3 rounded-xl text-xs ${isActive('/community/vanguard-of-islam') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'text-[#d8c5a8] hover:text-[#f4e8d1]'}`}>Vanguard of Islam</Link>
-              </div>
+                  const indicatorBar = (
+                    <span
+                      className={`mr-3 h-4 w-1 rounded-full bg-[#f0a024] transition-all duration-300 ${
+                        active ? 'opacity-100 shadow-[0_0_10px_#f0a024]' : 'opacity-0'
+                      }`}
+                    />
+                  );
 
-              <div className="border-t border-[#d07f05]/20 pt-3 flex flex-col space-y-3">
-                <Link href="/memorial" onClick={closeAll} className={`block py-2 px-3 rounded-xl ${isActive('/memorial') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'hover:text-[#f4e8d1]'}`}>MEMORIAL</Link>
-                <Link href="/archive" onClick={closeAll} className={`block py-2 px-3 rounded-xl ${isActive('/archive') ? 'text-[#f4e8d1] bg-[#1e140c] border border-[#d07f05]/30 font-bold' : 'hover:text-[#f4e8d1]'}`}>ARCHIVE</Link>
+                  if (item.href) {
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        aria-current={active ? 'page' : undefined}
+                        className={baseRowClass}
+                      >
+                        <span className="flex items-center">
+                          {indicatorBar}
+                          {item.label}
+                        </span>
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div key={item.label} className="overflow-hidden rounded-xl">
+                      <button
+                        type="button"
+                        className={baseRowClass}
+                        aria-expanded={open}
+                        onClick={() => setOpenSection(open ? null : item.label)}
+                      >
+                        <span className="flex items-center">
+                          {indicatorBar}
+                          {item.label}
+                        </span>
+                        <svg
+                          viewBox="0 0 10 6"
+                          className={`h-2.5 w-3 text-[#d07f05] transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M1 1l4 4 4-4" />
+                        </svg>
+                      </button>
+
+                      <div className={`grid transition-all duration-300 ease-in-out ${open ? 'grid-rows-[1fr] pb-1' : 'grid-rows-[0fr]'}`}>
+                        <div className="overflow-hidden">
+                          <div className="ml-5 mt-1 flex flex-col gap-1 border-l border-[#d07f05]/25 py-1 pl-3">
+                            {item.children!.map((c) => {
+                              const isChildActive = childActive(c.href);
+                              return (
+                                <Link
+                                  key={c.href}
+                                  href={c.href}
+                                  aria-current={isChildActive ? 'page' : undefined}
+                                  className={`block rounded-lg px-3 py-2.5 text-[13px] tracking-wide transition-all duration-200 ${
+                                    isChildActive
+                                      ? 'font-bold text-[#f0a024] bg-[#d07f05]/10 shadow-sm'
+                                      : 'text-[#c8b79b] hover:bg-white/[0.03] hover:text-[#fdf6ec]'
+                                  }`}
+                                >
+                                  {c.label}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
-        )}
-
+        </div>
       </div>
-    </div>
+    </header>
   );
 }

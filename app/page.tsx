@@ -12,7 +12,7 @@ import BookAdvertSection from "@/components/Book-advert";
 import BeginJourneySection from "@/components/BeginJourneySection";
 import { supabase } from "@/lib/supabase";
 import RootsSection from '@/components/RootsSection';
-
+import HeroSection from '@/components/HeroSection';
 
 // ==========================================
 // SOCIAL CHANNELS CONFIGURATION (Compact Modern Pills)
@@ -30,7 +30,7 @@ const socialChannels = [
     name: 'YouTube',
     handle: 'The Werjih Society',
     description: 'Documentaries & oral history archives.',
-    icon: '▶️️',
+    icon: '▶',
     link: '#',
     badge: 'Video Vault',
   },
@@ -116,160 +116,12 @@ export default function Home() {
   return (
     <main id="home" className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#d07f05] selection:text-black">
       
-      
       {/* CINEMATIC HERO SECTION */}
-     
-      <section 
-        className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-6 py-24 overflow-hidden bg-[#0c0907] group/hero"
-      >
-        
-        {/* Background Atmosphere & Drifting Amber Embers */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#261b12]/60 via-[#0c0907] to-[#0c0907]"></div>
-          
-          {!shouldReduceMotion && (
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute w-2 h-2 rounded-full bg-[#d07f05]/40 blur-[1px] top-[20%] left-[15%] animate-[pulse_4s_ease-in-out_infinite]"></div>
-              <div className="absolute w-3 h-3 rounded-full bg-[#d07f05]/30 blur-[2px] top-[70%] left-[80%] animate-[pulse_6s_ease-in-out_infinite_1s]"></div>
-              <div className="absolute w-1.5 h-1.5 rounded-full bg-[#d07f05]/50 blur-[1px] top-[40%] left-[85%] animate-[pulse_5s_ease-in-out_infinite_2s]"></div>
-              <div className="absolute w-2.5 h-2.5 rounded-full bg-[#d07f05]/30 blur-[2px] top-[80%] left-[25%] animate-[pulse_7s_ease-in-out_infinite_1.5s]"></div>
-            </div>
-          )}
-
-          <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-[#d07f05]/10 rounded-full blur-[140px] animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-[#945802]/10 rounded-full blur-[160px]"></div>
-        </div>
-
-        {/* Hero Content */}
-        <motion.div 
-          key="hero-choreography"
-          initial="hidden"
-          whileInView="visible"
-          whileHover="visible"
-          viewport={{ once: false, amount: 0.3 }}
-          className="relative z-10 max-w-4xl mx-auto flex flex-col items-center cursor-default"
-        >
-          
-          {/* 1. Pill Badge */}
-          <motion.div
-            style={{ y: badgeY }}
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { 
-                opacity: 1, 
-                y: 0, 
-                transition: { type: "spring", damping: 16, stiffness: 100, delay: 0.1 } 
-              }
-            }}
-            className="mb-6"
-          >
-            <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-[#d07f05] px-4 py-1.5 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 shadow-[0_0_25px_rgba(208,127,5,0.18)] inline-block">
-              ANCIENT HERITAGE & LEGACY
-            </span>
-          </motion.div>
-
-          {/* 2. Cinematic 3D Converging Headline */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-white tracking-tight leading-tight mb-8 flex flex-wrap justify-center items-center gap-x-3 gap-y-2 [perspective:1000px]">
-            <motion.span
-              variants={{
-                hidden: { opacity: 0, x: -70, rotateY: -30 },
-                visible: { 
-                  opacity: 1, 
-                  x: 0, 
-                  rotateY: 0, 
-                  transition: { type: "spring", damping: 15, stiffness: 110, delay: 0.3 } 
-                }
-              }}
-              style={{ transformStyle: "preserve-3d" }}
-              className="inline-block"
-            >
-              Inside THE
-            </motion.span>
-
-            <motion.span
-              variants={{
-                hidden: { opacity: 0, y: -80, scale: 0.85 },
-                visible: { 
-                  opacity: 1, 
-                  y: 0, 
-                  scale: 1, 
-                  transition: { type: "spring", damping: 12, stiffness: 140, delay: 0.6 } 
-                }
-              }}
-              className="italic text-[#d07f05] font-bold drop-shadow-[0_10px_30px_rgba(208,127,5,0.4)] inline-block animate-[pulse_3s_ease-in-out_infinite]"
-            >
-              WERJIH
-            </motion.span>
-
-            <motion.span
-              variants={{
-                hidden: { opacity: 0, x: 70, rotateY: 30 },
-                visible: { 
-                  opacity: 1, 
-                  x: 0, 
-                  rotateY: 0, 
-                  transition: { type: "spring", damping: 15, stiffness: 110, delay: 0.45 } 
-                }
-              }}
-              style={{ transformStyle: "preserve-3d" }}
-              className="inline-block"
-            >
-              World
-            </motion.span>
-          </h1>
-
-          {/* 3. Description Box */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 25 },
-              visible: { 
-                opacity: 1, 
-                y: 0, 
-                transition: { type: "spring", damping: 18, stiffness: 100, delay: 0.8 } 
-              }
-            }}
-            className="max-w-xl mx-auto p-7 rounded-2xl bg-gradient-to-b from-[#181410]/90 to-[#0e0c0a]/95 border border-[#d07f05]/20 shadow-[0_20px_50px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(208,127,5,0.15)] backdrop-blur-xl mb-10 relative overflow-hidden group"
-          >
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#d07f05]/50 to-transparent"></div>
-            <p className="text-gray-300 text-sm md:text-base font-light leading-relaxed">
-              Unveiling centuries of history, resilience, and trade roots. Journey through the ancestral legacy, culture, and documented chapters of the Werji people.
-            </p>
-          </motion.div>
-
-          {/* 4. Action Buttons */}
-          <motion.div
-            style={{ y: buttonsY }}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { 
-                opacity: 1, 
-                y: 0, 
-                transition: { type: "spring", damping: 16, stiffness: 110, delay: 1.0 } 
-              }
-            }}
-            className="flex flex-col sm:flex-row items-center gap-5"
-          >
-            <a
-              href="#notice"
-              className="group relative px-8 py-4 bg-gradient-to-r from-[#d07f05] to-[#b56b04] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(217,119,6,0.4)] flex items-center space-x-3 overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-              <span className="relative z-10">Walk With Us</span>
-              <span className="relative z-10 transform group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
-            </a>
-
-            <a
-              href="#leadership"
-              className="group relative px-8 py-4 bg-[#141210]/80 hover:bg-[#1d1915] text-[#f4e8d1] border border-[#d07f05]/40 hover:border-[#d07f05] font-serif text-xs uppercase tracking-[0.2em] rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(217,119,6,0.3)] backdrop-blur-md flex items-center space-x-3 overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-[#d07f05]/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-              <span className="relative z-10">A Call to WERJIH</span>
-              <span className="relative z-10 text-[#d07f05] transform group-hover:scale-125 transition-transform duration-300">&bull;</span>
-            </a>
-          </motion.div>
-
-        </motion.div>
-      </section>
+      <HeroSection 
+        shouldReduceMotion={shouldReduceMotion}
+        badgeY={badgeY}
+        buttonsY={buttonsY}
+      />
 
       {/* BOTTOM TICKER BAR (Ceremonial Infinite Marquee) */}
       <div 
@@ -403,7 +255,9 @@ export default function Home() {
           </div>
 
         </div>
-      </section><BeginJourneySection />
+      </section>
+
+      <BeginJourneySection />
 
       {/* ========================================== */}
       {/* PILLARS OF LEGACY: HEROES PREVIEW SECTION */}
@@ -467,12 +321,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       
-      {/* ROOTS & HOMELAND MAP SECTION (Moved directly beneath Heroes preview) */}
-      
+      {/* ROOTS & HOMELAND MAP SECTION */}
       <RootsSection />
-
 
       {/* Interactive Core Sections */}
       <ContributionPortal />
