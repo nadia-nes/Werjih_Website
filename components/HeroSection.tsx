@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, MotionValue } from 'framer-motion';
+import { motion, MotionValue, AnimatePresence } from 'framer-motion';
 
 interface HeroSectionProps {
   shouldReduceMotion?: boolean | null;
@@ -19,12 +19,12 @@ export default function HeroSection({
   const [isCallOpen, setIsCallOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-collapse transmission pop-up after 3 seconds, unless hovered
+  // Auto-collapse transmission pop-up after 4 seconds on mobile, unless hovered
   useEffect(() => {
     if (isCallOpen && !isHovered) {
       const timer = setTimeout(() => {
         setIsCallOpen(false);
-      }, 3000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
   }, [isCallOpen, isHovered]);
@@ -82,15 +82,15 @@ export default function HeroSection({
       </div>
 
       {/* ========================================================= */}
-      {/* BACKGROUND VECTOR FLOW & MULTIPLE MOVING THREADS          */}
+      {/* BACKGROUND VECTOR FLOW & MOVING THREADS (MOBILE & DESKTOP) */}
       {/* ========================================================= */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         
         {/* Deep Luxury Gradient Base */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#170e05] via-[#050302] to-[#030201]"></div>
 
-        {/* Left Side: Multiple Moving Threads */}
-        <div className="absolute left-8 md:left-14 top-0 bottom-0 hidden xl:flex items-center space-x-4 z-10">
+        {/* Left Side: Moving Threads (Visible on all screens now) */}
+        <div className="absolute left-3 md:left-14 top-0 bottom-0 flex items-center space-x-2 md:space-x-4 z-10 opacity-60 md:opacity-100">
           <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#8c550d]/30 to-transparent relative">
             <motion.div 
               className="absolute w-2 h-2 rounded-full bg-[#a86512] -left-[3.5px] shadow-[0_0_10px_#5c3605]"
@@ -98,7 +98,7 @@ export default function HeroSection({
               transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
-          <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#6b4208]/40 to-transparent relative">
+          <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#6b4208]/40 to-transparent relative hidden sm:block">
             <motion.div 
               className="absolute w-1.5 h-1.5 rounded-full bg-[#8c550d] -left-[2.5px] shadow-[0_0_6px_#a86512]"
               animate={{ y: ['80vh', '0vh', '80vh'] }}
@@ -107,9 +107,9 @@ export default function HeroSection({
           </div>
         </div>
 
-        {/* Right Side: Multiple Moving Threads */}
-        <div className="absolute right-8 md:right-14 top-0 bottom-0 hidden xl:flex items-center space-x-4 z-10">
-          <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#6b4208]/40 to-transparent relative">
+        {/* Right Side: Moving Threads (Visible on all screens now) */}
+        <div className="absolute right-3 md:right-14 top-0 bottom-0 flex items-center space-x-2 md:space-x-4 z-10 opacity-60 md:opacity-100">
+          <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#6b4208]/40 to-transparent relative hidden sm:block">
             <motion.div 
               className="absolute w-1.5 h-1.5 rounded-full bg-[#8c550d] -left-[2.5px] shadow-[0_0_6px_#a86512]"
               animate={{ y: ['50vh', '0vh', '50vh'] }}
@@ -208,7 +208,6 @@ export default function HeroSection({
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
             className="relative max-w-5xl w-full mx-auto rounded-3xl overflow-hidden mb-8 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_25px_70px_rgba(0,0,0,0.95)] p-6 sm:p-12 backdrop-blur-md"
           >
-            {/* Subtle corner accents */}
             <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
 
@@ -225,7 +224,6 @@ export default function HeroSection({
               }}
               className="text-2xl sm:text-4xl md:text-6xl font-serif tracking-tight leading-[1.3] text-center text-white"
             >
-              {/* Top line on mobile: Inside THE */}
               <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
@@ -248,7 +246,6 @@ export default function HeroSection({
                   WERJIH
                 </motion.span>
 
-                {/* World */}
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
                   className="font-light text-white"
@@ -311,48 +308,52 @@ export default function HeroSection({
 
         </motion.div>
 
-        {/* Right-Side Slide-In Transmission Panel */}
-        {isCallOpen && (
-          <motion.div 
-            initial={{ opacity: 0, x: 50, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 50, scale: 0.95 }}
-            transition={{ type: "spring", damping: 20, stiffness: 100 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 w-[340px] bg-[#0a0705]/95 border border-[#8c550d]/60 rounded-2xl p-6 shadow-[0_0_50px_rgba(140,85,13,0.2)] backdrop-blur-xl z-30 text-left"
-          >
-            {/* Corner Ornamental Accents */}
-            <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 border-t border-l border-[#8c550d]"></div>
-            <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 border-t border-r border-[#8c550d]"></div>
-            <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 border-b border-l border-[#8c550d]"></div>
-            <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 border-b border-r border-[#8c550d]"></div>
-
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-[9px] font-mono tracking-[0.3em] text-[#d9984a] uppercase">✦ TRANSMISSION ✦</span>
-              <button 
-                onClick={() => setIsCallOpen(false)}
-                className="text-[#d4cbb8]/70 hover:text-[#d9984a] text-xs font-mono transition-colors"
+        {/* Transmission Panel: Responsive Modal for Mobile & Slide-In for Desktop */}
+        <AnimatePresence>
+          {isCallOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none lg:block lg:static">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ type: "spring", damping: 22, stiffness: 120 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="w-full max-w-sm lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2 lg:w-[340px] bg-[#0a0705]/98 border border-[#8c550d]/60 rounded-2xl p-6 shadow-[0_0_50px_rgba(140,85,13,0.3)] backdrop-blur-xl text-left"
               >
-                [CLOSE]
-              </button>
-            </div>
+                {/* Corner Ornamental Accents */}
+                <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 border-t border-l border-[#8c550d]"></div>
+                <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 border-t border-r border-[#8c550d]"></div>
+                <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 border-b border-l border-[#8c550d]"></div>
+                <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 border-b border-r border-[#8c550d]"></div>
 
-            <h4 className="text-xl font-serif text-[#d9984a] mb-3">The Voice of Werjih</h4>
-            <p className="text-[#d4cbb8]/90 text-xs font-light leading-relaxed mb-6">
-              Like a horn blowing across ancestral valleys, this call carries the memory of our trade roots, resilience, and unyielding heritage. You have answered the call to remember.
-            </p>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[9px] font-mono tracking-[0.3em] text-[#d9984a] uppercase">✦ TRANSMISSION ✦</span>
+                  <button 
+                    onClick={() => setIsCallOpen(false)}
+                    className="text-[#d4cbb8]/70 hover:text-[#d9984a] text-xs font-mono transition-colors cursor-pointer"
+                  >
+                    [CLOSE]
+                  </button>
+                </div>
 
-            <div className="flex justify-end">
-              <button
-                onClick={() => setIsCallOpen(false)}
-                className="px-5 py-2 bg-gradient-to-r from-[#8c550d] to-[#5c3605] text-[#f4e8d1] font-serif font-bold text-[10px] uppercase tracking-[0.2em] rounded-lg hover:brightness-110 transition-all shadow-[0_4px_15px_rgba(140,85,13,0.3)]"
-              >
-                Acknowledge
-              </button>
+                <h4 className="text-xl font-serif text-[#d9984a] mb-3">The Voice of Werjih</h4>
+                <p className="text-[#d4cbb8]/90 text-xs font-light leading-relaxed mb-6">
+                  Like a horn blowing across ancestral valleys, this call carries the memory of our trade roots, resilience, and unyielding heritage. You have answered the call to remember.
+                </p>
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setIsCallOpen(false)}
+                    className="px-5 py-2 bg-gradient-to-r from-[#8c550d] to-[#5c3605] text-[#f4e8d1] font-serif font-bold text-[10px] uppercase tracking-[0.2em] rounded-lg hover:brightness-110 transition-all shadow-[0_4px_15px_rgba(140,85,13,0.3)] cursor-pointer"
+                  >
+                    Acknowledge
+                  </button>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
-        )}
+          )}
+        </AnimatePresence>
 
       </div>
     </section>
