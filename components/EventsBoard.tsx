@@ -83,7 +83,7 @@ export default function WerjihGatheringsBoard() {
           {/* Emotional Narrative Description */}
           <div className="py-8 space-y-4 text-gray-300 text-sm md:text-base font-light leading-relaxed">
             <p>
-              July 22 is more than just a date on the calendar—it is the heartbeat of the Werjih society. It is the sacred day we honor the resilience of our ancestors, pass down our distinct oral histories to the younger generation, and stand united under our shared identity.
+              July 22 is more than just a date on the calendar it is the heartbeat of the Werjih society. It is the sacred day we honor the resilience of our ancestors, pass down our distinct oral histories to the younger generation, and stand united under our shared identity.
             </p>
             <p className="text-xs text-gray-400 italic border-l-2 border-[#d07f05] pl-4 py-1">
               &ldquo;Gathering together on July 22 ensures that the fires of our unique culture, heritage, and kinship continue to burn bright for generations to come.&rdquo;

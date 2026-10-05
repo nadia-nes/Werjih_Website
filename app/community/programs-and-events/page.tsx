@@ -62,7 +62,7 @@ export default function ProgramsAndEventsPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="min-h-screen bg-[#070605] text-[#e8dfd3] font-serif selection:bg-[#d07f05] selection:text-black py-20 px-6 sm:px-12 relative overflow-hidden"
+      className="min-h-screen bg-[#070605] text-[#e8dfd3] font-serif selection:bg-[#d07f05] selection:text-black py-20 px-4 sm:px-12 relative overflow-hidden"
     >
       {/* Ambient Background Glows */}
       <div className="absolute top-10 left-1/4 w-[35rem] h-[35rem] bg-[#d07f05]/8 rounded-full blur-[130px] pointer-events-none" />
@@ -73,7 +73,7 @@ export default function ProgramsAndEventsPage() {
         {/* Header / Breadcrumb */}
         <div className="space-y-6 border-b border-[#2d2722] pb-10 text-center sm:text-left">
           <div className="inline-flex items-center space-x-2 text-[10px] font-mono tracking-[0.35em] uppercase text-[#d07f05] bg-[#d07f05]/10 px-3 py-1 rounded-full border border-[#d07f05]/25">
-            <span>• Community Archive</span>
+            <span>Community Archive</span>
             <span>/</span>
             <span>Programs & Events</span>
           </div>
@@ -109,7 +109,7 @@ export default function ProgramsAndEventsPage() {
         </section>
 
         {/* Section 2: A Dream Made Real */}
-        <section className="space-y-6 bg-gradient-to-br from-[#12100e] to-[#0d0b09] border border-[#362e26] p-8 sm:p-14 rounded-3xl font-sans shadow-[0_20px_50px_rgba(0,0,0,0.7)] relative">
+        <section className="space-y-6 bg-gradient-to-br from-[#12100e] to-[#0d0b09] border border-[#362e26] p-6 sm:p-14 rounded-3xl font-sans shadow-[0_20px_50px_rgba(0,0,0,0.7)] relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-[#d07f05]/5 rounded-bl-full pointer-events-none" />
           <div className="border-l-2 border-[#d07f05] pl-4">
             <h2 className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#d07f05]">
@@ -136,7 +136,7 @@ export default function ProgramsAndEventsPage() {
         </section>
 
         {/* 3D Interactive Fanned Card Deck Gallery */}
-        <section className="space-y-12 py-10">
+        <section className="space-y-12 py-10 overflow-hidden">
           <div className="text-center space-y-4">
             <div className="inline-block text-[10px] font-mono tracking-[0.4em] uppercase text-[#d07f05] border-b border-[#d07f05]/30 pb-1">
               Est. Tradition &amp; Heritage • Archival Record
@@ -151,14 +151,16 @@ export default function ProgramsAndEventsPage() {
           </div>
 
           {fanCards.length > 0 ? (
-            <div className="relative w-full h-[450px] sm:h-[520px] flex items-center justify-center perspective-[1400px] my-6">
+            <div className="relative w-full h-[420px] sm:h-[520px] flex items-center justify-center perspective-[1400px] my-6 px-4">
               
               <div className="relative flex items-center justify-center w-full max-w-2xl h-full">
                 {fanCards.map((ev, index) => {
                   const total = fanCards.length;
                   const centerOffset = index - (total - 1) / 2;
-                  const rotation = centerOffset * 11;
-                  const xOffset = centerOffset * 52;
+                  
+                  // Responsive offsets: smaller spread on mobile to prevent outer card clipping
+                  const rotation = centerOffset * (window && typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 11);
+                  const xOffset = centerOffset * (window && typeof window !== 'undefined' && window.innerWidth < 640 ? 24 : 52);
                   const isHovered = activeIndex === index;
 
                   return (
@@ -170,14 +172,14 @@ export default function ProgramsAndEventsPage() {
                       initial={{ opacity: 0, y: 50 }}
                       animate={{ 
                         opacity: 1,
-                        y: isHovered ? -45 : Math.abs(centerOffset) * 14, 
+                        y: isHovered ? -35 : Math.abs(centerOffset) * 10, 
                         x: xOffset,
                         rotate: isHovered ? 0 : rotation,
-                        scale: isHovered ? 1.12 : 1,
+                        scale: isHovered ? 1.08 : 1,
                         zIndex: isHovered ? 50 : 10 - Math.abs(centerOffset)
                       }}
                       transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-                      className="absolute w-[220px] sm:w-[260px] h-[340px] sm:h-[400px] bg-[#12100e] rounded-2xl p-3.5 border border-[#d07f05]/40 shadow-[0_20px_50px_rgba(0,0,0,0.85)] cursor-pointer transform-gpu flex flex-col justify-between"
+                      className="absolute w-[180px] sm:w-[260px] h-[300px] sm:h-[400px] bg-[#12100e] rounded-2xl p-3 border border-[#d07f05]/40 shadow-[0_20px_50px_rgba(0,0,0,0.85)] cursor-pointer transform-gpu flex flex-col justify-between"
                     >
                       {/* Uncropped Image Display */}
                       <div className="relative w-full h-[75%] rounded-xl overflow-hidden bg-black flex items-center justify-center border border-[#221c17]">
@@ -197,7 +199,7 @@ export default function ProgramsAndEventsPage() {
                         <div className="text-[8px] font-mono tracking-widest text-[#d07f05] uppercase mb-0.5">
                           Archive Fragment
                         </div>
-                        <h4 className="text-xs sm:text-sm text-[#f7f3ed] font-serif truncate">
+                        <h4 className="text-[11px] sm:text-sm text-[#f7f3ed] font-serif truncate">
                           {ev.title}
                         </h4>
                       </div>
@@ -235,12 +237,12 @@ export default function ProgramsAndEventsPage() {
         </section>
 
         {/* Closing Manifesto Box */}
-        <section className="bg-gradient-to-b from-[#14110f] via-[#0d0b09] to-[#070605] border border-[#d07f05]/40 p-8 sm:p-16 rounded-3xl text-center space-y-8 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden">
+        <section className="bg-gradient-to-b from-[#14110f] via-[#0d0b09] to-[#070605] border border-[#d07f05]/40 p-6 sm:p-16 rounded-3xl text-center space-y-8 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#d07f05]/10 via-transparent to-transparent pointer-events-none" />
           <div className="inline-block text-[10px] font-mono tracking-[0.4em] uppercase text-[#d07f05] border-b border-[#d07f05]/30 pb-1">
             It Is Now or Never
           </div>
-          <h3 className="text-4xl sm:text-6xl font-serif text-[#f7f3ed] tracking-tight">
+          <h3 className="text-3xl sm:text-6xl font-serif text-[#f7f3ed] tracking-tight">
             We Choose Now.
           </h3>
           <p className="text-[#ab9f94] text-base sm:text-lg font-sans font-light leading-relaxed max-w-2xl mx-auto">
