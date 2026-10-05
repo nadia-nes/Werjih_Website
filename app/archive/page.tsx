@@ -144,7 +144,7 @@ export default function ArchiveHubPage() {
             >
               <p className="text-xs font-mono uppercase tracking-[0.2em] text-[#d07f05] mb-1">Complete Sanctuary Repository</p>
               <p className="text-sm font-sans font-light text-[#ab9f94] italic leading-relaxed">
-                &ldquo;Exploring every facet of our shared heritage—where history, research, voices, and deeply bonded community traditions converge under one roof.&rdquo;
+                &ldquo;Exploring every facet of our shared heritage where history, research, voices, and deeply bonded community traditions converge under one roof.&rdquo;
               </p>
             </motion.div>
           )}
@@ -224,7 +224,7 @@ export default function ArchiveHubPage() {
             >
               <p className="text-xs font-mono uppercase tracking-[0.2em] text-[#d07f05] mb-1">Visual Kinship & Heritage</p>
               <p className="text-sm font-sans font-light text-[#ab9f94] italic leading-relaxed">
-                &ldquo;What makes the Werjih community uniquely close-knit is our deep rooted kinship—nearly everyone knows one another, and open-door family gatherings echo in every home because, one way or another, we are all family.&rdquo;
+                &ldquo;What makes the Werjih community uniquely close-knit is our deep rooted kinship nearly everyone knows one another, and open door family gatherings echo in every home because, one way or another, we are all family.&rdquo;
               </p>
             </motion.div>
           )}
