@@ -330,9 +330,9 @@ export default function Home() {
       <AncestralTree />
       <EventsBoard />
 
-      {/* ========================================== */}
+      
       {/* Visual Heritage Slideshow */}
-      {/* ========================================== */}
+     
       <section className="py-20 px-6 bg-[#0a0806] border-t border-[#d07f05]/20">
         <div className="text-center mb-10">
           <span className="text-xs font-mono tracking-[0.3em] text-[#d07f05] uppercase">Gallery</span>
@@ -404,7 +404,7 @@ export default function Home() {
                   alert(`The ${activeSocial.name} link will be active once setup is complete.`);
                 }
               }}
-              className="px-6 py-3 bg-[#d07f05] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-amber-400 transition-all shadow-lg flex items-center space-x-2 shrink-0"
+              className="px-6 py-3 bg-[#d07f05] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-black hover:text-[#d07f05] hover:border hover:border-[#d07f05] active:bg-black active:text-[#d07f05] transition-all duration-300 shadow-lg flex items-center space-x-2 shrink-0"
             >
               <span>Join {activeSocial.name}</span>
               <span>&rarr;</span>
@@ -491,5 +491,3 @@ export default function Home() {
     </main>
   );
 }
-
-      
