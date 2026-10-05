@@ -53,7 +53,7 @@ export default function MemorialPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-[#D97706] px-4 py-1.5 rounded-full border border-[#D97706]/30 bg-[#D97706]/5 inline-block mb-4 shadow-[0_0_25px_rgba(217,119,6,0.18)]">
+          <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-[#D97706] px-4 py-1.5 rounded-full border border-[#D97706]/40 bg-[#D97706]/10 inline-block mb-4 shadow-[0_0_25px_rgba(217,119,6,0.18)]">
             In Memoriam
           </span>
           <h1 className="text-3xl md:text-5xl font-serif text-white tracking-tight mb-4">
@@ -70,9 +70,9 @@ export default function MemorialPage() {
       <div className="max-w-4xl mx-auto space-y-12 text-gray-300 font-light text-sm md:text-base leading-relaxed">
         
         {/* Introduction */}
-        <section className="bg-gradient-to-b from-[#161514] to-[#0f0e0d] border border-[#D97706]/30 rounded-2xl p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97706]/40 to-transparent"></div>
-          <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-4 text-[#D97706]">
+        <section className="bg-gradient-to-b from-[#161514] to-[#12100e] border border-[#D97706]/30 rounded-2xl p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97706]/50 to-transparent"></div>
+          <h2 className="text-xl md:text-2xl font-serif font-bold mb-4 text-[#D97706]">
             Introduction: Beyond Numbers, Into Memory
           </h2>
           <p className="mb-4">
@@ -85,9 +85,9 @@ export default function MemorialPage() {
 
         {/* The Life We Had & Wealth */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-[#141210] border border-[#D97706]/20 rounded-2xl p-6 md:p-8 flex flex-col justify-between">
+          <div className="bg-[#141210] border border-[#D97706]/30 hover:border-[#D97706]/60 transition-all rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-lg">
             <div>
-              <h3 className="text-lg font-serif font-bold text-white mb-3 text-[#D97706]">
+              <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
                 The Pillars of Commerce and Community
               </h3>
               <p className="text-xs md:text-sm text-gray-300 leading-relaxed mb-4">
@@ -97,12 +97,12 @@ export default function MemorialPage() {
                 From this honest sweat came the lifeblood of our society: they fed families, built schools, supported mosques, and sustained neighbors in need. Their wealth was never just gold or grain; it was the fruit of patience, culture, language, dress, and a proud way of life.
               </p>
             </div>
-            <span className="text-[10px] font-mono text-[#D97706]/60 mt-6 uppercase tracking-widest">Heritage & Prosperity</span>
+            <span className="text-[10px] font-mono text-[#D97706]/80 mt-6 uppercase tracking-widest">Heritage & Prosperity</span>
           </div>
 
-          <div className="bg-[#141210] border border-[#D97706]/20 rounded-2xl p-6 md:p-8 flex flex-col justify-between">
+          <div className="bg-[#141210] border border-[#D97706]/30 hover:border-[#D97706]/60 transition-all rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-lg">
             <div>
-              <h3 className="text-lg font-serif font-bold text-white mb-3 text-[#D97706]">
+              <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
                 The Midnight of Upheaval (1966 E.C.)
               </h3>
               <p className="text-xs md:text-sm text-gray-300 leading-relaxed mb-4">
@@ -112,14 +112,14 @@ export default function MemorialPage() {
                 In a single day, by the stroke of a pen, the accumulated sweat and labor of generations vanished. Families who once stood in security and civic prominence were cast overnight into suspicion, poverty, and profound anxiety.
               </p>
             </div>
-            <span className="text-[10px] font-mono text-[#D97706]/60 mt-6 uppercase tracking-widest">The Sudden Loss</span>
+            <span className="text-[10px] font-mono text-[#D97706]/80 mt-6 uppercase tracking-widest">The Sudden Loss</span>
           </div>
         </div>
 
         {/* The Years of the Red Terror */}
-        <section className="bg-gradient-to-b from-[#161514] to-[#0f0e0d] border border-[#D97706]/30 rounded-2xl p-8 md:p-10 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97706]/40 to-transparent"></div>
-          <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-4 text-[#D97706]">
+        <section className="bg-gradient-to-b from-[#161514] to-[#12100e] border border-[#D97706]/30 rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97706]/50 to-transparent"></div>
+          <h2 className="text-xl md:text-2xl font-serif font-bold mb-4 text-[#D97706]">
             The Red Terror and the Silence of Grief (1969 E.C.)
           </h2>
           <p className="mb-4 text-xs md:text-sm leading-relaxed">
@@ -135,8 +135,8 @@ export default function MemorialPage() {
 
         {/* Two Wounds & The Shattering of Identity */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-[#141210] border border-[#D97706]/20 rounded-2xl p-6 md:p-8">
-            <h3 className="text-lg font-serif font-bold text-white mb-3 text-[#D97706]">
+          <div className="bg-[#141210] border border-[#D97706]/30 rounded-2xl p-6 md:p-8 shadow-lg">
+            <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
               Two Wounds: Wealth and Youth
             </h3>
             <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
@@ -144,8 +144,8 @@ export default function MemorialPage() {
             </p>
           </div>
 
-          <div className="bg-[#141210] border border-[#D97706]/20 rounded-2xl p-6 md:p-8">
-            <h3 className="text-lg font-serif font-bold text-white mb-3 text-[#D97706]">
+          <div className="bg-[#141210] border border-[#D97706]/30 rounded-2xl p-6 md:p-8 shadow-lg">
+            <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
               The Fracturing and Loss of Identity
             </h3>
             <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
@@ -158,9 +158,9 @@ export default function MemorialPage() {
         </div>
 
         {/* Words of Remembrance */}
-        <section className="bg-[#141210] border border-[#D97706]/40 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D97706]/10 via-transparent to-transparent pointer-events-none"></div>
-          <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-6 text-[#D97706]">
+        <section className="bg-[#141210] border border-[#D97706]/40 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-xl">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D97706]/15 via-transparent to-transparent pointer-events-none"></div>
+          <h2 className="text-xl md:text-2xl font-serif font-bold mb-6 text-[#D97706]">
             Words of Remembrance
           </h2>
           <div className="space-y-3 font-serif italic text-base md:text-lg text-gray-200 mb-8">
@@ -177,7 +177,7 @@ export default function MemorialPage() {
       </div>
 
       {/* Tribute Submission Banner */}
-      <div className="max-w-4xl mx-auto mt-16 bg-[#141210] border border-[#D97706]/30 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl">
+      <div className="max-w-4xl mx-auto mt-16 bg-gradient-to-b from-[#161514] to-[#12100e] border border-[#D97706]/40 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D97706]/10 via-transparent to-transparent pointer-events-none"></div>
         <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3 relative z-10">
           Want to Honor an Ancestor?
@@ -187,22 +187,21 @@ export default function MemorialPage() {
         </p>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="inline-block px-8 py-3.5 bg-[#D97706] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-transparent hover:text-[#D97706] hover:border-[#D97706] border border-transparent transition-all shadow-lg relative z-10 cursor-pointer"
+          className="inline-block px-8 py-3.5 bg-[#D97706] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-transparent hover:text-[#D97706] hover:border-[#D97706] border border-transparent transition-all shadow-[0_0_25px_rgba(217,119,6,0.3)] relative z-10 cursor-pointer"
         >
           Submit a Tribute &rarr;
         </button>
       </div>
 
       {/* FOOTER NAV RETURN */}
-<footer className="mt-28 text-center pt-10 border-t border-[#222]">
-  <Link 
-    href="/" 
-    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-xs font-mono tracking-widest uppercase border border-[#d07f05]/40 bg-[#14100c] hover:bg-[#d07f05] hover:text-black hover:border-[#d07f05] transition-all duration-300 cursor-pointer no-underline shadow-lg"
-  >
-    <span>←</span> Return to Home Chronicle
-  </Link>
-</footer>
-
+      <footer className="mt-28 text-center pt-10 border-t border-[#222]">
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-xs font-mono tracking-widest uppercase border border-[#D97706]/40 bg-[#141210] hover:bg-[#D97706] hover:text-black hover:border-[#D97706] transition-all duration-300 cursor-pointer no-underline shadow-lg"
+        >
+          <span>←</span> Return to Home Chronicle
+        </Link>
+      </footer>
 
       {/* Interactive Modal Popup */}
       <AnimatePresence>
@@ -212,7 +211,7 @@ export default function MemorialPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-[#141210] border border-[#D97706]/40 rounded-2xl max-w-lg w-full p-6 md:p-8 relative shadow-[0_25px_60px_rgba(0,0,0,0.9)]"
+              className="bg-[#141210] border border-[#D97706]/50 rounded-2xl max-w-lg w-full p-6 md:p-8 relative shadow-[0_25px_60px_rgba(0,0,0,0.9)]"
             >
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -227,7 +226,7 @@ export default function MemorialPage() {
               </p>
 
               {submitted ? (
-                <div className="bg-[#D97706]/10 border border-[#D97706]/40 rounded-xl p-6 text-center text-[#D97706] font-mono text-xs">
+                <div className="bg-[#D97706]/15 border border-[#D97706]/50 rounded-xl p-6 text-center text-[#D97706] font-mono text-xs">
                   Thank you. Your tribute has been securely saved to the Supabase registry for review.
                 </div>
               ) : (
@@ -246,7 +245,7 @@ export default function MemorialPage() {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="e.g., Turio Wario"
-                      className="w-full bg-[#0f0e0e] border border-[#D97706]/30 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D97706]"
+                      className="w-full bg-[#0f0e0e] border border-[#D97706]/40 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D97706]"
                     />
                   </div>
 
@@ -258,7 +257,7 @@ export default function MemorialPage() {
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                       placeholder="e.g., Elder / Merchant / Student Lost in 1969 E.C."
-                      className="w-full bg-[#0f0e0e] border border-[#D97706]/30 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D97706]"
+                      className="w-full bg-[#0f0e0e] border border-[#D97706]/40 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D97706]"
                     />
                   </div>
 
@@ -270,14 +269,14 @@ export default function MemorialPage() {
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="Describe their life, contributions, or story..."
-                      className="w-full bg-[#0f0e0e] border border-[#D97706]/30 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-[#D97706] resize-none"
+                      className="w-full bg-[#0f0e0e] border border-[#D97706]/40 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-[#D97706] resize-none"
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 bg-[#D97706] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-transparent hover:text-[#D97706] hover:border-[#D97706] border border-transparent transition-all shadow-lg cursor-pointer mt-2 disabled:opacity-50"
+                    className="w-full py-3.5 bg-[#D97706] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-transparent hover:text-[#D97706] hover:border-[#D97706] border border-transparent transition-all shadow-[0_0_20px_rgba(217,119,6,0.3)] cursor-pointer mt-2 disabled:opacity-50"
                   >
                     {loading ? "Submitting to Registry..." : "Submit to Registry \u2192"}
                   </button>
