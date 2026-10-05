@@ -62,7 +62,7 @@ export default function HeroSection({
   return (
     <section 
       onMouseMove={handleMouseMove}
-      className="relative min-h-[96vh] flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden bg-[#030201]"
+      className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-6 pt-16 pb-24 overflow-hidden bg-[#030201]"
     >
       
       {/* ========================================================= */}
@@ -89,7 +89,7 @@ export default function HeroSection({
         {/* Deep Luxury Gradient Base */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#170e05] via-[#050302] to-[#030201]"></div>
 
-        {/* Left Side: Moving Threads (Visible on all screens now) */}
+        {/* Left Side: Moving Threads */}
         <div className="absolute left-3 md:left-14 top-0 bottom-0 flex items-center space-x-2 md:space-x-4 z-10 opacity-60 md:opacity-100">
           <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#8c550d]/30 to-transparent relative">
             <motion.div 
@@ -107,7 +107,8 @@ export default function HeroSection({
           </div>
         </div>
 
-        {/* Right Side: Moving Threads (Visible on all screens now) */}
+        {/* Right Side: Moving Threads */}
+
         <div className="absolute right-3 md:right-14 top-0 bottom-0 flex items-center space-x-2 md:space-x-4 z-10 opacity-60 md:opacity-100">
           <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#6b4208]/40 to-transparent relative hidden sm:block">
             <motion.div 
@@ -172,7 +173,7 @@ export default function HeroSection({
       {/* ========================================== */}
       {/* HERO CONTENT CONTAINER                     */}
       {/* ========================================== */}
-      <div className="relative z-20 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-4">
+      <div className="relative z-20 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-center px-4">
         
         {/* Left/Center Column: Main Hero Headings & Actions */}
         <motion.div 
@@ -189,7 +190,7 @@ export default function HeroSection({
             initial={{ opacity: 0, filter: "blur(8px)", scale: 0.98 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
             transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="mb-8 group cursor-pointer"
+            className="mb-6 group cursor-pointer"
           >
             <div className="relative p-[1px] rounded-full overflow-hidden shadow-[0_0_20px_rgba(140,85,13,0.2)]">
               <span className="absolute inset-0 bg-gradient-to-r from-[#8c550d] via-[#a86512] to-[#8c550d] opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-[spin_4s_linear_infinite]"></span>
@@ -206,7 +207,7 @@ export default function HeroSection({
             initial={{ opacity: 0, filter: "blur(10px)", y: 15 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
-            className="relative max-w-5xl w-full mx-auto rounded-3xl overflow-hidden mb-8 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_25px_70px_rgba(0,0,0,0.95)] p-6 sm:p-12 backdrop-blur-md"
+            className="relative max-w-5xl w-full mx-auto rounded-3xl overflow-hidden mb-6 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_25px_70px_rgba(0,0,0,0.95)] p-6 sm:p-12 backdrop-blur-md"
           >
             <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
@@ -243,7 +244,7 @@ export default function HeroSection({
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: "easeOut" } } }}
                   className="italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#b47525] via-[#d9822b] to-[#915412] drop-shadow-[0_4px_20px_rgba(180,117,37,0.35)] px-1 sm:px-2"
                 >
-                  WERJIH
+                  THE WERJIH&apos;S
                 </motion.span>
 
                 <motion.span 
@@ -261,7 +262,7 @@ export default function HeroSection({
             initial={{ opacity: 0, filter: "blur(10px)", y: 15 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            className="relative max-w-2xl mx-auto rounded-2xl overflow-hidden mb-12 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_20px_60px_rgba(0,0,0,0.95)]"
+            className="relative max-w-2xl mx-auto rounded-2xl overflow-hidden mb-10 bg-gradient-to-b from-[#0c0806] via-[#070503] to-[#040302] border border-[#8c550d]/30 shadow-[0_20px_60px_rgba(0,0,0,0.95)]"
           >
             <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>

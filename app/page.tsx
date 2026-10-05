@@ -5,7 +5,7 @@ import Link from "next/link";
 import ContributionPortal from '@/components/ContributionPortal';
 import AncestralTree from '@/components/AncestralTree';
 import EventsBoard from '@/components/EventsBoard';
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useScroll, useTransform, useReducedMotion } from "framer-motion";
 import VisualHeritageSlideshow from '@/components/VisualHeritageSlideshow';
 import LeadershipImage from '@/components/leadership-image';
 import BookAdvertSection from "@/components/Book-advert";
@@ -412,41 +412,84 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* FOOTER */}
+      
+      <footer className="relative bg-gradient-to-b from-[#060504] via-[#040302] to-[#020101] border-t border-[#d07f05]/20 mt-28 py-20 overflow-hidden text-gray-400 font-serif">
+        
+        {/* Subtle Ambient Glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#d07f05]/50 to-transparent" />
+        <div className="absolute bottom-0 left-1/4 w-[25rem] h-[15rem] bg-[#d07f05]/5 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Footer */}
-      <footer className="bg-[#121111] border-t border-[#d07f05]/20 mt-20 py-12 text-gray-400 text-sm">
-        <div className="max-w-6xl mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div className="font-bold text-white text-lg tracking-wider mb-3">
-              THE <span className="text-[#d07f05]">WERJIH&apos;S</span>
+        <div className="max-w-6xl mx-auto px-8 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-16">
+          
+          {/* Column 1: Brand & Legacy */}
+          <div className="space-y-4">
+            <div className="inline-flex items-center space-x-2 text-[9px] font-mono tracking-[0.3em] uppercase text-[#d07f05] bg-[#d07f05]/10 px-3.5 py-1 rounded-full border border-[#d07f05]/25">
+              <span>✦ SANCTUARY & LEGACY ✦</span>
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Preserving our history, honoring our ancestral trade routes, and uniting our global community across generations.
+            <div className="text-xl font-normal text-white tracking-wide">
+              THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b47525] via-[#d9822b] to-[#915412] font-semibold italic">TIGRI WERJIH&apos;S</span>
+            </div>
+            <p className="text-xs font-sans font-light text-[#ab9f94] leading-relaxed max-w-sm">
+              Preserving our history, honoring our ancestral trade routes, and uniting our global community across generations with enduring pride.
             </p>
           </div>
-          <div>
-            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider text-[#d07f05]">Quick Links</h4>
-            <ul className="space-y-2 text-xs">
-              <li><Link href="#home" className="hover:text-[#d07f05] transition-colors">Home</Link></li>
-              <li><Link href="#leadership" className="hover:text-[#d07f05] transition-colors">History & Lineage</Link></li>
-              <li><Link href="#notice" className="hover:text-[#d07f05] transition-colors">Community</Link></li>
-              <li><Link href="/archive" className="hover:text-[#d07f05] transition-colors">Archive</Link></li>
+
+          {/* Column 2: Navigation / Quick Links */}
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05]">Quick Navigation</h4>
+            <ul className="space-y-2.5 text-xs font-sans">
+              <li>
+                <Link href="/" className="hover:text-[#d07f05] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#d07f05] opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span> Home Chronicle
+                </Link>
+              </li>
+              <li>
+                <Link href="/#history" className="hover:text-[#d07f05] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#d07f05] opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span> History & Lineage
+                </Link>
+              </li>
+              <li>
+                <Link href="/#notice" className="hover:text-[#d07f05] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#d07f05] opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span> Community & Notice
+                </Link>
+              </li>
+              <li>
+                <Link href="/archive" className="hover:text-[#d07f05] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#d07f05] opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span> Digital Archive Hub
+                </Link>
+              </li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider text-[#d07f05]">Annual Gathering</h4>
-            <p className="text-xs text-gray-400 mb-2">Held every August 10th globally.</p>
-            <a href="#notice" className="text-xs text-[#d07f05] font-semibold hover:underline">Register Now &rarr;</a>
+
+          {/* Column 3: Annual Gathering */}
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05]">Annual Gathering</h4>
+            <p className="text-xs font-sans font-light text-[#ab9f94]">
+              Held every August 10th globally to celebrate our roots, share stories, and strengthen kinship bonds.
+            </p>
+            <div>
+              <Link 
+                href="/#notice" 
+                className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#d07f05] bg-[#d07f05]/10 border border-[#d07f05]/30 hover:bg-[#d07f05] hover:text-black py-2 px-4 rounded-xl transition-all duration-300"
+              >
+                Register Now &rarr;
+              </Link>
+            </div>
           </div>
-          <div>
-            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider text-[#d07f05]">NGO Partner</h4>
-            <p className="text-xs text-gray-400">In collaboration with supporting Werjih community members.</p>
-          </div>
+
         </div>
-        <div className="max-w-6xl mx-auto px-8 pt-8 border-t border-white/5 text-center text-xs text-gray-400">
-          &copy; {new Date().getFullYear()} The Werjih Society. All rights reserved. Built with pride and legacy.
+
+        {/* Bottom Copyright Bar */}
+        <div className="max-w-6xl mx-auto px-8 pt-8 border-t border-[#221c17] flex flex-col sm:flex-row items-center justify-between text-xs font-sans text-[#8c7e72] gap-4">
+          <p>&copy; {new Date().getFullYear()} The Werjih Society. All rights reserved.</p>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#d07f05]/80">Built with pride, heritage, and lineage.</p>
         </div>
+
       </footer>
     </main>
   );
 }
+
+      
