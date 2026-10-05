@@ -12,7 +12,7 @@ const LEFT: Item[] = [
   {
     label: 'History',
     children: [
-      { label: 'Origins of the Werji People', href: '/history/origins' },
+      { label: 'Origins of the Werjih People', href: '/history/origins' },
       { label: 'Migration History', href: '/history/migration' },
       { label: 'Historical Timeline', href: '/history/timeline' },
     ],
@@ -206,7 +206,7 @@ export default function Navbar() {
               The Tigri
             </span>
             <span className="mt-1 block font-serif text-base font-bold uppercase tracking-[0.25em] text-[#fdf6ec] transition-all duration-300 group-hover:scale-[1.02] group-hover:text-white">
-              Werjihs
+              WERJIH&apos;S
             </span>
           </Link>
 
