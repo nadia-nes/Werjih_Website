@@ -19,7 +19,7 @@ const CACHE_BUSTER = Date.now();
 const epochDetails: Record<number, { years: string; subtitle: string; description: string }> = {
   0: {
     years: "Late 19th - Early 20th Century",
-    subtitle: "Guardian: Turiyo Wariyo",
+    subtitle: "Guardian: Turio Wario",
     description: "During the intense geopolitical realignments of Emperor Menelik II's era, Turiyo Wariyo stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties."
   },
   1: {
