@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "The Werjih Society",
   description: "Ancient Heritage & Legacy",
+};
+
+export const viewport: Viewport = {
   themeColor: "#0c0a09",
 };
 
