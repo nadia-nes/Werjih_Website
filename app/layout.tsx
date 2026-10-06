@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
-import ScrollThumb from "@/components/ScrollThumb"; // Replaced ScrollToTop with ScrollThumb
+import ScrollThumb from "@/components/ScrollToTop"; // Replaced ScrollToTop with ScrollThumb
 import "./globals.css";
 
 const geistSans = Geist({
