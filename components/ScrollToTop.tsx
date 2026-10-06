@@ -34,7 +34,7 @@ export default function ScrollToTop() {
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 10 }}
-          className="fixed bottom-6 right-6 z-50 md:hidden"
+          className="fixed bottom-6 right-6 z-50" // Active on both mobile and desktop now!
         >
           <button
             type="button"
