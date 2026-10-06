@@ -1,8 +1,30 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useTransition } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Cormorant_Garamond, Inter } from 'next/font/google';
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+} from 'framer-motion';
+
+/*
+  Calm palette (matches the hero)
+  #080604 ink · #0d0a07 surface · #f1e9d8 ivory · #cfc6b3 stone
+  #e6cfa6 champagne · #d9a05a soft amber · #c98a3c antique bronze
+*/
+
+const display = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+});
+const sans = Inter({ subsets: ['latin'], display: 'swap' });
 
 type Child = { label: string; href: string };
 type Item = { label: string; href?: string; children?: Child[] };
@@ -41,47 +63,207 @@ const RIGHT: Item[] = [
 ];
 
 const MOBILE_ORDER = [...LEFT, ...RIGHT];
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const isItemActive = (item: Item, pathname: string): boolean => {
+  if (item.href) {
+    return item.href === '/'
+      ? pathname === '/'
+      : pathname === item.href || pathname.startsWith(item.href + '/');
+  }
+  return !!item.children?.some((c) => pathname === c.href);
+};
+
+function Chevron({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 10 6"
+      className={`h-2 w-2.5 ${className}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M1 1l4 4 4-4" />
+    </svg>
+  );
+}
+
+/* Defined outside Navbar so it never remounts on scroll */
+function DesktopItem({
+  item,
+  pathname,
+  open,
+  setOpen,
+  reduce,
+}: {
+  item: Item;
+  pathname: string;
+  open: boolean;
+  setOpen: (label: string | null) => void;
+  reduce: boolean;
+}) {
+  const active = isItemActive(item, pathname);
+  const menuId = `menu-${item.label.toLowerCase()}`;
+
+  const label = (
+    <span className="relative inline-flex items-center gap-1.5 px-3.5 py-2">
+      <span
+        className={`text-[14px] tracking-[0.01em] transition-colors duration-300 ${
+          active || open ? 'text-[#f1e9d8]' : 'text-[#cfc6b3] group-hover:text-[#f1e9d8]'
+        }`}
+      >
+        {item.label}
+      </span>
+
+      {item.children && (
+        <Chevron
+          className={`text-[#c98a3c] transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+        />
+      )}
+
+      {/* A quiet dot glides to the active page */}
+      {active && (
+        <motion.span
+          layoutId="nav-dot"
+          aria-hidden
+          transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 34 }}
+          className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#c98a3c]"
+        />
+      )}
+    </span>
+  );
+
+  return (
+    <li
+      className="group relative"
+      onMouseEnter={() => item.children && setOpen(item.label)}
+      onMouseLeave={() => item.children && setOpen(null)}
+      onBlur={(e) => {
+        if (item.children && !e.currentTarget.contains(e.relatedTarget as Node)) setOpen(null);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') setOpen(null);
+      }}
+    >
+      {item.href ? (
+        <Link
+          href={item.href}
+          aria-current={active ? 'page' : undefined}
+          className="block rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70"
+        >
+          {label}
+        </Link>
+      ) : (
+        <>
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={menuId}
+            onClick={() => setOpen(open ? null : item.label)}
+            className="block rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70"
+          >
+            {label}
+          </button>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                id={menuId}
+                initial={{ opacity: 0, y: reduce ? 0 : 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: reduce ? 0 : 4 }}
+                transition={{ duration: reduce ? 0.01 : 0.22, ease: EASE }}
+                className="absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-3"
+              >
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0d0a07]/95 p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.7)] backdrop-blur-2xl">
+                  <div className="flex flex-col">
+                    {item.children!.map((c) => {
+                      const childActive = pathname === c.href;
+                      return (
+                        <Link
+                          key={c.href}
+                          href={c.href}
+                          aria-current={childActive ? 'page' : undefined}
+                          className={`flex items-center gap-3 rounded-xl px-4 py-3 text-[14px] outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 ${
+                            childActive
+                              ? 'bg-[#c98a3c]/[0.12] text-[#f1e9d8]'
+                              : 'text-[#cfc6b3] hover:bg-white/[0.05] hover:text-[#f1e9d8]'
+                          }`}
+                        >
+                          <span
+                            aria-hidden
+                            className={`h-1 w-1 rounded-full ${
+                              childActive ? 'bg-[#c98a3c]' : 'bg-[#c98a3c]/40'
+                            }`}
+                          />
+                          {c.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      )}
+    </li>
+  );
+}
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-  const [openSection, setOpenSection] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState<boolean>(false);
-  const [, startTransition] = useTransition();
+  const reduce = useReducedMotion() ?? false;
   const pathname = usePathname() ?? '';
 
-  // Ref to track the header/nav wrapper for outside-click detection
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSection, setMobileSection] = useState<string | null>(null);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Close menus when the route changes (during render, no effect needed)
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setMobileOpen(false);
+    setOpenMenu(null);
+  }
+
   const navRef = useRef<HTMLElement>(null);
 
-  // Close mobile drawer seamlessly on route change via transition
-  useEffect(() => {
-    startTransition(() => {
-      setMobileOpen(false);
-    });
-  }, [pathname]);
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 20));
 
+  // Close on outside tap / Escape
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Handle outside clicks to close the mobile menu
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setMobileOpen(false);
-      }
+    if (!mobileOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setMobileOpen(false);
     };
-
-    if (mobileOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKey);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKey);
     };
   }, [mobileOpen]);
 
+  // Close the mobile menu if the screen grows to desktop size
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setMobileOpen(false);
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  // Lock page scroll while the mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => {
@@ -89,172 +271,103 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
-  const isActive = (item: Item): boolean => {
-    if (item.href) {
-      return item.href === '/' ? pathname === '/' : pathname === item.href || pathname.startsWith(item.href + '/');
-    }
-    return !!item.children?.some((c) => pathname === c.href);
-  };
-
-  const childActive = (href: string): boolean => pathname === href;
-
-  const DesktopItem = ({ item }: { item: Item }) => {
-    const active = isActive(item);
-
-    const labelContent = (
-      <span className="relative inline-flex items-center gap-2 px-3.5 py-2">
-        <span
-          className={`text-[11px] font-semibold uppercase tracking-[0.25em] transition-colors duration-300 ${
-            active ? 'text-[#fdf6ec]' : 'text-[#c8b79b] group-hover:text-[#fdf6ec]'
-          }`}
-        >
-          {item.label}
-        </span>
-
-        {item.children && (
-          <svg
-            viewBox="0 0 10 6"
-            className="h-2 w-2.5 text-[#d07f05] transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M1 1l4 4 4-4" />
-          </svg>
-        )}
-
-        <span
-          aria-hidden
-          className={`absolute inset-x-2 -bottom-1 h-0.5 origin-center rounded-full bg-gradient-to-r from-transparent via-[#f0a024] to-transparent transition-all duration-500 ease-out ${
-            active
-              ? 'scale-x-100 opacity-100 shadow-[0_0_14px_3px_rgba(240,160,36,0.6)]'
-              : 'scale-x-0 opacity-0 group-hover:scale-x-75 group-hover:opacity-70'
-          }`}
-        />
-      </span>
-    );
-
-    return (
-      <li className="group relative">
-        {item.href ? (
-          <Link
-            href={item.href}
-            aria-current={active ? 'page' : undefined}
-            className="block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]/60"
-          >
-            {labelContent}
-          </Link>
-        ) : (
-          <>
-            <button
-              type="button"
-              aria-haspopup="menu"
-              className="block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]/60"
-            >
-              {labelContent}
-            </button>
-
-            <div className="invisible absolute left-1/2 top-full z-50 w-80 -translate-x-1/2 translate-y-3 pt-2 opacity-0 transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-              <div className="relative overflow-hidden rounded-2xl border border-[#d07f05]/30 bg-[#0c0806]/95 p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
-                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#d07f05]/10 blur-2xl pointer-events-none" />
-                
-                <div className="relative flex flex-col gap-1">
-                  {item.children!.map((c) => {
-                    const isChildActive = childActive(c.href);
-                    return (
-                      <Link
-                        key={c.href}
-                        href={c.href}
-                        aria-current={isChildActive ? 'page' : undefined}
-                        className={`group/link relative flex items-center justify-between rounded-xl px-4 py-3 text-[13px] tracking-wide transition-all duration-300 ${
-                          isChildActive
-                            ? 'bg-gradient-to-r from-[#d07f05]/20 to-transparent text-[#fdf6ec] font-medium'
-                            : 'text-[#c8b79b] hover:bg-white/[0.04] hover:text-[#fdf6ec] hover:translate-x-1'
-                        }`}
-                      >
-                        <span className="relative z-10 flex items-center gap-2.5">
-                          <span
-                            className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-                              isChildActive ? 'bg-[#f0a024] shadow-[0_0_8px_#f0a024]' : 'bg-[#d07f05]/40 group-hover/link:bg-[#f0a024]'
-                            }`}
-                          />
-                          {c.label}
-                        </span>
-
-                        {isChildActive && (
-                          <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-[#f0a024] shadow-[0_0_10px_#f0a024]" />
-                        )}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </li>
-    );
-  };
-
   return (
-    <header ref={navRef} className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5 transition-all duration-500">
+    <header
+      ref={navRef}
+      className={`${sans.className} sticky top-0 z-50 px-3 pb-1 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:pt-4`}
+    >
+      {/* Dim backdrop behind the open mobile menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduce ? 0.01 : 0.25 }}
+            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 -z-10 bg-black/70 backdrop-blur-sm md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       <div className="mx-auto max-w-7xl">
         <nav
           aria-label="Main"
-          className={`relative grid grid-cols-[auto_1fr_auto] items-center rounded-2xl border px-4 transition-all duration-500 md:grid-cols-[1fr_auto_1fr] sm:px-8 ${
+          className={`relative grid grid-cols-[auto_1fr_auto] items-center rounded-full border px-4 backdrop-blur-xl transition-all duration-500 sm:px-7 md:grid-cols-[1fr_auto_1fr] ${
             scrolled
-              ? 'h-16 border-[#d07f05]/35 bg-[#0a0705]/90 shadow-[0_16px_50px_rgba(0,0,0,0.8)] backdrop-blur-2xl'
-              : 'h-20 border-[#d07f05]/20 bg-[#0d0906]/70 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl'
+              ? 'h-14 border-[#c98a3c]/25 bg-[#080604]/90 shadow-[0_14px_40px_rgba(0,0,0,0.6)] md:h-16'
+              : 'h-16 border-white/[0.08] bg-[#080604]/60 shadow-[0_8px_24px_rgba(0,0,0,0.35)] md:h-[72px]'
           }`}
         >
-          <span className="pointer-events-none absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#d07f05]/60 to-transparent" />
-
-          <ul className="hidden items-center justify-start gap-1 md:flex lg:gap-2">
+          {/* Left links */}
+          <ul className="hidden items-center justify-start gap-0.5 md:flex lg:gap-1.5">
             {LEFT.map((i) => (
-              <DesktopItem key={i.label} item={i} />
+              <DesktopItem
+                key={i.label}
+                item={i}
+                pathname={pathname}
+                open={openMenu === i.label}
+                setOpen={setOpenMenu}
+                reduce={reduce}
+              />
             ))}
           </ul>
 
+          {/* Wordmark only: no tile, no icon */}
           <Link
             href="/"
-            className="group col-start-1 text-left leading-none md:col-start-2 md:text-center outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]/60 rounded-lg p-1"
+            aria-label="The Tigri Werjih's, home"
+            className="group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-1 py-1 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 md:col-start-2 md:items-center md:justify-self-center"
           >
-            <span className="block font-sans text-[9px] uppercase tracking-[0.45em] text-[#d07f05] font-semibold transition-colors group-hover:text-[#f0a024]">
+            <span
+              className={`${display.className} text-[13px] italic tracking-[0.08em] text-[#c98a3c]`}
+            >
               The Tigri
             </span>
-            <span className="mt-1 block font-serif text-base font-bold uppercase tracking-[0.25em] text-[#fdf6ec] transition-all duration-300 group-hover:scale-[1.02] group-hover:text-white">
+            <span
+              className={`${display.className} mt-1 text-xl font-medium tracking-[0.2em] text-[#f1e9d8] transition-colors duration-300 group-hover:text-[#e6cfa6] sm:text-2xl`}
+            >
               WERJIH&apos;S
             </span>
           </Link>
 
-          <ul className="hidden items-center justify-end gap-1 md:flex lg:gap-2">
+          {/* Right links */}
+          <ul className="hidden items-center justify-end gap-0.5 md:flex lg:gap-1.5">
             {RIGHT.map((i) => (
-              <DesktopItem key={i.label} item={i} />
+              <DesktopItem
+                key={i.label}
+                item={i}
+                pathname={pathname}
+                open={openMenu === i.label}
+                setOpen={setOpenMenu}
+                reduce={reduce}
+              />
             ))}
           </ul>
 
+          {/* Mobile toggle (44px touch target) */}
           <button
             type="button"
-            onClick={() => setMobileOpen((prev) => !prev)}
-            aria-label="Toggle navigation menu"
+            onClick={() => setMobileOpen((p) => !p)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileOpen}
-            className="col-start-3 flex h-11 w-11 items-center justify-center justify-self-end rounded-xl border border-[#d07f05]/30 bg-white/[0.02] text-[#d8c5a8] transition-all duration-300 hover:border-[#d07f05]/60 hover:bg-[#d07f05]/10 hover:text-[#fdf6ec] md:hidden outline-none focus-visible:ring-2 focus-visible:ring-[#f0a024]"
+            aria-controls="mobile-menu"
+            className="col-start-3 flex h-11 w-11 items-center justify-center justify-self-end rounded-full border border-white/15 text-[#f1e9d8] outline-none transition-colors duration-300 hover:border-[#c98a3c]/60 hover:bg-[#c98a3c]/10 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 md:hidden"
           >
             <span className="relative block h-3.5 w-5">
               <span
-                className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ease-in-out ${
+                className={`absolute left-0 h-[1.5px] w-5 rounded-full bg-current transition-all duration-300 ${
                   mobileOpen ? 'top-1.5 rotate-45' : 'top-0'
                 }`}
               />
               <span
-                className={`absolute left-0 top-1.5 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ease-in-out ${
-                  mobileOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
+                className={`absolute left-0 top-1.5 h-[1.5px] w-5 rounded-full bg-current transition-all duration-300 ${
+                  mobileOpen ? 'scale-x-0 opacity-0' : 'scale-x-100 opacity-100'
                 }`}
               />
               <span
-                className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ease-in-out ${
+                className={`absolute left-0 h-[1.5px] w-5 rounded-full bg-current transition-all duration-300 ${
                   mobileOpen ? 'top-1.5 -rotate-45' : 'top-3'
                 }`}
               />
@@ -262,103 +375,111 @@ export default function Navbar() {
           </button>
         </nav>
 
-        <div
-          className={`md:hidden grid transition-all duration-300 ease-in-out ${
-            mobileOpen ? 'mt-3 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
-          }`}
-        >
-          <div className="overflow-hidden">
-            <div className="max-h-[80vh] overflow-y-auto rounded-2xl border border-[#d07f05]/30 bg-[#0a0705]/95 p-3.5 shadow-[0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-2xl">
-              <div className="flex flex-col gap-1.5">
-                {MOBILE_ORDER.map((item) => {
-                  const active = isActive(item);
-                  const open = openSection === item.label;
-
-                  const baseRowClass = `flex w-full items-center justify-between rounded-xl px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-all duration-200 ${
-                    active
-                      ? 'bg-[#d07f05]/15 text-[#fdf6ec] shadow-inner'
-                      : 'text-[#c8b79b] hover:bg-white/[0.04] hover:text-[#fdf6ec]'
-                  }`;
-
-                  const indicatorBar = (
-                    <span
-                      className={`mr-3 h-4 w-1 rounded-full bg-[#f0a024] transition-all duration-300 ${
-                        active ? 'opacity-100 shadow-[0_0_10px_#f0a024]' : 'opacity-0'
-                      }`}
-                    />
-                  );
-
-                  if (item.href) {
-                    return (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        aria-current={active ? 'page' : undefined}
-                        className={baseRowClass}
-                      >
-                        <span className="flex items-center">
-                          {indicatorBar}
-                          {item.label}
-                        </span>
-                      </Link>
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              id="mobile-menu"
+              initial={{ opacity: 0, y: reduce ? 0 : -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: reduce ? 0 : -8 }}
+              transition={{ duration: reduce ? 0.01 : 0.25, ease: EASE }}
+              className="mt-3 md:hidden"
+            >
+              <div className="max-h-[calc(100dvh-6.5rem)] overflow-y-auto overscroll-contain rounded-3xl border border-white/10 bg-[#0d0a07]/97 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_24px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+                <ul className="flex flex-col gap-0.5">
+                  {MOBILE_ORDER.map((item) => {
+                    const active = isItemActive(item, pathname);
+                    const open = mobileSection === item.label;
+                    const rowClass = `flex min-h-[48px] w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-[16px] outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 ${
+                      active
+                        ? 'bg-[#c98a3c]/[0.12] text-[#f1e9d8]'
+                        : 'text-[#cfc6b3] hover:bg-white/[0.05] hover:text-[#f1e9d8] active:bg-white/[0.08]'
+                    }`;
+                    const dot = (
+                      <span
+                        aria-hidden
+                        className={`mr-3 h-1.5 w-1.5 rounded-full bg-[#c98a3c] transition-opacity duration-300 ${
+                          active ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      />
                     );
-                  }
 
-                  return (
-                    <div key={item.label} className="overflow-hidden rounded-xl">
-                      <button
-                        type="button"
-                        className={baseRowClass}
-                        aria-expanded={open}
-                        onClick={() => setOpenSection(open ? null : item.label)}
-                      >
-                        <span className="flex items-center">
-                          {indicatorBar}
-                          {item.label}
-                        </span>
-                        <svg
-                          viewBox="0 0 10 6"
-                          className={`h-2.5 w-3 text-[#d07f05] transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                    if (item.href) {
+                      return (
+                        <li key={item.label}>
+                          <Link
+                            href={item.href}
+                            aria-current={active ? 'page' : undefined}
+                            className={rowClass}
+                          >
+                            <span className="flex items-center">
+                              {dot}
+                              {item.label}
+                            </span>
+                          </Link>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={item.label}>
+                        <button
+                          type="button"
+                          className={rowClass}
+                          aria-expanded={open}
+                          onClick={() => setMobileSection(open ? null : item.label)}
                         >
-                          <path d="M1 1l4 4 4-4" />
-                        </svg>
-                      </button>
+                          <span className="flex items-center">
+                            {dot}
+                            {item.label}
+                          </span>
+                          <Chevron
+                            className={`text-[#c98a3c] transition-transform duration-300 ${
+                              open ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
 
-                      <div className={`grid transition-all duration-300 ease-in-out ${open ? 'grid-rows-[1fr] pb-1' : 'grid-rows-[0fr]'}`}>
-                        <div className="overflow-hidden">
-                          <div className="ml-5 mt-1 flex flex-col gap-1 border-l border-[#d07f05]/25 py-1 pl-3">
-                            {item.children!.map((c) => {
-                              const isChildActive = childActive(c.href);
-                              return (
-                                <Link
-                                  key={c.href}
-                                  href={c.href}
-                                  aria-current={isChildActive ? 'page' : undefined}
-                                  className={`block rounded-lg px-3 py-2.5 text-[13px] tracking-wide transition-all duration-200 ${
-                                    isChildActive
-                                      ? 'font-bold text-[#f0a024] bg-[#d07f05]/10 shadow-sm'
-                                      : 'text-[#c8b79b] hover:bg-white/[0.03] hover:text-[#fdf6ec]'
-                                  }`}
-                                >
-                                  {c.label}
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                        <AnimatePresence initial={false}>
+                          {open && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: reduce ? 0.01 : 0.28, ease: EASE }}
+                              className="overflow-hidden"
+                            >
+                              <div className="ml-7 mt-1 flex flex-col gap-0.5 border-l border-[#c98a3c]/30 py-1 pl-3">
+                                {item.children!.map((c) => {
+                                  const childActive = pathname === c.href;
+                                  return (
+                                    <Link
+                                      key={c.href}
+                                      href={c.href}
+                                      aria-current={childActive ? 'page' : undefined}
+                                      className={`flex min-h-[44px] items-center rounded-xl px-3 py-2.5 text-[15px] outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 ${
+                                        childActive
+                                          ? 'bg-[#c98a3c]/[0.12] text-[#e6cfa6]'
+                                          : 'text-[#cfc6b3] hover:bg-white/[0.05] hover:text-[#f1e9d8] active:bg-white/[0.08]'
+                                      }`}
+                                    >
+                                      {c.label}
+                                    </Link>
+                                  );
+                                })}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );

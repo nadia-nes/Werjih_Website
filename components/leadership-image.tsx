@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion, useReducedMotion } from "framer-motion";
 import { Shield } from "lucide-react";
@@ -44,7 +44,6 @@ export default function LeadershipImage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   
-  const storyCardRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -67,9 +66,6 @@ export default function LeadershipImage() {
 
   const handleSelectLeader = (index: number) => {
     setActiveIndex(index);
-    if (window.innerWidth < 1024 && storyCardRef.current) {
-      storyCardRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
   };
 
   if (loading) {
@@ -123,17 +119,15 @@ export default function LeadershipImage() {
           </p>
         </motion.div>
 
-        {/* Timeline Row */}
-        <div className="relative mb-16">
+        {/* Timeline Row / Cards Grid */}
+        <div className="relative mb-8">
           <div className="hidden lg:block absolute top-[50px] left-16 right-16 h-[2px] bg-[#26201a] z-0">
             {!shouldReduceMotion && (
               <div className="absolute inset-0 bg-gradient-to-r from-[#d07f05]/40 via-[#d07f05] to-[#d07f05]/40 shadow-[0_0_12px_#d07f05] animate-pulse"></div>
             )}
           </div>
 
-          <div className="block lg:hidden absolute top-8 bottom-8 left-[35px] w-[2px] bg-[#26201a] z-0"></div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8 relative z-10">
             {leaders.map((leader, index) => {
               const rawUrl = leader.image_url
                 ? supabase.storage
@@ -142,123 +136,167 @@ export default function LeadershipImage() {
                 : "";
               
               const imageUrl = rawUrl ? `${rawUrl}?t=${CACHE_BUSTER}` : "";
-
               const isSelected = activeIndex === index;
+              const currentEpochInfo = epochDetails[index] || {
+                years: "Historical Era",
+                subtitle: leader?.role || "Community Guardian",
+                description: "Honoring the legacy of our ancestors."
+              };
 
               return (
-                <motion.div
-                  key={leader.id || index}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  onClick={() => handleSelectLeader(index)}
-                  className={`group relative flex lg:flex-col items-center text-left lg:text-center cursor-pointer p-4 rounded-2xl transition-all duration-500 ${
-                    isSelected 
-                      ? "bg-[#181512] border border-[#d07f05]/60 shadow-[0_10px_35px_rgba(208,127,5,0.18)]" 
-                      : "bg-[#12100e]/60 border border-white/5 hover:border-[#d07f05]/30 hover:bg-[#15120f]"
-                  }`}
-                >
-                  <div className="relative shrink-0">
-                    {isSelected && (
-                      <div className="absolute -inset-2 rounded-full bg-[#d07f05]/20 blur-md animate-pulse pointer-events-none"></div>
-                    )}
+                <div key={leader.id || index} className="flex flex-col">
+                  {/* Leader Selection Card */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    onClick={() => handleSelectLeader(index)}
+                    className={`group relative flex lg:flex-col items-center text-left lg:text-center cursor-pointer p-4 rounded-2xl transition-all duration-500 ${
+                      isSelected 
+                        ? "bg-[#181512] border border-[#d07f05]/60 shadow-[0_10px_35px_rgba(208,127,5,0.18)]" 
+                        : "bg-[#12100e]/60 border border-white/5 hover:border-[#d07f05]/30 hover:bg-[#15120f]"
+                    }`}
+                  >
+                    <div className="relative shrink-0">
+                      {isSelected && (
+                        <div className="absolute -inset-2 rounded-full bg-[#d07f05]/20 blur-md animate-pulse pointer-events-none"></div>
+                      )}
 
-                    <div className={`relative w-20 h-20 lg:w-28 lg:h-28 rounded-full p-1 transition-all duration-500 ${
-                      isSelected ? "border-2 border-[#d07f05] scale-105 shadow-xl" : "border border-[#d07f05]/30 group-hover:border-[#d07f05]/70"
-                    } bg-[#0c0a09]`}>
-                      
-                      <div className="w-full h-full rounded-full overflow-hidden relative bg-[#070605]">
-                        {imageUrl ? (
-                          /* eslint-disable-next-line @next/next/no-img-element */
-                          <img
-                            src={imageUrl}
-                            alt={leader.name || "Guardian"}
-                            className="w-full h-full object-cover object-top filter grayscale-[25%] sepia-[15%] group-hover:grayscale-0 group-hover:sepia-0 transition-all duration-700 group-hover:scale-110"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-[9px] font-mono text-gray-500">
-                            ARCHIVE
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-20"></div>
+                      <div className={`relative w-20 h-20 lg:w-28 lg:h-28 rounded-full p-1 transition-all duration-500 ${
+                        isSelected ? "border-2 border-[#d07f05] scale-105 shadow-xl" : "border border-[#d07f05]/30 group-hover:border-[#d07f05]/70"
+                      } bg-[#0c0a09]`}>
+                        
+                        <div className="w-full h-full rounded-full overflow-hidden relative bg-[#070605]">
+                          {imageUrl ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img
+                              src={imageUrl}
+                              alt={leader.name || "Guardian"}
+                              className="w-full h-full object-cover object-top filter grayscale-[25%] sepia-[15%] group-hover:grayscale-0 group-hover:sepia-0 transition-all duration-700 group-hover:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-[9px] font-mono text-gray-500">
+                              ARCHIVE
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-20"></div>
+                        </div>
+                      </div>
+
+                      <div className="absolute -bottom-1 -right-1 bg-[#0f0e0e] border border-[#d07f05] text-[#d07f05] text-[9px] font-mono w-6 h-6 rounded-full flex items-center justify-center shadow-md">
+                        0{index + 1}
                       </div>
                     </div>
 
-                    <div className="absolute -bottom-1 -right-1 bg-[#0f0e0e] border border-[#d07f05] text-[#d07f05] text-[9px] font-mono w-6 h-6 rounded-full flex items-center justify-center shadow-md">
-                      0{index + 1}
+                    <div className="ml-5 lg:ml-0 lg:mt-4 flex flex-col justify-center">
+                      <span className="text-[10px] font-mono tracking-[0.25em] text-[#d07f05] uppercase mb-0.5">
+                        {leader.epoch || `Epoch ${index + 1}`}
+                      </span>
+                      <h3 className="text-base font-serif font-medium text-white group-hover:text-[#d07f05] transition-colors">
+                        {leader.name}
+                      </h3>
+                      <span className="text-[11px] text-gray-400 font-light mt-0.5 lg:hidden">
+                        {isSelected ? "Active Record ▼" : "Tap to view record ▸"}
+                      </span>
                     </div>
-                  </div>
 
-                  <div className="ml-5 lg:ml-0 lg:mt-4 flex flex-col justify-center">
-                    <span className="text-[10px] font-mono tracking-[0.25em] text-[#d07f05] uppercase mb-0.5">
-                      {leader.epoch || `Epoch ${index + 1}`}
-                    </span>
-                    <h3 className="text-base font-serif font-medium text-white group-hover:text-[#d07f05] transition-colors">
-                      {leader.name}
-                    </h3>
-                    <span className="text-[11px] text-gray-400 font-light mt-0.5 lg:hidden">
-                      Tap to view record &rarr;
-                    </span>
-                  </div>
+                    {isSelected && (
+                      <div className="hidden lg:block absolute -bottom-3 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#181512] border-r border-b border-[#d07f05]/60 rotate-45"></div>
+                    )}
+                  </motion.div>
 
+                  {/* MOBILE INLINE ACCORDION: Shows immediately below the tapped card on mobile screens only */}
                   {isSelected && (
-                    <div className="hidden lg:block absolute -bottom-3 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#181512] border-r border-b border-[#d07f05]/60 rotate-45"></div>
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="block lg:hidden mt-3 mb-4 bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-2xl p-5 shadow-xl relative overflow-hidden"
+                    >
+                      <div className="space-y-4 relative z-10">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-[9px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-2.5 py-0.5 rounded-full font-bold">
+                            {leader.epoch || `Epoch ${index + 1}`}
+                          </span>
+                          <span className="text-[10px] font-mono text-gray-400 flex items-center space-x-1">
+                            <span>⏳</span>
+                            <span>{currentEpochInfo.years}</span>
+                          </span>
+                        </div>
+
+                        <div>
+                          <h3 className="text-xl font-serif font-normal text-white mb-1">
+                            {leader.name}
+                          </h3>
+                          <p className="text-[#d07f05] text-xs font-serif italic">
+                            {currentEpochInfo.subtitle}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-[#d07f05]/20">
+                          <p className="text-gray-300 text-xs font-light leading-relaxed">
+                            {currentEpochInfo.description}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
                   )}
-                </motion.div>
+                </div>
               );
             })}
           </div>
         </div>
 
-        {/* Expanded Epoch Story Card */}
-        <div ref={storyCardRef}>
+        {/* DESKTOP EXPANDED STORY CARD: Only shows on large screens (lg and up) */}
+        <div className="hidden lg:block">
           <motion.div
             key={activeIndex}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-2xl md:rounded-3xl p-5 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden"
+            className="relative bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-3xl p-12 shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#d07f05]/5 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-900/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
-              <div className="lg:col-span-8 space-y-4 md:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              <div className="lg:col-span-8 space-y-6">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="text-[9px] md:text-[10px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-3 py-0.5 md:px-3.5 md:py-1 rounded-full font-bold shadow-[0_0_15px_rgba(208,127,5,0.3)]">
+                  <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-3.5 py-1 rounded-full font-bold shadow-[0_0_15px_rgba(208,127,5,0.3)]">
                     {activeLeader.epoch || `Epoch ${activeIndex + 1}`}
                   </span>
-                  <span className="text-[11px] md:text-xs font-mono text-gray-400 tracking-wider flex items-center space-x-1">
+                  <span className="text-xs font-mono text-gray-400 tracking-wider flex items-center space-x-1">
                     <span>⏳</span>
                     <span>{activeEpochInfo.years}</span>
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-xl md:text-4xl font-serif font-normal text-white mb-1.5 md:mb-2">
+                  <h3 className="text-4xl font-serif font-normal text-white mb-2">
                     {activeLeader.name}
                   </h3>
-                  <p className="text-[#d07f05] text-xs md:text-base font-serif italic tracking-wide">
+                  <p className="text-[#d07f05] text-base font-serif italic tracking-wide">
                     {activeEpochInfo.subtitle}
                   </p>
                 </div>
 
-                <div className="pt-3 md:pt-4 border-t border-[#d07f05]/20">
-                  <p className="text-gray-300 text-xs md:text-base font-light leading-relaxed">
+                <div className="pt-4 border-t border-[#d07f05]/20">
+                  <p className="text-gray-300 text-base font-light leading-relaxed">
                     {activeEpochInfo.description}
                   </p>
                 </div>
               </div>
 
-              <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[#0e0c0a]/80 border border-[#d07f05]/20 rounded-xl md:rounded-2xl p-4 md:p-6 text-center shadow-inner">
-                <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05] mb-1.5 md:mb-2">
+              <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[#0e0c0a]/80 border border-[#d07f05]/20 rounded-2xl p-6 text-center shadow-inner">
+                <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05] mb-2">
                   Custodianship Status
                 </span>
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 flex items-center justify-center text-[#d07f05] mb-2 md:mb-3">
-                  <Shield className="w-4 h-4 md:w-5 md:h-5" />
+                <div className="w-12 h-12 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 flex items-center justify-center text-[#d07f05] mb-3">
+                  <Shield className="w-5 h-5" />
                 </div>
-                <p className="text-[11px] md:text-xs text-gray-300 font-light leading-relaxed">
+                <p className="text-xs text-gray-300 font-light leading-relaxed">
                   Preserved across generations within the foundational memory and written archives of The Werjih Society.
                 </p>
               </div>
