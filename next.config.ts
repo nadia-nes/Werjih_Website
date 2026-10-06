@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    scrollRestoration: true,
+  },
 };
 
 export default nextConfig;

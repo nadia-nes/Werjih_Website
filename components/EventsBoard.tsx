@@ -71,7 +71,7 @@ export default function WerjihGatheringsBoard() {
               <span className="text-[10px] font-mono uppercase tracking-widest text-[#d07f05] bg-[#0f0b08] px-3 py-1 rounded-full border border-[#d07f05]/30">
                 Featured Annual Gathering
               </span>
-              <h3 className="text-3xl font-serif text-white mt-3">July 22 — Werjih Day</h3>
+              <h3 className="text-3xl font-serif text-white mt-3">July 22, Werjih Day</h3>
               <p className="text-xs text-gray-400 mt-1">📍 Global Community Assembly & Cultural Celebration</p>
             </div>
             <div className="bg-[#0f0b08] border border-[#d07f05]/30 px-6 py-4 rounded-xl text-center shadow-inner">

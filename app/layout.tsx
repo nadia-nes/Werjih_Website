@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import ScrollToTop from "@/components/ScrollToTop"; // 1. Import the component
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col bg-[#0c0a09] text-white">
         <Navbar />
         <main className="flex-1">{children}</main>
+        <ScrollToTop /> {/* 2. Place it here inside the body */}
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useEffect, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -49,6 +49,9 @@ export default function Navbar() {
   const [, startTransition] = useTransition();
   const pathname = usePathname() ?? '';
 
+  // Ref to track the header/nav wrapper for outside-click detection
+  const navRef = useRef<HTMLElement>(null);
+
   // Close mobile drawer seamlessly on route change via transition
   useEffect(() => {
     startTransition(() => {
@@ -62,6 +65,22 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Handle outside clicks to close the mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setMobileOpen(false);
+      }
+    };
+
+    if (mobileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobileOpen]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
@@ -180,7 +199,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5 transition-all duration-500">
+    <header ref={navRef} className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5 transition-all duration-500">
       <div className="mx-auto max-w-7xl">
         <nav
           aria-label="Main"

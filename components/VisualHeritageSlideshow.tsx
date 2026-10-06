@@ -1,119 +1,128 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
-// Initialize Supabase Client safely
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-interface SlideItem {
-  id: number;
-  image_url: string;
+interface Slide {
+  id: string;
   title: string;
-  description: string;
-  created_at: string;
+  image_url: string;
+  description?: string;
 }
 
 export default function VisualHeritageSlideshow() {
-  const [slides, setSlides] = useState<SlideItem[]>([]);
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchSlides() {
       try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from('heritage_slideshow')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.from("heritage_slideshow").select("*");
 
-        if (error) {
-          console.error('Supabase query error:', error);
-          setFetchError(error.message || JSON.stringify(error));
-        } else if (data) {
-          console.log('Fetched slides successfully:', data);
-          setSlides(data);
+        if (!error && data) {
+          const formattedSlides = data.map((item) => {
+            let imgPath = item.image_url;
+
+            if (imgPath && !imgPath.startsWith("http")) {
+              const { data: publicUrlData } = supabase.storage
+                .from("heritage")
+                .getPublicUrl(imgPath);
+              
+              imgPath = publicUrlData.publicUrl;
+            }
+
+            return {
+              ...item,
+              image_url: imgPath || "",
+            };
+          });
+          setSlides(formattedSlides);
+        } else if (error) {
+          console.error("Supabase error:", error.message);
         }
-      } catch (err: unknown) {
-        console.error('Unexpected catch error:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setFetchError(errorMessage);
+      } catch (err) {
+        console.error("Error loading heritage slides:", err);
       } finally {
-        setLoading(false); // Ensures loading state turns off after fetch completes
+        setLoading(false);
       }
     }
 
     fetchSlides();
   }, []);
 
+  // Auto-advance slides every 5 seconds if slides exist
   useEffect(() => {
     if (slides.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % slides.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
   }, [slides.length]);
 
   if (loading) {
     return (
-      <div className="w-full max-w-4xl mx-auto h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,109,19,0.35)] flex items-center justify-center text-gray-400 text-xs font-mono animate-pulse">
-        Connecting to Supabase archive...
-      </div>
-    );
-  }
-
-  if (fetchError) {
-    return (
-      <div className="w-full max-w-4xl mx-auto h-[450px] bg-[#121212] rounded-2xl border border-red-500/40 flex flex-col items-center justify-center text-red-400 text-xs font-mono p-6 text-center">
-        <p className="font-bold mb-2">Database Connection Error:</p>
-        <p>{fetchError}</p>
+      <div className="w-full h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
+        Loading Visual Archive...
       </div>
     );
   }
 
   if (slides.length === 0) {
     return (
-      <div className="w-full max-w-4xl mx-auto h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,109,19,0.35)] flex items-center justify-center text-gray-400 text-xs font-mono">
-        No records found in the heritage_slideshow table.
+      <div className="w-full h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
+        No visual heritage slides found.
       </div>
     );
   }
 
-  const currentSlide = slides[currentIndex];
-
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="relative w-full h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,109,19,0.35)] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center">
+      <div className="relative w-full h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,189,19,0.35)] overflow-hidden shadow-2xl flex items-center justify-center">
         
-        {/* Blurred background backdrop to fill aspect ratio gaps seamlessly */}
+        {/* Blurred background atmospheric image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
           src={slides[currentIndex].image_url} 
-          alt="" 
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-40 scale-110" 
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-40 scale-110"
         />
 
         {/* Main uncropped image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
-          src={slides[currentIndex].image_url} 
+          src={slides[currentIndex].image_url}
           alt={slides[currentIndex].title}
-          className="relative z-10 max-h-full max-w-full object-contain shadow-lg" 
+          className="relative z-10 max-h-full max-w-full object-contain shadow-lg"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 pointer-events-none z-20">
-          <span className="text-[10px] font-mono text-[#D66D13] tracking-widest uppercase mb-1">
-            Visual Archive {currentIndex + 1} of {slides.length}
+        {/* Slide Info Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 z-20 pointer-events-none">
+          <span className="text-[10px] font-mono text-[#d07f05] tracking-widest uppercase mb-1">
+            Visual Archive ({currentIndex + 1} of {slides.length})
           </span>
           <h3 className="text-lg md:text-xl font-bold text-white mb-1">
-            {currentSlide.title}
+            {slides[currentIndex].title}
           </h3>
-          <p className="text-xs md:text-sm text-gray-300 font-light max-w-2xl">
-            {currentSlide.description}
-          </p>
+          {slides[currentIndex].description && (
+            <p className="text-gray-300 text-xs md:text-sm font-light line-clamp-2 max-w-2xl">
+              {slides[currentIndex].description}
+            </p>
+          )}
+        </div>
+
+        {/* Navigation Dots */}
+        <div className="absolute bottom-4 right-6 flex items-center space-x-1.5 z-30">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                currentIndex === idx ? "w-6 bg-[#d07f05]" : "w-1.5 bg-white/40 hover:bg-white"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
         </div>
       </div>
     </div>

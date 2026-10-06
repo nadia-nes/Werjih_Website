@@ -1,22 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import ContributionPortal from '@/components/ContributionPortal';
+import { useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
+
+// Components
+import HeroSection from '@/components/HeroSection';
+import LeadershipImage from '@/components/leadership-image';
+import BeginJourneySection from '@/components/BeginJourneySection';
+import RootsSection from '@/components/RootsSection';
 import AncestralTree from '@/components/AncestralTree';
 import EventsBoard from '@/components/EventsBoard';
-import { useScroll, useTransform, useReducedMotion } from "framer-motion";
-import VisualHeritageSlideshow from '@/components/VisualHeritageSlideshow';
-import LeadershipImage from '@/components/leadership-image';
+import ContributionPortal from '@/components/ContributionPortal';
 import BookAdvertSection from "@/components/Book-advert";
-import BeginJourneySection from "@/components/BeginJourneySection";
-import { supabase } from "@/lib/supabase";
-import RootsSection from '@/components/RootsSection';
-import HeroSection from '@/components/HeroSection';
+import VisualHeritageSlideshow from '@/components/VisualHeritageSlideshow';
 
-// ==========================================
-// SOCIAL CHANNELS CONFIGURATION (Compact Modern Pills)
-// ==========================================
+// Social Channels Configuration
 const socialChannels = [
   {
     name: 'Telegram',
@@ -31,7 +32,7 @@ const socialChannels = [
     handle: 'The Werjih Society',
     description: 'Documentaries & oral history archives.',
     icon: '▶',
-    link: '#',
+    link: '',
     badge: 'Video Vault',
   },
   {
@@ -62,7 +63,6 @@ interface HeroItem {
 export default function Home() {
   const [activeSocial, setActiveSocial] = useState(socialChannels[0]);
   const [isPaused, setIsPaused] = useState(false);
-  const [showSellers, setShowSellers] = useState(false);
   const [heroes, setHeroes] = useState<HeroItem[]>([]);
 
   // Scroll parallax effects for hero elements
@@ -105,7 +105,6 @@ export default function Home() {
 
   const previewHeroes = heroes.slice(0, 3);
 
-  // Ticker phrases array
   const tickerPhrases = [
     "GLOBAL GATHERING EVERY AUGUST 10TH",
     "PRESERVING OUR IDENTITY & HISTORY",
@@ -116,14 +115,14 @@ export default function Home() {
   return (
     <main id="home" className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#d07f05] selection:text-black">
       
-      {/* CINEMATIC HERO SECTION */}
+      {/* 1. HERO SECTION */}
       <HeroSection 
         shouldReduceMotion={shouldReduceMotion}
         badgeY={badgeY}
         buttonsY={buttonsY}
       />
 
-      {/* BOTTOM TICKER BAR (Ceremonial Infinite Marquee) */}
+      {/* 2. CEREMONIAL INFINITE TICKER BAR */}
       <div 
         className="relative w-full bg-[#0a0807] border-t border-b border-[#d07f05]/40 py-3.5 overflow-hidden shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)] z-20"
         onMouseEnter={() => setIsPaused(true)}
@@ -135,7 +134,7 @@ export default function Home() {
             maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
             WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
           }}
-        ></div>
+        />
 
         <div className="flex whitespace-nowrap overflow-hidden">
           <div 
@@ -150,7 +149,7 @@ export default function Home() {
                 <span className="text-xs font-mono tracking-[0.25em] uppercase text-[#d07f05]/90 font-medium">
                   {phrase}
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#d07f05] animate-pulse"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d07f05] animate-pulse" />
               </div>
             ))}
           </div>
@@ -168,7 +167,7 @@ export default function Home() {
                 <span className="text-xs font-mono tracking-[0.25em] uppercase text-[#d07f05]/90 font-medium">
                   {phrase}
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#d07f05] animate-pulse"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d07f05] animate-pulse" />
               </div>
             ))}
           </div>
@@ -182,91 +181,18 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Foundational Leadership & Generational Hierarchy */}
+      {/* 3. FOUNDATIONAL LEADERSHIP SECTION */}
       <section id="leadership" className="max-w-6xl mx-auto px-8 py-20">
         <LeadershipImage />
       </section>
 
-      {/* Book Highlight & Compact Hover 3D Flipping Authorized Sellers Section */}
-      <section className="max-w-3xl mx-auto px-6 py-8 border-t border-[#d07f05]/20">
-        <div className="bg-[#161616] border border-[#d07f05]/30 rounded-xl p-5 md:p-6 shadow-xl">
-          
-          <BookAdvertSection />
-
-          <div 
-            className="mt-6 pt-5 border-t border-[#d07f05]/20 perspective-1000 group cursor-pointer"
-            onMouseEnter={() => setShowSellers(true)}
-            onMouseLeave={() => setShowSellers(false)}
-          >
-            <div 
-              className={`relative w-full transition-transform duration-700 transform-style-3d ${
-                showSellers ? "rotate-y-180" : ""
-              }`}
-            >
-              
-              {/* FRONT FACE: Call to Action */}
-              <div className="w-full bg-[#121110] border border-[#d07f05]/30 rounded-lg p-4 text-center backface-hidden shadow-lg">
-                <span className="px-2.5 py-0.5 mb-1.5 text-[9px] font-bold text-black bg-[#d07f05] rounded-full uppercase tracking-wider inline-block">
-                  Get Your Copy
-                </span>
-                <h3 className="text-sm font-bold text-white mb-0.5">Authorized Book Sellers</h3>
-                <p className="text-gray-400 text-[11px] mb-3">Distributors across Addis Ababa & surroundings.</p>
-                
-                <div className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-[#d07f05] bg-[#d07f05]/10 px-3 py-1.5 rounded-md border border-[#d07f05]/30 animate-pulse">
-                  <span>Hover to View 5 Distributor Contacts</span>
-                  <span>🔄</span>
-                </div>
-              </div>
-
-              {/* BACK FACE: Contact List */}
-              <div className="absolute inset-0 w-full h-full bg-[#121110] border border-[#d07f05]/40 rounded-lg p-4 backface-hidden rotate-y-180 shadow-2xl flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-center mb-2 pb-1.5 border-b border-[#d07f05]/20">
-                    <h3 className="text-[11px] font-bold text-[#d07f05] uppercase tracking-wider">Authorized Distributors</h3>
-                    <span className="text-[9px] text-gray-400 bg-white/5 px-1.5 py-0.5 rounded">Scroll to view all</span>
-                  </div>
-
-                  <div className="space-y-1.5 text-[11px] max-h-[95px] overflow-y-auto pr-1.5 custom-scrollbar">
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">1. Roza Siraj <span className="text-[#d07f05] text-[9px]">[Bethel]</span></span>
-                      <a href="tel:0988022885" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0988022885</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">2. Hamid Hamza <span className="text-[#d07f05] text-[9px]">[Autobis Tera]</span></span>
-                      <a href="tel:0911646448" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0911646448</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">3. Ali Usman <span className="text-[#d07f05] text-[9px]">[Jemo Mall]</span></span>
-                      <a href="tel:0912008319" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0912008319</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">4. Hussein Ali <span className="text-[#d07f05] text-[9px]">[Daleti]</span></span>
-                      <a href="tel:0922158994" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0922158994</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">5. Adam Mohammed <span className="text-[#d07f05] text-[9px]">[Sebeta]</span></span>
-                      <a href="tel:0923433183" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0923433183</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-
+      {/* 4. BEGIN JOURNEY SECTION */}
       <BeginJourneySection />
 
-      {/* ========================================== */}
-      {/* PILLARS OF LEGACY: HEROES PREVIEW SECTION */}
-      {/* ========================================== */}
+      {/* 5. HEROES PREVIEW SECTION */}
       <section className="max-w-4xl mx-auto px-6 py-12">
         <div className="w-full bg-[#12100e] border border-[#d07f05]/30 rounded-2xl p-6 sm:p-8 shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            
-            {/* Left text description */}
             <div className="space-y-2 max-w-xl">
               <div className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#d07f05]">
                 ★ Werjih Heroes &amp; Historical Figures
@@ -279,10 +205,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Right side: Circular overlapping avatars + View Full Archive Button */}
             <div className="flex items-center gap-6 self-start md:self-center">
-              
-              {/* Overlapping Circles Preview */}
               <div className="flex -space-x-3 overflow-hidden">
                 {previewHeroes.length > 0 ? (
                   previewHeroes.map((hero, index) => (
@@ -307,7 +230,6 @@ export default function Home() {
                 )}
               </div>
 
-              {/* View Full Archive Button */}
               <Link 
                 href="/heroes"
                 className="inline-flex items-center space-x-2 text-xs font-mono uppercase tracking-widest text-[#d07f05] border border-[#d07f05]/40 hover:border-[#d07f05] px-5 py-3 rounded-xl transition-all duration-300 hover:bg-[#d07f05]/10 whitespace-nowrap"
@@ -315,37 +237,35 @@ export default function Home() {
                 <span>View Full Archive</span>
                 <span>→</span>
               </Link>
-
             </div>
-
           </div>
         </div>
       </section>
       
-      {/* ROOTS & HOMELAND MAP SECTION */}
+      {/* 6. ROOTS & HOMELAND MAP */}
       <RootsSection />
 
-      {/* Interactive Core Sections */}
-      <ContributionPortal />
+      {/* 7. ANCESTRAL TREE & EVENTS */}
       <AncestralTree />
       <EventsBoard />
+      <ContributionPortal />
 
-      
-      {/* Visual Heritage Slideshow */}
-     
+      {/* 8. BOOK ADVERT SECTION (With built-in 3D Card) */}
+      <BookAdvertSection />
+
+      {/* 9. VISUAL HERITAGE SLIDESHOW */}
       <section className="py-20 px-6 bg-[#0a0806] border-t border-[#d07f05]/20">
         <div className="text-center mb-10">
           <span className="text-xs font-mono tracking-[0.3em] text-[#d07f05] uppercase">Gallery</span>
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mt-2">Visual Heritage Slideshow</h2>
           <p className="text-gray-400 text-sm mt-1 max-w-xl mx-auto font-light">
-            Glimpses into our ancestral artifacts, gatherings, and historical landmarks dynamically fetched from the archive database.
+             Glimpses into our ancestral artifacts, gatherings, and historical landmarks dynamically fetched from the archive database.
           </p>
         </div>
-
         <VisualHeritageSlideshow />
       </section>
 
-      {/* Compact Interactive Social Pill Widget */}
+      {/* 10. SOCIAL CHANNELS WIDGET */}
       <section id="social-channels" className="max-w-4xl mx-auto px-8 py-20 border-t border-[#d07f05]/25 relative">
         <div className="text-center mb-10">
           <span className="text-xs font-bold text-[#d07f05] uppercase tracking-widest bg-[#d07f05]/10 px-3 py-1 rounded-full">
@@ -412,18 +332,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
-      {/* FOOTER */}
-      
+
+      {/* 11. FOOTER */}
       <footer className="relative bg-gradient-to-b from-[#060504] via-[#040302] to-[#020101] border-t border-[#d07f05]/20 mt-28 py-20 overflow-hidden text-gray-400 font-serif">
-        
-        {/* Subtle Ambient Glows */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#d07f05]/50 to-transparent" />
         <div className="absolute bottom-0 left-1/4 w-[25rem] h-[15rem] bg-[#d07f05]/5 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-8 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-16">
-          
-          {/* Column 1: Brand & Legacy */}
           <div className="space-y-4">
             <div className="inline-flex items-center space-x-2 text-[9px] font-mono tracking-[0.3em] uppercase text-[#d07f05] bg-[#d07f05]/10 px-3.5 py-1 rounded-full border border-[#d07f05]/25">
               <span>✦ SANCTUARY & LEGACY ✦</span>
@@ -436,7 +351,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Column 2: Navigation / Quick Links */}
           <div className="space-y-4">
             <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05]">Quick Navigation</h4>
             <ul className="space-y-2.5 text-xs font-sans">
@@ -463,7 +377,6 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* Column 3: Annual Gathering */}
           <div className="space-y-4">
             <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05]">Annual Gathering</h4>
             <p className="text-xs font-sans font-light text-[#ab9f94]">
@@ -478,15 +391,12 @@ export default function Home() {
               </Link>
             </div>
           </div>
-
         </div>
 
-        {/* Bottom Copyright Bar */}
         <div className="max-w-6xl mx-auto px-8 pt-8 border-t border-[#221c17] flex flex-col sm:flex-row items-center justify-between text-xs font-sans text-[#8c7e72] gap-4">
           <p>&copy; {new Date().getFullYear()} The Werjih Society. All rights reserved.</p>
           <p className="font-mono text-[10px] uppercase tracking-widest text-[#d07f05]/80">Built with pride, heritage, and lineage.</p>
         </div>
-
       </footer>
     </main>
   );

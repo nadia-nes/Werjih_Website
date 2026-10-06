@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, MotionValue, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, MotionValue } from 'framer-motion';
 
 interface HeroSectionProps {
   shouldReduceMotion?: boolean | null;
@@ -16,18 +16,6 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
-  const [isCallOpen, setIsCallOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Auto-collapse transmission pop-up after 4 seconds on mobile, unless hovered
-  useEffect(() => {
-    if (isCallOpen && !isHovered) {
-      const timer = setTimeout(() => {
-        setIsCallOpen(false);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [isCallOpen, isHovered]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const { clientX, clientY, currentTarget } = e;
@@ -37,7 +25,7 @@ export default function HeroSection({
     setMousePos({ x, y });
   };
 
-  const handleRippleCall = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleCallToWerjih = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const rect = e.currentTarget.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
@@ -46,9 +34,13 @@ export default function HeroSection({
     const newRipple = { id: Date.now(), x, y };
     setRipples((prev) => [...prev, newRipple]);
 
+    // Smooth scroll directly to the video section below
     setTimeout(() => {
-      setIsCallOpen(true);
-    }, 300);
+      const videoSection = document.getElementById('call-video');
+      if (videoSection) {
+        videoSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 200);
   };
 
   const handleWalkWithUs = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -82,7 +74,7 @@ export default function HeroSection({
       </div>
 
       {/* ========================================================= */}
-      {/* BACKGROUND VECTOR FLOW & MOVING THREADS (MOBILE & DESKTOP) */}
+      {/* BACKGROUND VECTOR FLOW & MOVING THREADS                   */}
       {/* ========================================================= */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         
@@ -108,7 +100,6 @@ export default function HeroSection({
         </div>
 
         {/* Right Side: Moving Threads */}
-
         <div className="absolute right-3 md:right-14 top-0 bottom-0 flex items-center space-x-2 md:space-x-4 z-10 opacity-60 md:opacity-100">
           <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-[#6b4208]/40 to-transparent relative hidden sm:block">
             <motion.div 
@@ -175,14 +166,7 @@ export default function HeroSection({
       {/* ========================================== */}
       <div className="relative z-20 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-center px-4">
         
-        {/* Left/Center Column: Main Hero Headings & Actions */}
-        <motion.div 
-          key="hero-choreography"
-          initial="hidden"
-          animate="visible"
-          viewport={{ once: true }}
-          className={`lg:col-span-12 flex flex-col items-center transition-all duration-700 ${isCallOpen ? 'lg:translate-x-[-140px]' : 'lg:translate-x-0'}`}
-        >
+        <div className="lg:col-span-12 flex flex-col items-center">
           
           {/* 1. Pill Badge */}
           <motion.div
@@ -212,7 +196,6 @@ export default function HeroSection({
             <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#8c550d]/10 via-[#5c3605]/10 to-transparent pointer-events-none"></div>
 
-            {/* Responsive Clean Title Layout */}
             <motion.h1 
               initial="hidden"
               animate="visible"
@@ -239,7 +222,6 @@ export default function HeroSection({
                   THE
                 </motion.span>
 
-                {/* WERJIH (Earthy Brownish-Amber Gradient Accent) */}
                 <motion.span 
                   variants={{ hidden: { opacity: 0, filter: "blur(6px)" }, visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: "easeOut" } } }}
                   className="italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#b47525] via-[#d9822b] to-[#915412] drop-shadow-[0_4px_20px_rgba(180,117,37,0.35)] px-1 sm:px-2"
@@ -293,11 +275,11 @@ export default function HeroSection({
               <span className="relative z-10 transform group-hover:translate-x-1.5 transition-transform duration-300">&rarr;</span>
             </a>
 
-            {/* A Call to Werjih Button */}
+            {/* A Call to Werjih Button (Scrolls to Video Section) */}
             <a
-              href="#call"
-              onClick={handleRippleCall}
-              className="group relative px-9 py-4 bg-[#0a0705] hover:bg-[#150f0a] text-[#f4e8d1] border border-[#8c550d]/40 hover:border-[#8c550d] font-serif text-xs uppercase tracking-[0.25em] rounded-xl transition-all duration-300 hover:-translate-y-1.5 active:translate-y-0.5 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex items-center space-x-3 overflow-hidden"
+              href="#call-video"
+              onClick={handleCallToWerjih}
+              className="group relative px-9 py-4 bg-[#0a0705] hover:bg-[#150f0a] text-[#f4e8d1] border border-[#8c550d]/40 hover:border-[#8c550d] font-serif text-xs uppercase tracking-[0.25em] rounded-xl transition-all duration-300 hover:-translate-y-1.5 active:translate-y-0.5 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex items-center space-x-3 overflow-hidden cursor-pointer"
             >
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8c550d] opacity-75"></span>
@@ -307,54 +289,7 @@ export default function HeroSection({
             </a>
           </motion.div>
 
-        </motion.div>
-
-        {/* Transmission Panel: Responsive Modal for Mobile & Slide-In for Desktop */}
-        <AnimatePresence>
-          {isCallOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none lg:block lg:static">
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                transition={{ type: "spring", damping: 22, stiffness: 120 }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                className="w-full max-w-sm lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2 lg:w-[340px] bg-[#0a0705]/98 border border-[#8c550d]/60 rounded-2xl p-6 shadow-[0_0_50px_rgba(140,85,13,0.3)] backdrop-blur-xl text-left"
-              >
-                {/* Corner Ornamental Accents */}
-                <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 border-t border-l border-[#8c550d]"></div>
-                <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 border-t border-r border-[#8c550d]"></div>
-                <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 border-b border-l border-[#8c550d]"></div>
-                <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 border-b border-r border-[#8c550d]"></div>
-
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[9px] font-mono tracking-[0.3em] text-[#d9984a] uppercase">✦ TRANSMISSION ✦</span>
-                  <button 
-                    onClick={() => setIsCallOpen(false)}
-                    className="text-[#d4cbb8]/70 hover:text-[#d9984a] text-xs font-mono transition-colors cursor-pointer"
-                  >
-                    [CLOSE]
-                  </button>
-                </div>
-
-                <h4 className="text-xl font-serif text-[#d9984a] mb-3">The Voice of Werjih</h4>
-                <p className="text-[#d4cbb8]/90 text-xs font-light leading-relaxed mb-6">
-                  Like a horn blowing across ancestral valleys, this call carries the memory of our trade roots, resilience, and unyielding heritage. You have answered the call to remember.
-                </p>
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setIsCallOpen(false)}
-                    className="px-5 py-2 bg-gradient-to-r from-[#8c550d] to-[#5c3605] text-[#f4e8d1] font-serif font-bold text-[10px] uppercase tracking-[0.2em] rounded-lg hover:brightness-110 transition-all shadow-[0_4px_15px_rgba(140,85,13,0.3)] cursor-pointer"
-                  >
-                    Acknowledge
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
+        </div>
 
       </div>
     </section>
