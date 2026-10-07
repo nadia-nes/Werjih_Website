@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
 
 // Components
-import HeroSection from '@/components/HeroSection';
+import Hero from '@/components/HeroSection';
 import LeadershipImage from '@/components/leadership-image';
 import BeginJourneySection from '@/components/BeginJourneySection';
 import RootsSection from '@/components/RootsSection';
@@ -65,12 +64,6 @@ export default function Home() {
   const [isPaused, setIsPaused] = useState(false);
   const [heroes, setHeroes] = useState<HeroItem[]>([]);
 
-  // Scroll parallax effects for hero elements
-  const { scrollY } = useScroll();
-  const shouldReduceMotion = useReducedMotion();
-  const badgeY = useTransform(scrollY, [0, 500], [0, shouldReduceMotion ? 0 : -30]);
-  const buttonsY = useTransform(scrollY, [0, 500], [0, shouldReduceMotion ? 0 : 30]);
-
   // Fetch heroes for the circular avatar preview stack
   useEffect(() => {
     async function fetchHeroes() {
@@ -116,11 +109,7 @@ export default function Home() {
     <main id="home" className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#d07f05] selection:text-black">
       
       {/* 1. HERO SECTION */}
-      <HeroSection 
-        shouldReduceMotion={shouldReduceMotion}
-        badgeY={badgeY}
-        buttonsY={buttonsY}
-      />
+      <Hero />
 
       {/* 2. CEREMONIAL INFINITE TICKER BAR */}
       <div 
