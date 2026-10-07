@@ -1,10 +1,10 @@
 // components/LeadershipImage.tsx
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { motion, useReducedMotion } from "framer-motion";
-import { Shield, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Shield } from "lucide-react";
 
 type Leader = {
   id: string;
@@ -14,39 +14,78 @@ type Leader = {
   role: string;
 };
 
-// Generated once on module load to bypass browser image caching safely without violating React purity
+const BUCKET = "hierarchical_leadership_photos";
+const ACCENT = "#d07f05";
+
+// Generated once on module load to bypass browser image caching safely
 const CACHE_BUSTER = Date.now();
 
 const epochDetails: Record<number, { years: string; subtitle: string; description: string }> = {
   0: {
     years: "Late 19th - Early 20th Century",
     subtitle: "Guardian: Turio Wario",
-    description: "During the intense geopolitical realignments of Emperor Menelik II's era, Turiyo Wariyo stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties."
+    description:
+      "During the intense geopolitical realignments of Emperor Menelik II's era, Turiyo Wariyo stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties.",
   },
   1: {
     years: "Mid 20th Century (56-Year Tenure)",
     subtitle: "Guardian: Hajj Musa Sheikh Abdulrahman",
-    description: "Served as administrator and chief judge under Sharia law, leading his community safely to Arsi during the Italian invasion, and preserving Werjih stability through decades of political shift."
+    description:
+      "Served as administrator and chief judge under Sharia law, leading his community safely to Arsi during the Italian invasion, and preserving Werjih stability through decades of political shift.",
   },
   2: {
     years: "Federal Transition Era",
     subtitle: "Guardian: Haji Jamal Abdo",
-    description: "With the establishment of the federal system, Haji Jamal Abdo stepped forward to advocate for formal representation and stake legitimate claims for societal identity and political recognition."
+    description:
+      "With the establishment of the federal system, Haji Jamal Abdo stepped forward to advocate for formal representation and stake legitimate claims for societal identity and political recognition.",
   },
   3: {
     years: "Present Era",
     subtitle: "Visionary: Arif Abdulkadir",
-    description: "Transitioning to historical documentation and digital revival, youth leaders and scholars spearheaded groundbreaking initiatives authoring the first definitive Werjih book and uniting the global diaspora."
-  }
+    description:
+      "Transitioning to historical documentation and digital revival, youth leaders and scholars spearheaded groundbreaking initiatives authoring the first definitive Werjih book and uniting the global diaspora.",
+  },
 };
+
+// Works whether the table stores a file name ("Turio Wario.png")
+// or a full public link (https://...supabase.co/storage/...).
+function getImageUrl(path?: string) {
+  if (!path) return "";
+
+  const trimmed = path.trim();
+
+  const raw = /^https?:\/\//i.test(trimmed)
+    ? trimmed
+    : supabase.storage.from(BUCKET).getPublicUrl(trimmed).data.publicUrl;
+
+  if (!raw) return "";
+  return `${raw}${raw.includes("?") ? "&" : "?"}t=${CACHE_BUSTER}`;
+}
+
+function initials(name?: string) {
+  return (name || "?")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+}
+
+// Position of each card in the stack, relative to the active one
+function stackPose(rel: number) {
+  if (rel === 0) return { x: "0%", scale: 1, opacity: 1 };
+  if (rel === 1) return { x: "16%", scale: 0.92, opacity: 0.85 };
+  if (rel === 2) return { x: "32%", scale: 0.84, opacity: 0.6 };
+  return { x: "32%", scale: 0.8, opacity: 0 };
+}
 
 export default function LeadershipImage() {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeIndex, setActiveIndex] = useState<number>(0); 
-  const [mobileExpanded, setMobileExpanded] = useState<boolean>(false); 
-  
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [failed, setFailed] = useState<Record<string, boolean>>({});
+
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -67,15 +106,6 @@ export default function LeadershipImage() {
     fetchLeaders();
   }, []);
 
-  const handleSelectLeader = (index: number) => {
-    if (activeIndex === index) {
-      setMobileExpanded(!mobileExpanded);
-    } else {
-      setActiveIndex(index);
-      setMobileExpanded(true);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center py-28">
@@ -87,244 +117,242 @@ export default function LeadershipImage() {
     );
   }
 
+  if (leaders.length === 0) return null;
+
+  const total = leaders.length;
   const activeLeader = leaders[activeIndex] || leaders[0];
   const activeEpochInfo = epochDetails[activeIndex] || {
     years: "Historical Era",
     subtitle: activeLeader?.role || "Community Guardian",
-    description: "Honoring the legacy of our ancestors and their unwavering commitment to the Werjih lineage."
+    description:
+      "Honoring the legacy of our ancestors and their unwavering commitment to the Werjih lineage.",
   };
 
-  return (
-    <motion.div 
-      ref={containerRef} 
-      onViewportLeave={() => setMobileExpanded(false)}
-      className="w-full py-16 px-4 md:px-8 relative overflow-hidden"
-    >
-      
-      {/* Background Ornamental Motif */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.02] z-0"
-        style={{
-          backgroundImage: `radial-gradient(#d07f05 1px, transparent 1px)`,
-          backgroundSize: `32px 32px`
-        }}
-      ></div>
+  const markFailed = (key: string) => setFailed((f) => ({ ...f, [key]: true }));
+  const goTo = (index: number) => setActiveIndex(index);
+  const step = (dir: number) => setActiveIndex((i) => (i + dir + total) % total);
+  const pad = (n: number) => String(n).padStart(2, "0");
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        
+  return (
+    <section className="w-full py-12 md:py-20 px-4 md:px-8 relative overflow-hidden">
+      {/* Ambient background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
+        style={{
+          backgroundImage: `radial-gradient(${ACCENT} 1px, transparent 1px)`,
+          backgroundSize: `32px 32px`,
+        }}
+      />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#d07f05]/[0.06] rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="text-center max-w-2xl mx-auto mb-8 md:mb-16"
         >
-          <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-[#d07f05] px-4 py-1.5 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 inline-block mb-4 shadow-[0_0_20px_rgba(208,127,5,0.15)]">
+          <span className="text-[10px] md:text-[11px] font-mono tracking-[0.3em] uppercase text-[#d07f05] px-4 py-1.5 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 inline-block mb-4">
             UNBROKEN GENERATIONAL SHIELD
           </span>
-          <h2 className="text-3xl md:text-5xl font-serif font-normal text-white tracking-tight mb-4">
-            Foundational Leadership & <span className="italic text-[#d07f05]">Hierarchy</span>
+          <h2 className="text-2xl md:text-5xl font-serif font-normal text-white tracking-tight mb-3 md:mb-4">
+            Foundational Leadership &amp;{" "}
+            <span className="italic text-[#d07f05]">Hierarchy</span>
           </h2>
           <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
-            A continuous chain of defense and advocacy across historical epochs. Select an era below to explore the custodian of the legacy.
+            A continuous chain of defense and advocacy across historical epochs. Swipe or tap the
+            stack to explore each custodian of the legacy.
           </p>
         </motion.div>
 
-        {/* Timeline Row / Cards Grid */}
-        <div className="relative mb-8">
-          <div className="hidden lg:block absolute top-[50px] left-16 right-16 h-[2px] bg-[#26201a] z-0">
-            {!shouldReduceMotion && (
-              <div className="absolute inset-0 bg-gradient-to-r from-[#d07f05]/40 via-[#d07f05] to-[#d07f05]/40 shadow-[0_0_12px_#d07f05] animate-pulse"></div>
-            )}
-          </div>
+        {/* STAGE: photo stack + story, side by side on every screen size */}
+        <div className="flex flex-row items-center gap-4 sm:gap-8 lg:gap-14">
+          {/* PHOTO STACK */}
+          <div className="w-[46%] max-w-[230px] sm:max-w-[300px] lg:max-w-[340px] shrink-0">
+            <div className="relative w-[80%] aspect-[4/5]">
+              {leaders.map((leader, index) => {
+                const key = leader.id || String(index);
+                const rel = (index - activeIndex + total) % total;
+                const isActive = rel === 0;
+                const pose = stackPose(rel);
+                const imageUrl = failed[key] ? "" : getImageUrl(leader.image_url);
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8 relative z-10">
-            {leaders.map((leader, index) => {
-              const rawUrl = leader.image_url
-                ? supabase.storage
-                    .from("hierarchical_leadership_photos")
-                    .getPublicUrl(leader.image_url).data.publicUrl
-                : "";
-              
-              const imageUrl = rawUrl ? `${rawUrl}?t=${CACHE_BUSTER}` : "";
-              const isSelected = activeIndex === index;
-              const isCardExpanded = isSelected && mobileExpanded;
-
-              return (
-                <div key={leader.id || index} className="flex flex-col">
-                  {/* Leader Selection Card */}
+                return (
                   <motion.div
-                    initial={{ opacity: 0, y: 25 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    onClick={() => handleSelectLeader(index)}
-                    className={`group relative flex lg:flex-col items-center text-left lg:text-center cursor-pointer p-4 rounded-2xl transition-all duration-500 ${
-                      isSelected 
-                        ? "bg-[#181512] border border-[#d07f05]/60 shadow-[0_10px_35px_rgba(208,127,5,0.18)]" 
-                        : "bg-[#12100e]/60 border border-white/5 hover:border-[#d07f05]/30 hover:bg-[#15120f]"
-                    }`}
+                    key={key}
+                    initial={false}
+                    animate={pose}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    style={{
+                      zIndex: total - rel,
+                      transformOrigin: "left center",
+                      pointerEvents: rel > 2 ? "none" : "auto",
+                    }}
+                    onClick={() => !isActive && goTo(index)}
+                    className={`absolute inset-0 ${isActive ? "" : "cursor-pointer"}`}
                   >
-                    <div className="relative shrink-0">
-                      {isSelected && (
-                        <div className="absolute -inset-2 rounded-full bg-[#d07f05]/20 blur-md animate-pulse pointer-events-none"></div>
+                    {/* Inner layer handles the swipe so it doesn't fight the stack animation */}
+                    <motion.div
+                      drag={isActive && !shouldReduceMotion ? "x" : false}
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.25}
+                      dragSnapToOrigin
+                      onDragEnd={(_, info) => {
+                        if (info.offset.x < -50) step(1);
+                        else if (info.offset.x > 50) step(-1);
+                      }}
+                      className={`relative w-full h-full overflow-hidden rounded-t-[999px] rounded-b-2xl md:rounded-b-3xl bg-[#0c0a09] touch-pan-y ${
+                        isActive
+                          ? "border-2 border-[#d07f05] shadow-[0_20px_50px_rgba(208,127,5,0.25)] cursor-grab active:cursor-grabbing"
+                          : "border border-[#d07f05]/30 shadow-[0_10px_30px_rgba(0,0,0,0.6)]"
+                      }`}
+                    >
+                      {imageUrl ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={imageUrl}
+                          alt={leader.name || "Guardian"}
+                          draggable={false}
+                          onError={() => markFailed(key)}
+                          className={`w-full h-full object-cover object-top select-none transition-all duration-700 ${
+                            isActive ? "sepia-[10%]" : "grayscale brightness-50"
+                          }`}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1612] to-[#0a0807]">
+                          <span className="text-3xl md:text-5xl font-serif text-[#d07f05]/60">
+                            {initials(leader.name)}
+                          </span>
+                        </div>
                       )}
 
-                      <div className={`relative w-20 h-20 lg:w-28 lg:h-28 rounded-full p-1 transition-all duration-500 ${
-                        isSelected ? "border-2 border-[#d07f05] scale-105 shadow-xl" : "border border-[#d07f05]/30 group-hover:border-[#d07f05]/70"
-                      } bg-[#0c0a09]`}>
-                        
-                        <div className="w-full h-full rounded-full overflow-hidden relative bg-[#070605]">
-                          {imageUrl ? (
-                            /* eslint-disable-next-line @next/next/no-img-element */
-                            <img
-                              src={imageUrl}
-                              alt={leader.name || "Guardian"}
-                              className="w-full h-full object-cover object-top filter grayscale-[25%] sepia-[15%] group-hover:grayscale-0 group-hover:sepia-0 transition-all duration-700 group-hover:scale-110"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[9px] font-mono text-gray-500">
-                              ARCHIVE
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-20"></div>
-                        </div>
-                      </div>
-
-                      <div className="absolute -bottom-1 -right-1 bg-[#0f0e0e] border border-[#d07f05] text-[#d07f05] text-[9px] font-mono w-6 h-6 rounded-full flex items-center justify-center shadow-md">
-                        0{index + 1}
-                      </div>
-                    </div>
-
-                    <div className="ml-5 lg:ml-0 lg:mt-4 flex flex-col justify-center">
-                      <span className="text-[10px] font-mono tracking-[0.25em] text-[#d07f05] uppercase mb-0.5">
-                        {leader.epoch || `Epoch ${index + 1}`}
-                      </span>
-                      <h3 className="text-base font-serif font-medium text-white group-hover:text-[#d07f05] transition-colors">
-                        {leader.name}
-                      </h3>
-                      <span className="text-[11px] text-gray-400 font-light mt-0.5 lg:hidden">
-                        {isCardExpanded ? "Tap to close ✕" : "Tap to view record ▸"}
-                      </span>
-                    </div>
-
-                    {isSelected && (
-                      <div className="hidden lg:block absolute -bottom-3 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#181512] border-r border-b border-[#d07f05]/60 rotate-45"></div>
-                    )}
-                  </motion.div>
-
-                  {/* MOBILE INLINE ACCORDION */}
-                  {isCardExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="block lg:hidden mt-3 mb-4 bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-2xl p-5 shadow-xl relative overflow-hidden"
-                    >
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMobileExpanded(false);
-                        }}
-                        aria-label="Close reading panel"
-                        className="absolute top-4 right-4 w-7 h-7 rounded-full bg-black/40 border border-[#d07f05]/30 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-
-                      <div className="space-y-4 relative z-10 pr-6">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-[9px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-2.5 py-0.5 rounded-full font-bold">
-                            {leader.epoch || `Epoch ${index + 1}`}
-                          </span>
-                          <span className="text-[10px] font-mono text-gray-400 flex items-center space-x-1">
-                            <span>⏳</span>
-                            <span>{activeEpochInfo.years}</span>
-                          </span>
-                        </div>
-
-                        <div>
-                          <h3 className="text-xl font-serif font-normal text-white mb-1">
-                            {leader.name}
-                          </h3>
-                          <p className="text-[#d07f05] text-xs font-serif italic">
-                            {activeEpochInfo.subtitle}
-                          </p>
-                        </div>
-
-                        <div className="pt-3 border-t border-[#d07f05]/20">
-                          <p className="text-gray-300 text-xs font-light leading-relaxed">
-                            {activeEpochInfo.description}
-                          </p>
-                        </div>
-                      </div>
+                      {isActive && (
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none" />
+                      )}
                     </motion.div>
-                  )}
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <p className="mt-4 text-[9px] md:text-[10px] font-mono tracking-[0.2em] uppercase text-gray-500">
+              Swipe or tap for next ›
+            </p>
+          </div>
+
+          {/* STORY */}
+          <div className="flex-1 min-w-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="relative"
+              >
+                {/* Ghost numeral */}
+                <span
+                  aria-hidden
+                  className="absolute -top-6 -left-1 md:-top-12 text-[70px] md:text-[150px] leading-none font-serif text-[#d07f05]/[0.07] select-none pointer-events-none"
+                >
+                  {pad(activeIndex + 1)}
+                </span>
+
+                <div className="relative space-y-3 md:space-y-6">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                    <span className="text-[8px] md:text-[10px] font-mono tracking-[0.25em] uppercase text-black bg-[#d07f05] px-2.5 md:px-3.5 py-0.5 md:py-1 rounded-full font-bold">
+                      {activeLeader.epoch || `Epoch ${activeIndex + 1}`}
+                    </span>
+                    <span className="text-[9px] md:text-xs font-mono text-gray-400 tracking-wide">
+                      {activeEpochInfo.years}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl sm:text-3xl md:text-5xl font-serif font-normal text-white mb-1 md:mb-3 leading-tight">
+                      {activeLeader.name}
+                    </h3>
+                    <p className="text-[#d07f05] text-[11px] sm:text-sm md:text-lg font-serif italic tracking-wide">
+                      {activeEpochInfo.subtitle}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 md:pt-5 border-t border-[#d07f05]/20">
+                    <p className="text-gray-300 text-[11px] sm:text-sm md:text-base font-light leading-relaxed">
+                      {activeEpochInfo.description}
+                    </p>
+                  </div>
+
+                  {/* Hidden on small phones to keep photo + writing side by side */}
+                  <div className="hidden md:flex items-center gap-4 rounded-2xl border border-[#d07f05]/20 bg-[#0e0c0a]/70 p-4">
+                    <div className="shrink-0 w-11 h-11 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 flex items-center justify-center text-[#d07f05]">
+                      <Shield className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="block text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05] mb-1">
+                        Custodianship Status
+                      </span>
+                      <p className="text-xs text-gray-400 font-light leading-relaxed">
+                        Preserved across generations within the foundational memory and written
+                        archives of The Werjih Society.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* CONTROLS: arrows + dots + counter */}
+            <div className="flex items-center gap-3 md:gap-4 mt-5 md:mt-8">
+              <button
+                type="button"
+                onClick={() => step(-1)}
+                aria-label="Previous leader"
+                className="w-8 h-8 md:w-11 md:h-11 rounded-full border border-[#d07f05]/40 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                {leaders.map((leader, index) => (
+                  <button
+                    key={leader.id || index}
+                    type="button"
+                    onClick={() => goTo(index)}
+                    aria-label={`View ${leader.name}`}
+                    aria-current={activeIndex === index}
+                    className="py-3 px-0.5"
+                  >
+                    <span
+                      className={`block h-1.5 rounded-full transition-all duration-500 ${
+                        activeIndex === index
+                          ? "w-6 bg-[#d07f05]"
+                          : "w-1.5 bg-white/25 hover:bg-white/50"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => step(1)}
+                aria-label="Next leader"
+                className="w-8 h-8 md:w-11 md:h-11 rounded-full border border-[#d07f05]/40 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors"
+              >
+                <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+
+              <span className="ml-1 text-[10px] md:text-[11px] font-mono text-gray-500 tracking-widest">
+                {pad(activeIndex + 1)} / {pad(total)}
+              </span>
+            </div>
           </div>
         </div>
-
-        {/* DESKTOP EXPANDED STORY CARD */}
-        <div className="hidden lg:block">
-          <motion.div
-            key={activeIndex}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-3xl p-12 shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#d07f05]/5 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-900/10 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-              <div className="lg:col-span-8 space-y-6">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-3.5 py-1 rounded-full font-bold shadow-[0_0_15px_rgba(208,127,5,0.3)]">
-                    {activeLeader.epoch || `Epoch ${activeIndex + 1}`}
-                  </span>
-                  <span className="text-xs font-mono text-gray-400 tracking-wider flex items-center space-x-1">
-                    <span>⏳</span>
-                    <span>{activeEpochInfo.years}</span>
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="text-4xl font-serif font-normal text-white mb-2">
-                    {activeLeader.name}
-                  </h3>
-                  <p className="text-[#d07f05] text-base font-serif italic tracking-wide">
-                    {activeEpochInfo.subtitle}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-[#d07f05]/20">
-                  <p className="text-gray-300 text-base font-light leading-relaxed">
-                    {activeEpochInfo.description}
-                  </p>
-                </div>
-              </div>
-
-              <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[#0e0c0a]/80 border border-[#d07f05]/20 rounded-2xl p-6 text-center shadow-inner">
-                <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05] mb-2">
-                  Custodianship Status
-                </span>
-                <div className="w-12 h-12 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 flex items-center justify-center text-[#d07f05] mb-3">
-                  <Shield className="w-5 h-5" />
-                </div>
-                <p className="text-xs text-gray-300 font-light leading-relaxed">
-                  Preserved across generations within the foundational memory and written archives of The Werjih Society.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
       </div>
-    </motion.div>
+    </section>
   );
 }
