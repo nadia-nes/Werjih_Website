@@ -54,18 +54,15 @@ export default function Hero() {
           
           {/* Heading */}
           <h1 className="font-[family-name:var(--font-cormorant)] text-[2.1rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
-            Werjih&apos;s story, told while{" "}
+            Werjih :
             <span className="relative inline-block pr-1 font-normal italic text-[#f1e9d8]">
-              we still can.
+              Stories Woven in Time.
             </span>
           </h1>
 
           {/* Description */}
           <p className="mt-3.5 font-[family-name:var(--font-cormorant)] text-[15px] sm:text-[19px] leading-[1.6] tracking-wide text-[#cfc6b3]">
-            “Every basket holds a mother&apos;s hands, every pattern an elder&apos;s
-            prayer. Safeguarding centuries of ancestral craft and resilience, so
-            what our grandparents wove is never lost, and our children inherit it
-            whole.”
+            Before these threads of history fade, we preserve the ancestral craft of our elders. Every piece carries the resilience of yesterday so the next generation inherits our complete story.
           </p>
 
           {/* Single Action Button */}
@@ -74,7 +71,7 @@ export default function Hero() {
               href="#notice"
               className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f1e9d8] border border-[#c98a3c]/40 bg-black/50 hover:border-[#c98a3c] transition-all"
             >
-              <span>A call to Werjih</span>
+              <span>Unfold the History</span>
               <span className="text-[#c98a3c]">→</span>
             </a>
           </div>

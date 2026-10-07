@@ -25,7 +25,7 @@ const epochDetails: Record<number, { years: string; subtitle: string; descriptio
     years: "Late 19th - Early 20th Century",
     subtitle: "Guardian: Turio Wario",
     description:
-      "During the intense geopolitical realignments of Emperor Menelik II's era, Turiyo Wariyo stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties.",
+      "During the intense geopolitical realignments of Emperor Menelik II's era, Turio Wario stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties.",
   },
   1: {
     years: "Mid 20th Century (56-Year Tenure)",
