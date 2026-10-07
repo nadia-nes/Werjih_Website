@@ -1,7 +1,7 @@
 // components/LeadershipImage.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion, useReducedMotion } from "framer-motion";
 import { Shield, X } from "lucide-react";
@@ -46,6 +46,7 @@ export default function LeadershipImage() {
   const [activeIndex, setActiveIndex] = useState<number>(0); 
   const [mobileExpanded, setMobileExpanded] = useState<boolean>(false); 
   
+  const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -68,10 +69,8 @@ export default function LeadershipImage() {
 
   const handleSelectLeader = (index: number) => {
     if (activeIndex === index) {
-      // Toggle open/close if tapping the same card
       setMobileExpanded(!mobileExpanded);
     } else {
-      // Switch to new card and open it
       setActiveIndex(index);
       setMobileExpanded(true);
     }
@@ -96,7 +95,11 @@ export default function LeadershipImage() {
   };
 
   return (
-    <div className="w-full py-16 px-4 md:px-8 relative overflow-hidden">
+    <motion.div 
+      ref={containerRef} 
+      onViewportLeave={() => setMobileExpanded(false)}
+      className="w-full py-16 px-4 md:px-8 relative overflow-hidden"
+    >
       
       {/* Background Ornamental Motif */}
       <div 
@@ -322,6 +325,6 @@ export default function LeadershipImage() {
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }

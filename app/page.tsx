@@ -171,15 +171,17 @@ export default function Home() {
       `}</style>
 
       {/* 3. FOUNDATIONAL LEADERSHIP SECTION */}
-      <section id="leadership" className="max-w-6xl mx-auto px-8 py-20">
+      <section id="leadership" className="max-w-6xl mx-auto px-8 py-20 border-t border-[#d07f05]/20">
         <LeadershipImage />
       </section>
 
       {/* 4. BEGIN JOURNEY SECTION */}
-      <BeginJourneySection />
+      <section className="border-t border-[#d07f05]/20">
+        <BeginJourneySection />
+      </section>
 
       {/* 5. HEROES PREVIEW SECTION */}
-      <section className="max-w-4xl mx-auto px-6 py-12">
+      <section className="max-w-4xl mx-auto px-6 py-16 border-t border-[#d07f05]/20">
         <div className="w-full bg-[#12100e] border border-[#d07f05]/30 rounded-2xl p-6 sm:p-8 shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="space-y-2 max-w-xl">
@@ -232,15 +234,27 @@ export default function Home() {
       </section>
       
       {/* 6. ROOTS & HOMELAND MAP */}
-      <RootsSection />
+      <section className="border-t border-[#d07f05]/20">
+        <RootsSection />
+      </section>
 
       {/* 7. ANCESTRAL TREE & EVENTS */}
-      <AncestralTree />
-      <EventsBoard />
-      <ContributionPortal />
+      <section className="border-t border-[#d07f05]/20">
+        <AncestralTree />
+      </section>
+      
+      <section className="border-t border-[#d07f05]/20">
+        <EventsBoard />
+      </section>
+      
+      <section className="border-t border-[#d07f05]/20">
+        <ContributionPortal />
+      </section>
 
-      {/* 8. BOOK ADVERT SECTION (With built-in 3D Card) */}
-      <BookAdvertSection />
+      {/* 8. BOOK ADVERT SECTION */}
+      <section className="border-t border-[#d07f05]/20">
+        <BookAdvertSection />
+      </section>
 
       {/* 9. VISUAL HERITAGE SLIDESHOW */}
       <section className="py-20 px-6 bg-[#0a0806] border-t border-[#d07f05]/20">
