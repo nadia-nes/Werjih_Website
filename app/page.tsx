@@ -60,13 +60,17 @@ const tickerPhrases = [
   "TRADE ROOTS & ANCESTRAL LEGACY",
 ];
 
-const footerLinks = [
+const footerExplore = [
   { href: "/", label: "Home" },
   { href: "/#leadership", label: "History & Lineage" },
-  { href: "/#community", label: "Community & Clans" },
   { href: "/heroes", label: "Heroes & Figures" },
   { href: "/archive", label: "Digital Archive" },
-  { href: "/#social-channels", label: "Social Channels" },
+];
+
+const footerTakePart = [
+  { href: "/#community", label: "Find Your Relatives" },
+  { href: "/#contribution-portal", label: "Contribute to the Archive" },
+  { href: "/#gatherings-events", label: "Annual Gathering" },
 ];
 
 interface HeroItem {
@@ -121,6 +125,25 @@ export default function Home() {
     maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
     WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
   };
+
+  // Shared look for every footer list item
+  const FooterItem = ({ href, label }: { href: string; label: string }) => (
+    <li>
+      <Link
+        href={href}
+        className="group flex items-center gap-3 py-1.5 text-[#ab9f94] hover:text-white transition-colors"
+      >
+        {/* Double-diamond marker */}
+        <span aria-hidden className="relative flex h-3.5 w-3.5 shrink-0 items-center justify-center">
+          <span className="absolute h-2 w-2 rotate-45 border border-[#d07f05]/60 transition-all duration-500 group-hover:h-3 group-hover:w-3 group-hover:rotate-[135deg] group-hover:border-[#d07f05]" />
+          <span className="h-1 w-1 rotate-45 bg-[#d07f05]/40 transition-colors duration-300 group-hover:bg-[#d07f05]" />
+        </span>
+        <span className="transition-transform duration-300 group-hover:translate-x-1">
+          {label}
+        </span>
+      </Link>
+    </li>
+  );
 
   return (
     <main
@@ -410,10 +433,10 @@ export default function Home() {
         </div>
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#020101] to-transparent" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12 pb-24 md:pb-40">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12 pb-20 md:pb-36">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
-            {/* Brand + socials */}
-            <div className="md:col-span-5 space-y-4">
+            {/* Brand */}
+            <div className="md:col-span-6 space-y-4">
               <span className="inline-flex items-center text-[9px] font-mono tracking-[0.3em] uppercase text-[#d07f05] bg-[#d07f05]/10 px-3.5 py-1 rounded-full border border-[#d07f05]/25">
                 ✦ Sanctuary &amp; Legacy ✦
               </span>
@@ -427,115 +450,40 @@ export default function Home() {
                 Preserving our history, honoring our ancestral trade routes, and uniting our
                 global community across generations with enduring pride.
               </p>
-
-              <div className="flex items-center gap-2.5 pt-1">
-                {socialChannels.map((channel) => {
-                  const live = !!channel.link && channel.link !== "#";
-                  const circle =
-                    "w-10 h-10 rounded-full border flex items-center justify-center text-base transition-all duration-300";
-
-                  return live ? (
-                    <a
-                      key={channel.name}
-                      href={channel.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${channel.name} (opens in a new tab)`}
-                      title={channel.name}
-                      className={`${circle} border-[#d07f05]/40 bg-[#d07f05]/10 text-[#d07f05] hover:bg-[#d07f05] hover:text-black hover:-translate-y-0.5`}
-                    >
-                      {channel.icon}
-                    </a>
-                  ) : (
-                    <span
-                      key={channel.name}
-                      title={`${channel.name}: coming soon`}
-                      aria-label={`${channel.name}: coming soon`}
-                      className={`${circle} border-white/10 bg-white/[0.02] text-gray-600 opacity-60 cursor-default`}
-                    >
-                      {channel.icon}
-                    </span>
-                  );
-                })}
-              </div>
             </div>
 
-            {/* Explore */}
-            <nav aria-label="Footer" className="md:col-span-3">
-              <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05] mb-4">
-                Explore
-              </h4>
-              <ul className="space-y-1 font-sans text-sm">
-                {footerLinks.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="group flex items-center gap-3 py-1.5 text-[#ab9f94] hover:text-white transition-colors"
-                    >
-                      <span className="h-px w-3 bg-[#d07f05]/40 transition-all duration-300 group-hover:w-7 group-hover:bg-[#d07f05]" />
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Join card */}
-            <div className="md:col-span-4">
-              <div className="rounded-2xl border border-[#d07f05]/30 bg-[#0f0b08]/80 p-5 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
-                <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05]">
-                  Be part of the story
+            {/* Lists */}
+            <nav aria-label="Footer" className="md:col-span-6 grid grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05] mb-3">
+                  Explore
                 </h4>
-                <p className="mt-2 text-xs font-sans font-light text-[#ab9f94] leading-relaxed">
-                  Join our community, share your family&apos;s history, and gather with us at the
-                  annual celebration.
-                </p>
-
-                <div className="mt-4 flex flex-col gap-2">
-                  <a
-                    href={socialChannels[0].link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#d07f05] hover:bg-[#e8921a] text-black text-[11px] font-mono font-bold uppercase tracking-widest py-2.5 px-5 transition-colors"
-                  >
-                    Join on Telegram &rarr;
-                  </a>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link
-                      href="/#contribution-portal"
-                      className="text-center rounded-full border border-[#d07f05]/30 text-[#d07f05] hover:bg-[#d07f05]/10 text-[10px] font-mono uppercase tracking-wider py-2 transition-colors"
-                    >
-                      Contribute
-                    </Link>
-                    <Link
-                      href="/#gatherings-events"
-                      className="text-center rounded-full border border-[#d07f05]/30 text-[#d07f05] hover:bg-[#d07f05]/10 text-[10px] font-mono uppercase tracking-wider py-2 transition-colors"
-                    >
-                      Gathering
-                    </Link>
-                  </div>
-                </div>
+                <ul className="font-sans text-sm">
+                  {footerExplore.map((item) => (
+                    <FooterItem key={item.href} {...item} />
+                  ))}
+                </ul>
               </div>
-            </div>
+
+              <div>
+                <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05] mb-3">
+                  Take Part
+                </h4>
+                <ul className="font-sans text-sm">
+                  {footerTakePart.map((item) => (
+                    <FooterItem key={item.href} {...item} />
+                  ))}
+                </ul>
+              </div>
+            </nav>
           </div>
 
           {/* Bottom bar */}
-          <div className="mt-10 pt-5 border-t border-[#221c17] flex items-center justify-between gap-4 text-[11px] font-sans text-[#8c7e72]">
-            <div className="space-y-1">
-              <p>&copy; {new Date().getFullYear()} The Werjih Society. All rights reserved.</p>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-[#d07f05]/80">
-                Built with pride, heritage, and lineage.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              aria-label="Back to top"
-              className="shrink-0 w-11 h-11 rounded-full border border-[#d07f05]/40 text-[#d07f05] text-lg flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors cursor-pointer"
-            >
-              ↑
-            </button>
+          <div className="mt-10 pt-5 border-t border-[#221c17] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-sans text-[#8c7e72]">
+            <p>&copy; {new Date().getFullYear()} The Werjih Society. All rights reserved.</p>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[#d07f05]/80">
+              Built with pride, heritage, and lineage.
+            </p>
           </div>
         </div>
       </footer>
