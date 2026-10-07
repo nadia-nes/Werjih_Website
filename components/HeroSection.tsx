@@ -1,286 +1,91 @@
+// components/Hero.tsx
 "use client";
 
-import React, { useRef } from "react";
-import { Cormorant_Garamond, Inter } from "next/font/google";
-import {
-  motion,
-  MotionValue,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
-/*
-  Calm palette: warm black, ivory, and softened shades of #e88d22
-  #080604  ink            #14100a  umber (glow base)
-  #f1e9d8  ivory (text)   #cfc6b3  stone (body text)
-  #e6cfa6  champagne      #d9a05a  soft amber
-  #c98a3c  antique bronze #a8691c  deep bronze
-*/
+const IMG =
+  "https://sygzaktjynjnqstbgenx.supabase.co/storage/v1/object/public/heritage-images/2026-10-05%2011.49.40.jpg";
 
-const display = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-const sans = Inter({ subsets: ["latin"], display: "swap" });
+const fadeLeft = "linear-gradient(to right, transparent 0%, black 38%, black 100%)";
+const barrelZone =
+  "radial-gradient(ellipse 55% 52% at 92% 14%, black 25%, transparent 78%)";
 
-interface HeroSectionProps {
-  shouldReduceMotion?: boolean | null;
-  badgeY?: MotionValue<number>;
-  buttonsY?: MotionValue<number>;
-}
-
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-const GRAIN = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")`;
-
-export default function HeroSection({
-  shouldReduceMotion,
-  badgeY,
-  buttonsY,
-}: HeroSectionProps) {
-  const systemReduce = useReducedMotion();
-  const reduce = shouldReduceMotion ?? systemReduce ?? false;
-  const sectionRef = useRef<HTMLElement>(null);
-
-  /* Gentle mouse depth */
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 40, damping: 22 });
-  const sy = useSpring(my, { stiffness: 40, damping: 22 });
-  const tiltX = useTransform(sy, [-0.5, 0.5], [4, -4]);
-  const tiltY = useTransform(sx, [-0.5, 0.5], [-6, 6]);
-  const glowX = useTransform(sx, [-0.5, 0.5], [-90, 90]);
-  const glowY = useTransform(sy, [-0.5, 0.5], [-60, 60]);
-
-  /* Soft scroll exit */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, -90]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (reduce) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    mx.set((e.clientX - rect.left) / rect.width - 0.5);
-    my.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-  const handleMouseLeave = () => {
-    mx.set(0);
-    my.set(0);
-  };
-
-  const scrollToId = (id: string) =>
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-
-  const handleWalkWithUs = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    scrollToId("notice");
-  };
-  const handleCallToWerjih = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    scrollToId("call-video");
-  };
-
-  /* One slow, graceful entrance */
-  const column = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } },
-  };
-  const rise = {
-    hidden: { opacity: 0, y: reduce ? 0 : 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: reduce ? 0.01 : 1.1, ease: EASE },
-    },
-  };
-  const headline = {
-    hidden: {},
-    visible: { transition: { staggerChildren: reduce ? 0 : 0.18 } },
-  };
-  const word = {
-    hidden: {
-      opacity: 0,
-      y: reduce ? 0 : 24,
-      filter: reduce ? "blur(0px)" : "blur(8px)",
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: { duration: reduce ? 0.01 : 1.3, ease: EASE },
-    },
-  };
+export default function Hero() {
+  const reduce = useReducedMotion();
+  const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section
-      ref={sectionRef}
-      aria-labelledby="hero-title"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`${sans.className} relative isolate flex min-h-[88svh] flex-col items-center justify-center overflow-hidden bg-[#080604] px-6 pb-24 pt-16 text-center`}
-    >
-      {/* ---------- Background ---------- */}
+    <section className="relative min-h-screen overflow-hidden bg-[#0b0a09] text-[#f3ead8]">
+      {/* photo */}
       <motion.div
-        aria-hidden
-        style={reduce ? undefined : { y: bgY }}
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="absolute inset-y-0 right-0 w-full md:w-[72%]"
+        style={{ WebkitMaskImage: fadeLeft, maskImage: fadeLeft }}
+        initial={{ opacity: 0, scale: 1.06 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: reduce ? 0 : 2.4, ease }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,#17100a_0%,#0c0805_50%,#080604_85%)]" />
-
-        {/* Soft glow that breathes slowly and drifts with the cursor */}
-        <motion.div
-          className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2"
-          style={reduce ? undefined : { x: glowX, y: glowY }}
-        >
-          <motion.div
-            className="h-[560px] w-[560px] rounded-full bg-[#c98a3c]/[0.08] blur-[140px]"
-            animate={
-              reduce ? undefined : { scale: [1, 1.1, 1], opacity: [0.8, 1, 0.8] }
-            }
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-
-        {/* Fine film grain for a tactile, printed feel */}
-        <div
-          className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
-          style={{ backgroundImage: GRAIN }}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={IMG}
+          alt="A Werjih woman weaving a coiled basket"
+          className="h-full w-full object-cover object-[50%_32%]"
         />
 
-        {/* Edge vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55)_100%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#080604] to-transparent" />
+        {/* barrel: blur the upper right, then melt it into the background */}
+        <div
+          className="absolute inset-0 backdrop-blur-2xl"
+          style={{ WebkitMaskImage: barrelZone, maskImage: barrelZone }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_46%_at_92%_12%,rgba(11,10,9,0.92),rgba(11,10,9,0.55)_50%,transparent_80%)]" />
       </motion.div>
 
-      {/* ---------- Content ---------- */}
+      {/* floor behind the text so it always reads clearly */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0b0a09]/95 via-[#0b0a09]/55 to-transparent" />
+
+      {/* text */}
       <motion.div
-        style={reduce ? undefined : { y: contentY, opacity: contentOpacity }}
-        className="relative z-10 w-full max-w-5xl"
+        className="relative z-10 flex min-h-screen flex-col justify-end px-6 pb-14 md:px-16 md:pb-20"
+        initial={{ opacity: 0, y: reduce ? 0 : 16, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.6, ease }}
       >
-        <motion.div
-          variants={column}
-          initial="hidden"
-          animate="visible"
-          className="mx-auto flex w-full flex-col items-center"
-        >
-          {/* Eyebrow */}
-          <motion.div style={{ y: badgeY }} className="mb-9">
-            <motion.div
-              variants={rise}
-              className="flex items-center gap-4 text-[#d9a05a]"
-            >
-              <span
-                aria-hidden
-                className="h-px w-8 bg-gradient-to-r from-transparent to-[#c98a3c]/70 sm:w-14"
-              />
-              <span
-                className={`${display.className} text-lg italic tracking-[0.06em] sm:text-xl`}
-              >
-                Ancient heritage &amp; legacy
-              </span>
-              <span
-                aria-hidden
-                className="h-px w-8 bg-gradient-to-l from-transparent to-[#c98a3c]/70 sm:w-14"
-              />
-            </motion.div>
-          </motion.div>
+        <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(1.6rem,3.4vw,2.6rem)] font-light leading-snug tracking-[0.01em] drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)] md:whitespace-nowrap">
+          Werjih&apos;s story, told while{" "}
+          <span className="relative inline-block bg-gradient-to-r from-[#e88d22] via-[#e9b074] to-[#f3ead8] bg-clip-text pr-1 font-bold italic text-transparent">
+            we still can.
+            <motion.span
+              aria-hidden
+              className="absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-gradient-to-r from-[#e88d22] via-[#e88d22]/40 to-transparent"
+              initial={{ scaleX: reduce ? 1 : 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: reduce ? 0 : 1.2, delay: reduce ? 0 : 1.6, ease }}
+            />
+          </span>
+        </h1>
 
-          {/* Headline with a gentle 3D tilt */}
-          <motion.div
-            style={{
-              transformPerspective: 1400,
-              rotateX: reduce ? 0 : tiltX,
-              rotateY: reduce ? 0 : tiltY,
-            }}
+        <p className="mt-5 max-w-xl font-[family-name:var(--font-cormorant)] text-[17px] leading-[1.75] tracking-wide text-[#f6eedd] drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)] md:text-[19px]">
+          “Every basket holds a mother&apos;s hands, every pattern an elder&apos;s
+          prayer. Safeguarding centuries of ancestral craft and resilience, so
+          what our grandparents wove is never lost, and our children inherit it
+          whole.”
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          <a
+            href="#notice"
+            className="group inline-flex items-center gap-3 rounded-none bg-[#e88d22] px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0b0a09] transition duration-500 hover:bg-[#f4a24a]"
           >
-            <motion.h1
-              id="hero-title"
-              variants={headline}
-              className={`${display.className} flex flex-wrap items-baseline justify-center gap-x-4 gap-y-0 text-[3.25rem] font-light leading-[1.05] tracking-[-0.01em] text-[#f1e9d8] sm:text-7xl md:text-8xl lg:text-[8.5rem]`}
-            >
-              <motion.span variants={word}>Inside</motion.span>
-              <motion.span
-                variants={word}
-                className="bg-gradient-to-b from-[#ecd7b0] via-[#d9a05a] to-[#b9772a] bg-clip-text px-2 font-medium italic text-transparent"
-              >
-                Werjih&apos;s
-              </motion.span>
-              <motion.span variants={word}>World</motion.span>
-            </motion.h1>
-          </motion.div>
-
-          {/* Divider */}
-          <motion.span
-            variants={rise}
-            aria-hidden
-            className="my-10 h-px w-20 bg-gradient-to-r from-transparent via-[#c98a3c]/70 to-transparent"
-          />
-
-          {/* Description */}
-          <motion.p
-            variants={rise}
-            className={`${display.className} max-w-xl text-xl leading-relaxed text-[#cfc6b3] md:text-2xl`}
+            A call to Werjih
+            <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+          </a>
+          <a
+            href="#call-video"
+            className="group inline-flex items-center gap-3 rounded-none border border-[#e88d22] bg-black/20 px-7 py-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#e88d22] backdrop-blur-md transition duration-500 hover:bg-[#e88d22] hover:text-[#0b0a09]"
           >
-            Unveiling centuries of history, resilience, and trade roots. Journey
-            through the ancestral legacy, culture, and documented chapters of
-            the <span className="italic text-[#e6cfa6]">Werjih</span> people.
-          </motion.p>
-
-          {/* Buttons */}
-          <motion.div style={{ y: buttonsY }} className="mt-12 w-full sm:w-auto">
-            <motion.div
-              variants={rise}
-              className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5"
-            >
-              <a
-                href="#notice"
-                onClick={handleWalkWithUs}
-                className="group inline-flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full border border-[#e6cfa6]/25 bg-gradient-to-b from-[#d49a4e] to-[#b27832] px-8 text-[15px] font-medium tracking-wide text-[#16100a] shadow-[0_8px_24px_rgba(201,138,60,0.16)] transition duration-300 hover:-translate-y-0.5 hover:from-[#dba35b] hover:to-[#bb8038] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080604] sm:w-auto"
-              >
-                Walk with us
-                <svg
-                  aria-hidden
-                  viewBox="0 0 16 16"
-                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 8h10M9 4l4 4-4 4" />
-                </svg>
-              </a>
-
-              <a
-                href="#call-video"
-                onClick={handleCallToWerjih}
-                className="group inline-flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full border border-[#f1e9d8]/20 bg-white/[0.02] px-8 text-[15px] font-medium tracking-wide text-[#f1e9d8] transition duration-300 hover:-translate-y-0.5 hover:border-[#c98a3c]/60 hover:bg-[#c98a3c]/[0.07] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080604] sm:w-auto"
-              >
-                <span
-                  aria-hidden
-                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#c98a3c]/60 text-[#d9a05a] transition-colors duration-300 group-hover:bg-[#c98a3c]/20"
-                >
-                  <svg viewBox="0 0 12 12" className="ml-0.5 h-2.5 w-2.5" fill="currentColor">
-                    <path d="M2 1l9 5-9 5z" />
-                  </svg>
-                </span>
-                A call to Werjih
-              </a>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            Walk with Us
+            <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+          </a>
+        </div>
       </motion.div>
     </section>
   );
