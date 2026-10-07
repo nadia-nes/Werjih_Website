@@ -52,12 +52,6 @@ export default function Hero() {
       >
         <div className="max-w-xl bg-black/40 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/10 lg:border-none shadow-xl lg:shadow-none">
           
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 mb-3 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.3em] text-[#c98a3c] border border-[#c98a3c]/30 px-3.5 py-1 rounded-full bg-black/30 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#c98a3c] animate-pulse" />
-            Ancient Heritage & Legacy
-          </div>
-
           {/* Heading */}
           <h1 className="font-[family-name:var(--font-cormorant)] text-[2.1rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
             Werjih&apos;s story, told while{" "}
