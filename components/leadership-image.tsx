@@ -1,9 +1,10 @@
+// components/LeadershipImage.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion, useReducedMotion } from "framer-motion";
-import { Shield } from "lucide-react";
+import { Shield, X } from "lucide-react";
 
 type Leader = {
   id: string;
@@ -42,7 +43,8 @@ const epochDetails: Record<number, { years: string; subtitle: string; descriptio
 export default function LeadershipImage() {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0); // Default to first leader on desktop
+  const [mobileExpanded, setMobileExpanded] = useState<boolean>(false); // Controls mobile inline view open/close
   
   const shouldReduceMotion = useReducedMotion();
 
@@ -66,6 +68,7 @@ export default function LeadershipImage() {
 
   const handleSelectLeader = (index: number) => {
     setActiveIndex(index);
+    setMobileExpanded(true); // Open mobile view when tapped
   };
 
   if (loading) {
@@ -137,11 +140,6 @@ export default function LeadershipImage() {
               
               const imageUrl = rawUrl ? `${rawUrl}?t=${CACHE_BUSTER}` : "";
               const isSelected = activeIndex === index;
-              const currentEpochInfo = epochDetails[index] || {
-                years: "Historical Era",
-                subtitle: leader?.role || "Community Guardian",
-                description: "Honoring the legacy of our ancestors."
-              };
 
               return (
                 <div key={leader.id || index} className="flex flex-col">
@@ -197,7 +195,7 @@ export default function LeadershipImage() {
                         {leader.name}
                       </h3>
                       <span className="text-[11px] text-gray-400 font-light mt-0.5 lg:hidden">
-                        {isSelected ? "Active Record ▼" : "Tap to view record ▸"}
+                        {isSelected && mobileExpanded ? "Tap to close ✕" : "Tap to view record ▸"}
                       </span>
                     </div>
 
@@ -206,8 +204,8 @@ export default function LeadershipImage() {
                     )}
                   </motion.div>
 
-                  {/* MOBILE INLINE ACCORDION: Shows immediately below the tapped card on mobile screens only */}
-                  {isSelected && (
+                  {/* MOBILE INLINE ACCORDION: Shows below tapped card when expanded, with a dismiss button */}
+                  {isSelected && mobileExpanded && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
@@ -215,14 +213,26 @@ export default function LeadershipImage() {
                       transition={{ duration: 0.3 }}
                       className="block lg:hidden mt-3 mb-4 bg-gradient-to-br from-[#161412] via-[#110f0d] to-[#0a0807] border border-[#d07f05]/40 rounded-2xl p-5 shadow-xl relative overflow-hidden"
                     >
-                      <div className="space-y-4 relative z-10">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMobileExpanded(false);
+                        }}
+                        aria-label="Close reading panel"
+                        className="absolute top-4 right-4 w-7 h-7 rounded-full bg-black/40 border border-[#d07f05]/30 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+
+                      <div className="space-y-4 relative z-10 pr-6">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-[9px] font-mono tracking-[0.3em] uppercase text-black bg-[#d07f05] px-2.5 py-0.5 rounded-full font-bold">
                             {leader.epoch || `Epoch ${index + 1}`}
                           </span>
                           <span className="text-[10px] font-mono text-gray-400 flex items-center space-x-1">
                             <span>⏳</span>
-                            <span>{currentEpochInfo.years}</span>
+                            <span>{activeEpochInfo.years}</span>
                           </span>
                         </div>
 
@@ -231,13 +241,13 @@ export default function LeadershipImage() {
                             {leader.name}
                           </h3>
                           <p className="text-[#d07f05] text-xs font-serif italic">
-                            {currentEpochInfo.subtitle}
+                            {activeEpochInfo.subtitle}
                           </p>
                         </div>
 
                         <div className="pt-3 border-t border-[#d07f05]/20">
                           <p className="text-gray-300 text-xs font-light leading-relaxed">
-                            {currentEpochInfo.description}
+                            {activeEpochInfo.description}
                           </p>
                         </div>
                       </div>
@@ -249,7 +259,7 @@ export default function LeadershipImage() {
           </div>
         </div>
 
-        {/* DESKTOP EXPANDED STORY CARD: Only shows on large screens (lg and up) */}
+        {/* DESKTOP EXPANDED STORY CARD: Always visible on large screens */}
         <div className="hidden lg:block">
           <motion.div
             key={activeIndex}

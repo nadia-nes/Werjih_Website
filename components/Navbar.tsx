@@ -1,3 +1,4 @@
+// components/Navbar.tsx
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -261,7 +262,7 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className={`${sans.className} absolute inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4`}
+      className={`${sans.className} fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4`}
     >
       {/* Full screen backdrop locked to prevent background scrolling artifacts */}
       <AnimatePresence>
