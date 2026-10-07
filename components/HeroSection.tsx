@@ -13,15 +13,19 @@ export default function Hero() {
   return (
     <section className="relative h-auto lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
       
-      {/* Background Image / Layout Setup */}
+      {/* Background Image Container with Container-Level Blend Mode */}
       <div className="absolute inset-0 z-0 lg:hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={IMG}
-          alt="A Werjih woman weaving a coiled basket"
-          className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.75] contrast-[1.05]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-[#0b0a09]/60 to-[#0b0a09]/80" />
+        <div className="relative w-full h-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={IMG}
+            alt="A Werjih woman weaving a coiled basket"
+            className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.8] contrast-[1.1]"
+          />
+          {/* Container-level color tint overlay */}
+          <div className="absolute inset-0 bg-[#e88d22] mix-blend-color opacity-70 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-[#0b0a09]/60 to-[#0b0a09]/80" />
+        </div>
       </div>
 
       <div className="absolute inset-0 hidden lg:grid grid-cols-12 items-center">
@@ -32,14 +36,18 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: reduce ? 0 : 2.2, ease }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={IMG}
-            alt="A Werjih woman weaving a coiled basket"
-            className="h-full w-full object-cover object-[50%_32%] opacity-90"
-          />
-          <div className="absolute top-0 right-0 h-[45%] w-[55%] bg-[radial-gradient(ellipse_at_top_right,rgba(11,10,9,0.95)_0%,rgba(11,10,9,0.5)_60%,transparent_100%)] pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/70 to-transparent" />
+          <div className="relative w-full h-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={IMG}
+              alt="A Werjih woman weaving a coiled basket"
+              className="h-full w-full object-cover object-[50%_32%] opacity-90"
+            />
+            {/* Container-level color tint overlay for desktop */}
+            <div className="absolute inset-0 bg-[#e88d22] mix-blend-color opacity-60 pointer-events-none" />
+            <div className="absolute top-0 right-0 h-[45%] w-[55%] bg-[radial-gradient(ellipse_at_top_right,rgba(11,10,9,0.95)_0%,rgba(11,10,9,0.5)_60%,transparent_100%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/70 to-transparent" />
+          </div>
         </motion.div>
       </div>
 
@@ -55,7 +63,7 @@ export default function Hero() {
           {/* Heading */}
           <h1 className="font-[family-name:var(--font-cormorant)] text-[2.1rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
             Werjih :
-            <span className="relative inline-block pr-1 font-normal italic text-[#f1e9d8]">
+            <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               Stories Woven in Time.
             </span>
           </h1>
@@ -69,10 +77,10 @@ export default function Hero() {
           <div className="mt-6 flex">
             <a
               href="#notice"
-              className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f1e9d8] border border-[#c98a3c]/40 bg-black/50 hover:border-[#c98a3c] transition-all"
+              className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/40 bg-black/50 hover:border-[#e88d22] transition-all"
             >
               <span>Unfold History</span>
-              <span className="text-[#c98a3c]">→</span>
+              <span className="text-[#e88d22]">→</span>
             </a>
           </div>
 
