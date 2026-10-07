@@ -161,11 +161,12 @@ export default function LeadershipImage() {
             <span className="italic text-[#d07f05]">Hierarchy</span>
           </h2>
           <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
-            A continuous chain of defense and advocacy across historical epochs.
+            A continuous chain of defense and advocacy across historical epochs. Swipe or tap the
+            stack to explore each custodian of the legacy.
           </p>
         </motion.div>
 
-        {/* STAGE: Left Column (Photo Stack + Controls) & Right Column (Metadata + Story) */}
+        {/* STAGE: Left Column (Photo Stack + Controls) & Right Column (Transparent Metadata Container) */}
         <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-14">
           
           {/* LEFT: PHOTO STACK & CONTROLS */}
@@ -279,7 +280,7 @@ export default function LeadershipImage() {
             </div>
           </div>
 
-          {/* RIGHT: METADATA & STORY */}
+          {/* RIGHT: TRANSPARENT METADATA CONTAINER */}
           <div className="flex-1 min-w-0 w-full flex flex-col justify-center">
             <AnimatePresence mode="wait">
               <motion.div
@@ -288,7 +289,7 @@ export default function LeadershipImage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-6"
+                className="space-y-6 p-6 md:p-8 rounded-2xl bg-white/[0.02] border border-[#d07f05]/20 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
               >
                 <div className="space-y-2">
                   <p className="text-[11px] md:text-xs font-mono text-white tracking-wide">
