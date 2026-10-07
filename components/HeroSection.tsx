@@ -1,4 +1,4 @@
-// components/Hero.tsx
+// components/HeroSection.tsx
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
@@ -49,42 +49,45 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.6, ease }}
       >
-        <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(1.5rem,3.4vw,2.6rem)] font-light leading-snug tracking-[0.01em] drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]">
-          Werjih&apos;s story, told while{" "}
-          <span className="relative inline-block bg-gradient-to-r from-[#e88d22] via-[#e9b074] to-[#f3ead8] bg-clip-text pr-1 font-bold italic text-transparent">
-            we still can.
-            <motion.span
-              aria-hidden
-              className="absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-gradient-to-r from-[#e88d22] via-[#e88d22]/40 to-transparent"
-              initial={{ scaleX: reduce ? 1 : 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: reduce ? 0 : 1.2, delay: reduce ? 0 : 1.6, ease }}
-            />
-          </span>
-        </h1>
+        {/* Mobile background wrapper card for high contrast and readability */}
+        <div className="rounded-2xl bg-black/60 p-5 backdrop-blur-md border border-white/10 sm:bg-transparent sm:p-0 sm:border-none sm:backdrop-blur-none">
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(1.5rem,3.4vw,2.6rem)] font-light leading-snug tracking-[0.01em] drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]">
+            Werjih&apos;s story, told while{" "}
+            <span className="relative inline-block bg-gradient-to-r from-[#e88d22] via-[#e9b074] to-[#f3ead8] bg-clip-text pr-1 font-bold italic text-transparent">
+              we still can.
+              <motion.span
+                aria-hidden
+                className="absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-gradient-to-r from-[#e88d22] via-[#e88d22]/40 to-transparent"
+                initial={{ scaleX: reduce ? 1 : 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: reduce ? 0 : 1.2, delay: reduce ? 0 : 1.6, ease }}
+              />
+            </span>
+          </h1>
 
-        <p className="mt-3 max-w-xl font-[family-name:var(--font-cormorant)] text-[15px] leading-[1.6] tracking-wide text-[#f6eedd] drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)] sm:text-[17px] md:text-[19px]">
-          “Every basket holds a mother&apos;s hands, every pattern an elder&apos;s
-          prayer. Safeguarding centuries of ancestral craft and resilience, so
-          what our grandparents wove is never lost, and our children inherit it
-          whole.”
-        </p>
+          <p className="mt-3 max-w-xl font-[family-name:var(--font-cormorant)] text-[15px] leading-[1.6] tracking-wide text-[#f6eedd] drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)] sm:text-[17px] md:text-[19px]">
+            “Every basket holds a mother&apos;s hands, every pattern an elder&apos;s
+            prayer. Safeguarding centuries of ancestral craft and resilience, so
+            what our grandparents wove is never lost, and our children inherit it
+            whole.”
+          </p>
 
-        <div className="mt-5 flex flex-wrap gap-3">
-          <a
-            href="#notice"
-            className="group inline-flex items-center gap-3 rounded-none bg-[#e88d22] px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0b0a09] transition duration-500 hover:bg-[#f4a24a]"
-          >
-            A call to Werjih
-            <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-          </a>
-          <a
-            href="#call-video"
-            className="group inline-flex items-center gap-3 rounded-none border border-[#e88d22] bg-black/20 px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.22em] text-[#e88d22] backdrop-blur-md transition duration-500 hover:bg-[#e88d22] hover:text-[#0b0a09]"
-          >
-            Walk with Us
-            <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-          </a>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              href="#notice"
+              className="group inline-flex items-center gap-3 rounded-none bg-[#e88d22] px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0b0a09] transition duration-500 hover:bg-[#f4a24a]"
+            >
+              A call to Werjih
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </a>
+            <a
+              href="#call-video"
+              className="group inline-flex items-center gap-3 rounded-none border border-[#e88d22] bg-black/20 px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.22em] text-[#e88d22] backdrop-blur-md transition duration-500 hover:bg-[#e88d22] hover:text-[#0b0a09]"
+            >
+              Walk with Us
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </a>
+          </div>
         </div>
       </motion.div>
     </section>
