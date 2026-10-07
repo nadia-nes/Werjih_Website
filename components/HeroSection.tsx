@@ -21,7 +21,6 @@ export default function Hero() {
           alt="A Werjih woman weaving a coiled basket"
           className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.75] contrast-[1.05]"
         />
-        {/* Softer gradient so the background image remains clearly visible */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09]/90 via-[#0b0a09]/40 to-black/20" />
       </div>
 
@@ -51,7 +50,6 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        {/* Mobile box: much smaller padding (p-5 instead of p-8) and heavily transparent background (bg-black/40) */}
         <div className="max-w-xl bg-black/40 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/10 lg:border-none shadow-xl lg:shadow-none">
           
           {/* Badge */}
@@ -76,21 +74,13 @@ export default function Hero() {
             whole.”
           </p>
 
-          {/* Outline Buttons */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+          {/* Single Action Button */}
+          <div className="mt-6 flex">
             <a
               href="#notice"
               className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f1e9d8] border border-[#c98a3c]/40 bg-black/50 hover:border-[#c98a3c] transition-all"
             >
               <span>A call to Werjih</span>
-              <span className="text-[#c98a3c]">→</span>
-            </a>
-
-            <a
-              href="#call-video"
-              className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#cfc6b3] border border-white/10 bg-black/50 hover:border-[#c98a3c]/60 hover:text-[#f1e9d8] transition-all"
-            >
-              <span>Walk with Us</span>
               <span className="text-[#c98a3c]">→</span>
             </a>
           </div>
