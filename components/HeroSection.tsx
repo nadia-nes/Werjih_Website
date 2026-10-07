@@ -11,16 +11,24 @@ export default function Hero() {
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="relative h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8]">
-      {/* Background container holding both the image on the right and the deep dark gradient on the left */}
-      <div className="absolute inset-0 grid grid-cols-1 lg:grid-cols-12 items-center">
-        
-        {/* Left side: Solid dark base for crystal-clear typography */}
-        <div className="absolute inset-0 lg:relative lg:col-span-6 h-full w-full bg-[#0b0a09] z-10 flex flex-col justify-center px-6 sm:px-12 lg:px-16" />
+    <section className="relative min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
+      
+      {/* ==================== MOBILE LAYOUT (< 1024px) ==================== */}
+      <div className="absolute inset-0 z-0 lg:hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={IMG}
+          alt="A Werjih woman weaving a coiled basket"
+          className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.65] contrast-[1.05]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-[#0b0a09]/70 to-black/40" />
+      </div>
 
-        {/* Right side: Image with targeted top-right corner darkening */}
+      {/* ==================== DESKTOP LAYOUT (>= 1024px) ==================== */}
+      <div className="absolute inset-0 hidden lg:grid grid-cols-12 items-center">
+        <div className="col-span-6 h-full w-full bg-[#0b0a09]" />
         <motion.div
-          className="absolute inset-y-0 right-0 w-full lg:col-span-6 lg:relative h-full overflow-hidden z-0"
+          className="col-span-6 h-full relative overflow-hidden"
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: reduce ? 0 : 2.2, ease }}
@@ -31,25 +39,21 @@ export default function Hero() {
             alt="A Werjih woman weaving a coiled basket"
             className="h-full w-full object-cover object-[50%_32%] opacity-90"
           />
-
-          {/* Focused gradient darkening ONLY the top-right corner */}
           <div className="absolute top-0 right-0 h-[45%] w-[55%] bg-[radial-gradient(ellipse_at_top_right,rgba(11,10,9,0.95)_0%,rgba(11,10,9,0.5)_60%,transparent_100%)] pointer-events-none" />
-
-          {/* Gradient overlay to seamlessly blend the image into the dark left side */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/70 to-transparent lg:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-transparent to-[#0b0a09]/50 lg:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/70 to-transparent" />
         </motion.div>
       </div>
 
-      {/* Foreground Text Content with Modern 3D Floating Typography Effect */}
+      {/* ==================== FOREGROUND CONTENT ==================== */}
       <motion.div
-        className="relative z-20 flex h-full max-w-7xl mx-auto flex-col justify-center px-6 sm:px-12 lg:px-16 pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-36 pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        <div className="max-w-xl">
-          {/* 3D Floating Badge matching the unified amber-gold tone */}
+        <div className="max-w-xl bg-[#0b0a09]/80 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-6 sm:p-8 lg:p-0 rounded-3xl lg:rounded-none border border-white/10 lg:border-none shadow-2xl lg:shadow-none">
+          
+          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -60,7 +64,7 @@ export default function Hero() {
             Ancient Heritage & Legacy
           </motion.div>
 
-          {/* 3D Layered Heading with constant navbar-matching white color */}
+          {/* Heading */}
           <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(2.3rem,4.5vw,3.9rem)] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8] drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
             Werjih&apos;s story, told while{" "}
             <span className="relative inline-block pr-1 font-normal italic text-[#f1e9d8]">
@@ -75,7 +79,7 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* 3D Depth Paragraph */}
+          {/* Description */}
           <p className="mt-5 font-[family-name:var(--font-cormorant)] text-[16px] sm:text-[19px] leading-[1.7] tracking-wide text-[#cfc6b3] drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
             “Every basket holds a mother&apos;s hands, every pattern an elder&apos;s
             prayer. Safeguarding centuries of ancestral craft and resilience, so
@@ -83,7 +87,7 @@ export default function Hero() {
             whole.”
           </p>
 
-          {/* Sleek Black Buttons with Brownish-Amber-Gold Touch */}
+          {/* Buttons */}
           <div className="mt-8 flex flex-wrap gap-4">
             <a
               href="#notice"
@@ -102,6 +106,7 @@ export default function Hero() {
               <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#c98a3c]">→</span>
             </a>
           </div>
+
         </div>
       </motion.div>
     </section>
