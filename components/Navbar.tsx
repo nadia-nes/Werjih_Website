@@ -12,12 +12,6 @@ import {
   useScroll,
 } from 'framer-motion';
 
-/*
-  Calm palette (matches the hero)
-  #080604 ink · #0d0a07 surface · #f1e9d8 ivory · #cfc6b3 stone
-  #e6cfa6 champagne · #d9a05a soft amber · #c98a3c antique bronze
-*/
-
 const display = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
@@ -91,7 +85,6 @@ function Chevron({ className = '' }: { className?: string }) {
   );
 }
 
-/* Defined outside Navbar so it never remounts on scroll */
 function DesktopItem({
   item,
   pathname,
@@ -124,7 +117,6 @@ function DesktopItem({
         />
       )}
 
-      {/* A quiet dot glides to the active page */}
       {active && (
         <motion.span
           layoutId="nav-dot"
@@ -223,7 +215,6 @@ export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
-  // Close menus when the route changes (during render, no effect needed)
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
@@ -236,24 +227,17 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 20));
 
-  // Close on outside tap / Escape
   useEffect(() => {
     if (!mobileOpen) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) setMobileOpen(false);
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMobileOpen(false);
     };
-    document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('keydown', onKey);
     return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('keydown', onKey);
     };
   }, [mobileOpen]);
 
-  // Close the mobile menu if the screen grows to desktop size
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)');
     const onChange = (e: MediaQueryListEvent) => {
@@ -263,9 +247,12 @@ export default function Navbar() {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  // Lock page scroll while the mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
     return () => {
       document.body.style.overflow = '';
     };
@@ -274,9 +261,9 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className={`${sans.className} sticky top-0 z-50 px-3 pb-1 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:pt-4`}
+      className={`${sans.className} absolute inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4`}
     >
-      {/* Dim backdrop behind the open mobile menu */}
+      {/* Full screen backdrop locked to prevent background scrolling artifacts */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -286,12 +273,12 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: reduce ? 0.01 : 0.25 }}
             onClick={() => setMobileOpen(false)}
-            className="fixed inset-0 -z-10 bg-black/70 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-black/80 backdrop-blur-md lg:hidden"
           />
         )}
       </AnimatePresence>
 
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl relative z-50">
         <nav
           aria-label="Main"
           className={`relative grid grid-cols-[auto_1fr_auto] items-center rounded-full border px-4 backdrop-blur-xl transition-all duration-500 sm:px-7 lg:grid-cols-[1fr_auto_1fr] ${
@@ -314,7 +301,7 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Wordmark only: no tile, no icon */}
+          {/* Wordmark */}
           <Link
             href="/"
             aria-label="The Tigri Werjih's, home"
@@ -346,7 +333,7 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Mobile toggle (48px touch target) */}
+          {/* Mobile toggle */}
           <button
             type="button"
             onClick={() => setMobileOpen((p) => !p)}
@@ -375,7 +362,7 @@ export default function Navbar() {
           </button>
         </nav>
 
-        {/* Mobile menu */}
+        {/* Mobile menu dropdown */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
