@@ -71,7 +71,7 @@ export default function Hero() {
               href="#notice"
               className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f1e9d8] border border-[#c98a3c]/40 bg-black/50 hover:border-[#c98a3c] transition-all"
             >
-              <span>Unfold the History</span>
+              <span>Unfold History</span>
               <span className="text-[#c98a3c]">→</span>
             </a>
           </div>
