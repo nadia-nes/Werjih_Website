@@ -11,7 +11,7 @@ export default function Hero() {
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="relative h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8]">
+    <section className="relative min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
       {/* Background container holding both the image on the right and the deep dark gradient on the left */}
       <div className="absolute inset-0 grid grid-cols-1 lg:grid-cols-12 items-center">
         
@@ -29,21 +29,22 @@ export default function Hero() {
           <img
             src={IMG}
             alt="A Werjih woman weaving a coiled basket"
-            className="h-full w-full object-cover object-[50%_32%] opacity-90"
+            className="h-full w-full object-cover object-[50%_32%] opacity-40 lg:opacity-90"
           />
 
           {/* Focused gradient darkening ONLY the top-right corner */}
           <div className="absolute top-0 right-0 h-[45%] w-[55%] bg-[radial-gradient(ellipse_at_top_right,rgba(11,10,9,0.95)_0%,rgba(11,10,9,0.5)_60%,transparent_100%)] pointer-events-none" />
 
           {/* Gradient overlay to seamlessly blend the image into the dark left side */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/70 to-transparent lg:block" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/90 to-[#0b0a09]/50 lg:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0a09] via-[#0b0a09]/70 to-transparent hidden lg:block" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-transparent to-[#0b0a09]/50 lg:hidden" />
         </motion.div>
       </div>
 
       {/* Foreground Text Content with Modern 3D Floating Typography Effect */}
       <motion.div
-        className="relative z-20 flex h-full max-w-7xl mx-auto flex-col justify-center px-6 sm:px-12 lg:px-16 pt-20"
+        className="relative z-25 w-full max-w-7xl mx-auto flex flex-col justify-center px-6 sm:px-12 lg:px-16 pt-36 pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
@@ -54,7 +55,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="inline-flex items-center gap-2 mb-4 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.3em] text-[#c98a3c] border border-[#c98a3c]/30 px-4 py-1.5 rounded-full bg-[#121110]/60 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+            className="inline-flex items-center gap-2 mb-4 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.3em] text-[#c98a3c] border border-[#c98a3c]/30 px-4 py-1.5 rounded-full bg-[#121110]/80 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#c98a3c] animate-pulse" />
             Ancient Heritage & Legacy
