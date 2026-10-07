@@ -11,7 +11,7 @@ export default function Hero() {
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="relative min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
+    <section className="relative h-auto lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
       
       {/* Background Image / Layout Setup */}
       <div className="absolute inset-0 z-0 lg:hidden">
@@ -21,7 +21,7 @@ export default function Hero() {
           alt="A Werjih woman weaving a coiled basket"
           className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.75] contrast-[1.05]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09]/90 via-[#0b0a09]/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-[#0b0a09]/60 to-[#0b0a09]/80" />
       </div>
 
       <div className="absolute inset-0 hidden lg:grid grid-cols-12 items-center">
@@ -45,7 +45,7 @@ export default function Hero() {
 
       {/* Content Container */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-32 pb-12 lg:pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-36 pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}

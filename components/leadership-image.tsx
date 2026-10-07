@@ -43,8 +43,8 @@ const epochDetails: Record<number, { years: string; subtitle: string; descriptio
 export default function LeadershipImage() {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeIndex, setActiveIndex] = useState<number>(0); // Default to first leader on desktop
-  const [mobileExpanded, setMobileExpanded] = useState<boolean>(false); // Controls mobile inline view open/close
+  const [activeIndex, setActiveIndex] = useState<number>(0); 
+  const [mobileExpanded, setMobileExpanded] = useState<boolean>(false); 
   
   const shouldReduceMotion = useReducedMotion();
 
@@ -67,8 +67,14 @@ export default function LeadershipImage() {
   }, []);
 
   const handleSelectLeader = (index: number) => {
-    setActiveIndex(index);
-    setMobileExpanded(true); // Open mobile view when tapped
+    if (activeIndex === index) {
+      // Toggle open/close if tapping the same card
+      setMobileExpanded(!mobileExpanded);
+    } else {
+      // Switch to new card and open it
+      setActiveIndex(index);
+      setMobileExpanded(true);
+    }
   };
 
   if (loading) {
@@ -140,6 +146,7 @@ export default function LeadershipImage() {
               
               const imageUrl = rawUrl ? `${rawUrl}?t=${CACHE_BUSTER}` : "";
               const isSelected = activeIndex === index;
+              const isCardExpanded = isSelected && mobileExpanded;
 
               return (
                 <div key={leader.id || index} className="flex flex-col">
@@ -195,7 +202,7 @@ export default function LeadershipImage() {
                         {leader.name}
                       </h3>
                       <span className="text-[11px] text-gray-400 font-light mt-0.5 lg:hidden">
-                        {isSelected && mobileExpanded ? "Tap to close ✕" : "Tap to view record ▸"}
+                        {isCardExpanded ? "Tap to close ✕" : "Tap to view record ▸"}
                       </span>
                     </div>
 
@@ -204,8 +211,8 @@ export default function LeadershipImage() {
                     )}
                   </motion.div>
 
-                  {/* MOBILE INLINE ACCORDION: Shows below tapped card when expanded, with a dismiss button */}
-                  {isSelected && mobileExpanded && (
+                  {/* MOBILE INLINE ACCORDION */}
+                  {isCardExpanded && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
@@ -259,7 +266,7 @@ export default function LeadershipImage() {
           </div>
         </div>
 
-        {/* DESKTOP EXPANDED STORY CARD: Always visible on large screens */}
+        {/* DESKTOP EXPANDED STORY CARD */}
         <div className="hidden lg:block">
           <motion.div
             key={activeIndex}
