@@ -106,7 +106,7 @@ export default function Home() {
   ];
 
   return (
-    <main id="home" className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#d07f05] selection:text-black">
+    <main id="home" className="min-h-screen bg-[#0f0e0e] text-white text-base selection:bg-[#d07f05] selection:text-black">
       
       {/* 1. HERO SECTION */}
       <Hero />

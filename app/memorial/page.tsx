@@ -149,7 +149,7 @@ export default function MemorialPage() {
               The Fracturing and Loss of Identity
             </h3>
             <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-              Perhaps the most insidious wound was the assault on our collective identity. Displaced, fractured, and hunted, surviving family members were forced into hiding or assimilation, terrified to speak their mother tongue, practice native customs, or wear traditional clothing openly. 
+              Perhaps the most insidious wound was the assault on our collective identity. Displaced, fractured, and hunted, surviving family members were forced into hiding or assimilation, terrified to practice native customs, or wear traditional clothing openly. 
             </p>
             <p className="text-xs md:text-sm text-gray-300 leading-relaxed mt-3">
               Our history, oral traditions, and shared memory nearly faded into the shadows. This memorial stands as our fierce vow against that erasure: a sacred promise that our identity will never be extinguished.

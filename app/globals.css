@@ -12,6 +12,13 @@ body {
   overflow-x: hidden;
 }
 
+@layer base {
+  body {
+    font-size: 1.09rem; /* Slightly larger base text */
+    line-height: 1.6;
+  }
+}
+
 @layer utilities {
   .perspective-1000 {
     perspective: 1000px;
