@@ -1,6 +1,9 @@
+// components/BookAdvertSection.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { ChevronDown, Phone } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 interface BookAdvertItem {
@@ -10,10 +13,153 @@ interface BookAdvertItem {
   video_url: string;
 }
 
+const SELLERS = [
+  { name: "Roza Siraj", place: "Bethel", phone: "0988022885" },
+  { name: "Hamid Hamza", place: "Autobis Tera", phone: "0911646448" },
+  { name: "Ali Usman", place: "Jemo Mall", phone: "0912008319" },
+  { name: "Hussein Ali", place: "Daleti", phone: "0922158994" },
+  { name: "Adam Mohammed", place: "Sebeta", phone: "0923433183" },
+];
+
+function AdvertCard({ item }: { item: BookAdvertItem }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [prevInView, setPrevInView] = useState(false);
+
+  // Watch the top block (video + text). Its height never changes when the
+  // list opens, so the open/close can't flicker back and forth.
+  const topRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(topRef, { amount: 0.4 });
+
+  // Open when the section comes into view, close when it leaves.
+  // (Updating state during render like this avoids the "setState in effect" lint error.)
+  if (inView !== prevInView) {
+    setPrevInView(inView);
+    setIsOpen(inView);
+  }
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="relative overflow-hidden rounded-2xl border border-[#d07f05]/30 bg-[#120e0a] shadow-2xl"
+    >
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#d07f05]/50 to-transparent" />
+      <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#d07f05]/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div
+        ref={topRef}
+        className="relative grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-8 p-4 md:p-6"
+      >
+        {/* Video */}
+        <div className="md:col-span-3">
+          <div className="relative aspect-video rounded-xl overflow-hidden border border-[#d07f05]/30 bg-black shadow-[0_15px_40px_rgba(0,0,0,0.6)]">
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-contain"
+            >
+              <source src={item.video_url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+        {/* Text + CTA */}
+        <div className="md:col-span-2 flex flex-col justify-center gap-4">
+          <div>
+            <span className="inline-block text-[10px] font-mono tracking-[0.25em] uppercase text-[#d07f05] px-3 py-1 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 mb-3">
+              Now Available
+            </span>
+            <h3 className="text-xl md:text-2xl font-serif text-[#f4e8d1] leading-tight mb-2">
+              {item.title}
+            </h3>
+            <p className="text-xs md:text-sm text-gray-300 font-light leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((v) => !v)}
+            aria-expanded={isOpen}
+            className={`group flex items-center justify-between gap-3 w-full px-4 py-3 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
+              isOpen
+                ? "bg-[#d07f05] border-[#d07f05] text-black"
+                : "bg-[#d07f05]/10 border-[#d07f05]/40 text-[#d07f05] hover:bg-[#d07f05]/20"
+            }`}
+          >
+            <span>
+              <span className="block text-[9px] font-mono uppercase tracking-[0.25em] opacity-80">
+                Get Your Copy
+              </span>
+              <span className="block text-sm font-bold">
+                {SELLERS.length} Authorized Distributors
+              </span>
+            </span>
+            <ChevronDown
+              className={`w-5 h-5 shrink-0 transition-transform duration-300 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        </div>
+      </div>
+
+      {/* Distributors panel (compact) */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 md:px-6 pb-4 pt-3 border-t border-[#d07f05]/20">
+              <p className="text-[10px] text-gray-500 font-serif mb-2">
+                Addis Ababa &amp; surroundings. Tap to call.
+              </p>
+
+              <ul className="rounded-xl border border-[#d07f05]/20 bg-[#181615] divide-y divide-white/5 overflow-hidden">
+                {SELLERS.map((seller, i) => (
+                  <li
+                    key={seller.phone}
+                    className="flex items-center gap-2.5 px-3 py-2 hover:bg-[#d07f05]/5 transition-colors"
+                  >
+                    <span className="shrink-0 w-4 text-[10px] font-mono text-[#d07f05]/70">
+                      {i + 1}
+                    </span>
+
+                    <p className="min-w-0 flex-1 truncate text-xs text-gray-100">
+                      <span className="font-medium">{seller.name}</span>
+                      <span className="text-[#d07f05] text-[10px]"> · {seller.place}</span>
+                    </p>
+
+                    <a
+                      href={`tel:${seller.phone}`}
+                      aria-label={`Call ${seller.name}`}
+                      className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 hover:bg-[#d07f05] hover:text-black text-[#d07f05] text-[10px] font-mono transition-colors"
+                    >
+                      <Phone className="w-3 h-3" />
+                      {seller.phone}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.article>
+  );
+}
+
 export default function BookAdvertSection() {
   const [adverts, setAdverts] = useState<BookAdvertItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showSellers, setShowSellers] = useState(false);
 
   useEffect(() => {
     async function fetchBookAdverts() {
@@ -36,95 +182,19 @@ export default function BookAdvertSection() {
   }, []);
 
   if (loading) {
-    return <div className="text-center py-10 text-xs font-mono text-[#d07f05]">Loading book movement archives...</div>;
+    return (
+      <div className="text-center py-10 text-xs font-mono text-[#d07f05]">
+        Loading book movement archives...
+      </div>
+    );
   }
 
+  if (adverts.length === 0) return null;
+
   return (
-    <section className="max-w-4xl mx-auto px-6 py-10">
+    <section className="max-w-4xl mx-auto px-4 md:px-6 py-10 space-y-6">
       {adverts.map((item) => (
-        <div key={item.id} className="rounded-xl p-6 md:p-8 border border-[#d07f05]/30 bg-[#120e0a] relative shadow-2xl mb-8">
-          <h3 className="text-xl font-serif text-[#f4e8d1] mb-2">
-            {item.title}
-          </h3>
-          <p className="text-xs text-gray-300 mb-6 font-light leading-relaxed">
-            {item.description}
-          </p>
-
-          {/* Dynamic Video Player fed directly from the 'book-advert' table */}
-          <div className="relative rounded-lg overflow-hidden border border-[#d07f05]/30 bg-black shadow-inner mb-6">
-            <video 
-              controls 
-              preload="metadata"
-              className="w-full h-auto max-h-[400px] object-cover"
-            >
-              <source src={item.video_url} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-
-          {/* 3D Flipping Authorized Sellers Section */}
-          <div 
-            className="pt-5 border-t border-[#d07f05]/20 perspective-1000 group cursor-pointer"
-            onMouseEnter={() => setShowSellers(true)}
-            onMouseLeave={() => setShowSellers(false)}
-          >
-            <div 
-              className={`relative w-full transition-transform duration-700 transform-style-3d ${
-                showSellers ? "rotate-y-180" : ""
-              }`}
-            >
-              
-              {/* FRONT FACE: Call to Action */}
-              <div className="w-full bg-[#121110] border border-[#d07f05]/30 rounded-lg p-4 text-center backface-hidden shadow-lg">
-                <span className="px-2.5 py-0.5 mb-1.5 text-[9px] font-bold text-black bg-[#d07f05] rounded-full uppercase tracking-wider inline-block">
-                  Get Your Copy
-                </span>
-                <h3 className="text-sm font-bold text-white mb-0.5">Authorized Book Sellers</h3>
-                <p className="text-gray-400 text-[11px] mb-3">Distributors across Addis Ababa & surroundings.</p>
-                
-                <div className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-[#d07f05] bg-[#d07f05]/10 px-3 py-1.5 rounded-md border border-[#d07f05]/30 animate-pulse">
-                  <span>Hover to View 5 Distributor Contacts</span>
-                  <span>🔄</span>
-                </div>
-              </div>
-
-              {/* BACK FACE: Contact List */}
-              <div className="absolute inset-0 w-full h-full bg-[#121110] border border-[#d07f05]/40 rounded-lg p-4 backface-hidden rotate-y-180 shadow-2xl flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-center mb-2 pb-1.5 border-b border-[#d07f05]/20">
-                    <h3 className="text-[11px] font-bold text-[#d07f05] uppercase tracking-wider">Authorized Distributors</h3>
-                    <span className="text-[9px] text-gray-400 bg-white/5 px-1.5 py-0.5 rounded">Scroll to view all</span>
-                  </div>
-
-                  <div className="space-y-1.5 text-[11px] max-h-[95px] overflow-y-auto pr-1.5 custom-scrollbar">
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">1. Roza Siraj <span className="text-[#d07f05] text-[9px]">[Bethel]</span></span>
-                      <a href="tel:0988022885" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0988022885</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">2. Hamid Hamza <span className="text-[#d07f05] text-[9px]">[Autobis Tera]</span></span>
-                      <a href="tel:0911646448" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0911646448</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">3. Ali Usman <span className="text-[#d07f05] text-[9px]">[Jemo Mall]</span></span>
-                      <a href="tel:0912008319" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0912008319</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">4. Hussein Ali <span className="text-[#d07f05] text-[9px]">[Daleti]</span></span>
-                      <a href="tel:0922158994" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0922158994</a>
-                    </div>
-                    <div className="flex justify-between items-center bg-[#181615] p-2 rounded border border-white/5">
-                      <span className="text-gray-200 font-medium">5. Adam Mohammed <span className="text-[#d07f05] text-[9px]">[Sebeta]</span></span>
-                      <a href="tel:0923433183" className="text-[#d07f05] hover:underline font-mono bg-[#d07f05]/10 px-1.5 py-0.5 rounded">0923433183</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
+        <AdvertCard key={item.id} item={item} />
       ))}
     </section>
   );

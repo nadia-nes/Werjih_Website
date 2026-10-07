@@ -1,7 +1,7 @@
 // components/Navbar.tsx
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
@@ -20,6 +20,9 @@ const display = Cormorant_Garamond({
   display: 'swap',
 });
 const sans = Inter({ subsets: ['latin'], display: 'swap' });
+
+// Set to false if you want the navbar to always stay visible.
+const HIDE_ON_SCROLL = true;
 
 type Child = { label: string; href: string };
 type Item = { label: string; href?: string; children?: Child[] };
@@ -215,7 +218,10 @@ export default function Navbar() {
   const [mobileSection, setMobileSection] = useState<string | null>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [lastY, setLastY] = useState(0);
 
+  // Close menus when the page changes
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
@@ -223,10 +229,36 @@ export default function Navbar() {
     setOpenMenu(null);
   }
 
-  const navRef = useRef<HTMLElement>(null);
+  const { scrollY, scrollYProgress } = useScroll();
 
-  const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 20));
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    setScrolled(y > 20);
+
+    if (HIDE_ON_SCROLL) {
+      const delta = y - lastY;
+      if (y < 120) setHidden(false);
+      else if (delta > 6) setHidden(true);
+      else if (delta < -6) setHidden(false);
+    }
+    setLastY(y);
+  });
+
+  // Never hide while a menu is open
+  const show = !hidden || mobileOpen || openMenu !== null;
+
+  // LOGO: go home, or scroll to the top if already on the home page
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setMobileOpen(false);
+    setOpenMenu(null);
+
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  };
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -249,22 +281,21 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
   }, [mobileOpen]);
 
   return (
-    <header
-      ref={navRef}
+    <motion.header
+      initial={false}
+      animate={{ y: show ? '0%' : '-130%' }}
+      transition={{ duration: reduce ? 0.01 : 0.35, ease: EASE }}
+      onFocusCapture={() => setHidden(false)}
       className={`${sans.className} fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4`}
     >
-      {/* Full screen backdrop locked to prevent background scrolling artifacts */}
+      {/* Full screen backdrop for the mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -302,11 +333,12 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Wordmark */}
+          {/* Wordmark / home button */}
           <Link
             href="/"
-            aria-label="The Tigri Werjih's, home"
-            className="group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-1 py-1 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:col-start-2 lg:items-center lg:justify-self-center"
+            onClick={handleLogoClick}
+            aria-label="The Tigri Werjih's, back to home"
+            className="group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-2 py-2 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:col-start-2 lg:items-center lg:justify-self-center"
           >
             <span
               className={`${display.className} text-[15px] font-medium italic tracking-[0.08em] text-[#c98a3c] sm:text-base`}
@@ -361,6 +393,13 @@ export default function Navbar() {
               />
             </span>
           </button>
+
+          {/* Reading progress line */}
+          <motion.span
+            aria-hidden
+            style={{ scaleX: scrollYProgress }}
+            className="pointer-events-none absolute bottom-0 left-8 right-8 h-[2px] origin-left rounded-full bg-gradient-to-r from-[#c98a3c]/30 via-[#c98a3c] to-[#e6cfa6]"
+          />
         </nav>
 
         {/* Mobile menu dropdown */}
@@ -376,7 +415,7 @@ export default function Navbar() {
             >
               <div className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-3xl border border-white/10 bg-[#0d0a07]/97 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_24px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
                 <ul className="flex flex-col gap-0.5">
-                  {MOBILE_ORDER.map((item) => {
+                  {MOBILE_ORDER.map((item, index) => {
                     const active = isItemActive(item, pathname);
                     const open = mobileSection === item.label;
                     const rowClass = `flex min-h-[54px] w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-[18px] font-medium outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 ${
@@ -393,9 +432,19 @@ export default function Navbar() {
                       />
                     );
 
+                    const enter = {
+                      initial: { opacity: 0, x: reduce ? 0 : -10 },
+                      animate: { opacity: 1, x: 0 },
+                      transition: {
+                        duration: reduce ? 0.01 : 0.3,
+                        delay: reduce ? 0 : 0.05 + index * 0.04,
+                        ease: EASE,
+                      },
+                    };
+
                     if (item.href) {
                       return (
-                        <li key={item.label}>
+                        <motion.li key={item.label} {...enter}>
                           <Link
                             href={item.href}
                             aria-current={active ? 'page' : undefined}
@@ -406,12 +455,12 @@ export default function Navbar() {
                               {item.label}
                             </span>
                           </Link>
-                        </li>
+                        </motion.li>
                       );
                     }
 
                     return (
-                      <li key={item.label}>
+                      <motion.li key={item.label} {...enter}>
                         <button
                           type="button"
                           className={rowClass}
@@ -460,7 +509,7 @@ export default function Navbar() {
                             </motion.div>
                           )}
                         </AnimatePresence>
-                      </li>
+                      </motion.li>
                     );
                   })}
                 </ul>
@@ -469,6 +518,6 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </div>
-    </header>
+    </motion.header>
   );
 }

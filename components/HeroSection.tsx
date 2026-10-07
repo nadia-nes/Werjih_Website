@@ -62,7 +62,7 @@ export default function Hero() {
           
           {/* Heading */}
           <h1 className="font-[family-name:var(--font-cormorant)] text-[2.1rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
-            Werjih :
+            
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               Stories Woven in Time.
             </span>
