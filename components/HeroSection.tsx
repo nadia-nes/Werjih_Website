@@ -53,12 +53,12 @@ export default function Hero() {
 
       {/* Content Container */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-36 sm:pt-36 pb-10 sm:pb-16 lg:pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-44 sm:pt-44 pb-10 sm:pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        {/* Card container active on BOTH mobile and desktop */}
+        {/* Card container active on both mobile and desktop */}
         <div className="w-full max-w-[21rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] p-4 sm:p-8 rounded-2xl border border-white/15 shadow-2xl">
           
           {/* Heading */}
