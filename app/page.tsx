@@ -16,6 +16,8 @@ import EventsBoard from "@/components/EventsBoard";
 import ContributionPortal from "@/components/ContributionPortal";
 import BookAdvertSection from "@/components/Book-advert";
 import VisualHeritageSlideshow from "@/components/VisualHeritageSlideshow";
+import UnfoldHistory from "@/components/UnfoldHistory";
+
 
 // Social Channels Configuration
 const socialChannels = [
@@ -62,6 +64,7 @@ const tickerPhrases = [
 
 const footerExplore = [
   { href: "/", label: "Home" },
+  { href: "/#unfold-history", label: "Unfold History" },
   { href: "/#leadership", label: "History & Lineage" },
   { href: "/heroes", label: "Heroes & Figures" },
   { href: "/archive", label: "Digital Archive" },
@@ -184,6 +187,9 @@ export default function Home() {
       </div>
 
       <style jsx global>{`
+        html {
+          scroll-behavior: smooth;
+        }
         @keyframes marquee {
           0% {
             transform: translateX(0%);
@@ -193,6 +199,9 @@ export default function Home() {
           }
         }
       `}</style>
+
+      {/* 2b. UNFOLD HISTORY (target of the hero button) */}
+      <UnfoldHistory />
 
       {/* 3. FOUNDATIONAL LEADERSHIP SECTION */}
       <section
