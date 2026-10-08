@@ -1,4 +1,4 @@
-// components/Hero.tsx
+// components/HeroSection.tsx
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
@@ -11,7 +11,7 @@ export default function Hero() {
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="relative h-auto min-h-[78svh] lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-start lg:items-center">
+    <section className="relative h-auto min-h-[78svh] lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
       
       {/* Background Image Container with Container-Level Blend Mode */}
       <div className="absolute inset-0 z-0 lg:hidden">
@@ -53,7 +53,7 @@ export default function Hero() {
 
       {/* Content Container */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-28 pb-10 sm:pt-36 sm:pb-16 lg:pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-24 pb-10 sm:pt-36 sm:pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
