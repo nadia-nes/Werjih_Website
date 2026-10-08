@@ -158,38 +158,48 @@ function Story({ onFold }: { onFold: () => void }) {
 /* ---------- Section ---------- */
 export default function UnfoldHistory() {
   const [open, setOpen] = useState(false);
+  const [instant, setInstant] = useState(false);
   const [jumpTo, setJumpTo] = useState<number | null>(null);
+
   const sectionRef = useRef<HTMLElement>(null);
+  const storyRef = useRef<HTMLDivElement>(null);
+  const openedAt = useRef(0);
+  const pendingDelta = useRef(0);
+  const prevAnchor = useRef("");
 
-  // Open when the hero button / footer link pointing here is clicked
-  // Open when the hero button / footer link pointing here is clicked,
-// or when the page loads with #unfold-history in the URL
-useEffect(() => {
-  const onClick = (e: MouseEvent) => {
-    const a = (e.target as HTMLElement).closest("a");
-    if (a && a.getAttribute("href")?.endsWith("#unfold-history")) {
-      setOpen(true);
-    }
+  const openStory = () => {
+    openedAt.current = Date.now();
+    setOpen(true);
   };
 
-  const onHash = () => {
-    if (window.location.hash === "#unfold-history") setOpen(true);
-  };
+  // Open from the hero button / footer link, or a #unfold-history URL
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest("a");
+      if (a && a.getAttribute("href")?.endsWith("#unfold-history")) {
+        openedAt.current = Date.now();
+        setOpen(true);
+      }
+    };
+    const onHash = () => {
+      if (window.location.hash === "#unfold-history") {
+        openedAt.current = Date.now();
+        setOpen(true);
+      }
+    };
 
-  document.addEventListener("click", onClick);
-  window.addEventListener("hashchange", onHash);
+    document.addEventListener("click", onClick);
+    window.addEventListener("hashchange", onHash);
+    const t = setTimeout(onHash, 0);
 
-  // run the initial check after the effect, not inside it
-  const t = setTimeout(onHash, 0);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("hashchange", onHash);
+    };
+  }, []);
 
-  return () => {
-    clearTimeout(t);
-    document.removeEventListener("click", onClick);
-    window.removeEventListener("hashchange", onHash);
-  };
-}, []);
-
-  // After opening from an era chip, scroll to that chapter
+  // Jump to a chapter after opening from an era dot
   useEffect(() => {
     if (open && jumpTo !== null) {
       const t = setTimeout(() => {
@@ -202,11 +212,60 @@ useEffect(() => {
     }
   }, [open, jumpTo]);
 
+  // AUTO-FOLD: collapse when the story is well out of view
+  useEffect(() => {
+    if (!open) return;
+    const el = storyRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) return;
+        if (Date.now() - openedAt.current < 1200) return; // just opened
+        const rect = entry.boundingClientRect;
+        if (rect.height < 200) return; // still animating
+
+        const wasAbove = rect.bottom <= 0;
+        pendingDelta.current = wasAbove ? rect.height : 0;
+
+        // step 1: switch to an instant collapse, step 2: close
+        setInstant(true);
+        requestAnimationFrame(() => {
+          const root = document.documentElement;
+          prevAnchor.current = root.style.overflowAnchor;
+          root.style.overflowAnchor = "none"; // we compensate manually
+          setOpen(false);
+        });
+      },
+      { rootMargin: "400px 0px 400px 0px", threshold: 0 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [open]);
+
+  // After an auto-fold finishes, keep the reader's place on the page
+  const onExitComplete = () => {
+    if (pendingDelta.current > 0) {
+      window.scrollBy({
+        top: -pendingDelta.current,
+        behavior: "instant" as ScrollBehavior,
+      });
+      pendingDelta.current = 0;
+    }
+    document.documentElement.style.overflowAnchor = prevAnchor.current;
+    setInstant(false);
+  };
+
+  // Manual fold (button): animate and return to the title
   const fold = () => {
     setOpen(false);
     setTimeout(
       () =>
-        sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        sectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        }),
       50
     );
   };
@@ -246,7 +305,7 @@ useEffect(() => {
                 key={c.era}
                 type="button"
                 onClick={() => {
-                  setOpen(true);
+                  openStory();
                   setJumpTo(i);
                 }}
                 aria-label={`Open chapter ${i + 1}: ${c.title}`}
@@ -264,7 +323,7 @@ useEffect(() => {
         {/* Toggle */}
         <button
           type="button"
-          onClick={() => (open ? fold() : setOpen(true))}
+          onClick={() => (open ? fold() : openStory())}
           aria-expanded={open}
           aria-controls="unfold-history-story"
           className="mt-6 inline-flex items-center gap-3 rounded-xl border border-[#e88d22]/40 bg-black/50 px-5 py-2.5 font-sans text-[10px] uppercase tracking-[0.25em] text-[#f1e9d8] transition-all hover:border-[#e88d22] sm:px-6 sm:py-3 sm:text-[11px]"
@@ -281,14 +340,19 @@ useEffect(() => {
         </button>
 
         {/* Expandable story */}
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} onExitComplete={onExitComplete}>
           {open && (
             <motion.div
+              ref={storyRef}
               id="unfold-history-story"
               key="story"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+              exit={{
+                height: 0,
+                opacity: 0,
+                transition: { duration: instant ? 0 : 0.5 },
+              }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="overflow-hidden"
             >

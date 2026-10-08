@@ -11,7 +11,7 @@ export default function Hero() {
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="relative h-auto lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
+    <section className="relative h-auto min-h-[78svh] lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-start lg:items-center">
       
       {/* Background Image Container with Container-Level Blend Mode */}
       <div className="absolute inset-0 z-0 lg:hidden">
@@ -20,11 +20,11 @@ export default function Hero() {
           <img
             src={IMG}
             alt="A Werjih woman weaving a coiled basket"
-            className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.8] contrast-[1.1]"
+            className="h-full w-full object-cover object-[50%_30%] filter brightness-[0.9] contrast-[1.1]"
           />
           {/* Container-level color tint overlay */}
           <div className="absolute inset-0 bg-[#e88d22] mix-blend-color opacity-70 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-[#0b0a09]/60 to-[#0b0a09]/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0a09] via-[#0b0a09]/25 to-[#0b0a09]/45" />
         </div>
       </div>
 
@@ -53,15 +53,15 @@ export default function Hero() {
 
       {/* Content Container */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-28 pb-12 sm:pt-36 sm:pb-16 lg:pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-28 pb-10 sm:pt-36 sm:pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        <div className="max-w-xl bg-black/40 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none p-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/10 lg:border-none shadow-xl lg:shadow-none">
+        <div className="w-full max-w-[15.5rem] sm:max-w-xl bg-black/35 lg:bg-transparent lg:backdrop-blur-none sm:backdrop-blur-[2px] p-3 sm:p-8 lg:p-0 rounded-xl sm:rounded-2xl lg:rounded-none border border-white/10 lg:border-none shadow-lg sm:shadow-xl lg:shadow-none">
           
           {/* Heading */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.6rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.3rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
             
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               Stories Woven in Time.
@@ -69,15 +69,15 @@ export default function Hero() {
           </h1>
 
           {/* Description */}
-          <p className="mt-3 font-[family-name:var(--font-cormorant)] text-[13px] sm:text-[19px] leading-[1.55] sm:leading-[1.6] tracking-wide text-[#cfc6b3]">
+          <p className="mt-2 sm:mt-3 font-[family-name:var(--font-cormorant)] text-[11px] sm:text-[19px] leading-[1.5] sm:leading-[1.6] tracking-normal sm:tracking-wide text-[#cfc6b3]">
             Before these threads of history fade, we preserve the ancestral craft of our elders. Every piece carries the resilience of yesterday so the next generation inherits our complete story.
           </p>
 
           {/* Single Action Button */}
-          <div className="mt-5 sm:mt-6 flex">
+          <div className="mt-3 sm:mt-6 flex">
             <a
               href="#unfold-history"
-              className="inline-flex items-center justify-between sm:justify-center gap-3 sm:gap-4 rounded-xl px-5 py-2.5 sm:px-6 sm:py-3 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.22em] sm:tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/40 bg-black/50 hover:border-[#e88d22] transition-all"
+              className="inline-flex items-center justify-between sm:justify-center gap-2 sm:gap-4 rounded-lg sm:rounded-xl px-3.5 py-2 sm:px-6 sm:py-3 text-[9px] sm:text-[11px] font-medium uppercase tracking-[0.18em] sm:tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/40 bg-black/50 hover:border-[#e88d22] transition-all"
             >
               <span>Unfold History</span>
               <span className="text-[#e88d22]">→</span>
