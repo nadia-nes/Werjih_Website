@@ -34,7 +34,7 @@ const socialChannels = [
     handle: "The Werjih Society",
     description: "Documentaries & oral history archives.",
     icon: "▶",
-    link: "",
+    link: "https://youtube.com/@thewerjih?si=Wg9C1T6k0DpZox-b",
     badge: "Video Vault",
   },
   {
