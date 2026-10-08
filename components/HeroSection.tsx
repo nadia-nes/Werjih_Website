@@ -53,15 +53,15 @@ export default function Hero() {
 
       {/* Content Container */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-36 pb-16 lg:pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-28 pb-12 sm:pt-36 sm:pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        <div className="max-w-xl bg-black/40 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/10 lg:border-none shadow-xl lg:shadow-none">
+        <div className="max-w-xl bg-black/40 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none p-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/10 lg:border-none shadow-xl lg:shadow-none">
           
           {/* Heading */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[2.1rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.6rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
             
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               Stories Woven in Time.
@@ -69,15 +69,15 @@ export default function Hero() {
           </h1>
 
           {/* Description */}
-          <p className="mt-3.5 font-[family-name:var(--font-cormorant)] text-[15px] sm:text-[19px] leading-[1.6] tracking-wide text-[#cfc6b3]">
+          <p className="mt-3 font-[family-name:var(--font-cormorant)] text-[13px] sm:text-[19px] leading-[1.55] sm:leading-[1.6] tracking-wide text-[#cfc6b3]">
             Before these threads of history fade, we preserve the ancestral craft of our elders. Every piece carries the resilience of yesterday so the next generation inherits our complete story.
           </p>
 
           {/* Single Action Button */}
-          <div className="mt-6 flex">
+          <div className="mt-5 sm:mt-6 flex">
             <a
-              href="#notice"
-              className="inline-flex items-center justify-between sm:justify-center gap-4 rounded-xl px-6 py-3 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/40 bg-black/50 hover:border-[#e88d22] transition-all"
+              href="#unfold-history"
+              className="inline-flex items-center justify-between sm:justify-center gap-3 sm:gap-4 rounded-xl px-5 py-2.5 sm:px-6 sm:py-3 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.22em] sm:tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/40 bg-black/50 hover:border-[#e88d22] transition-all"
             >
               <span>Unfold History</span>
               <span className="text-[#e88d22]">→</span>
