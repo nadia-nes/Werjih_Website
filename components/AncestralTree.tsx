@@ -21,10 +21,10 @@ interface AncestralRecord {
 type ScoredRecord = AncestralRecord & { score: number };
 
 const clansList = [
-  "WERJIH", "ABDILABO", "SHANKOLI", "KEKU", "ALISHITO", "JELDU", "HANBISO",
-  "HAJIMOHAMEDO", "AWLIJAN", "KELILO", "AWASO", "ISLAMEDIN", "EMERDIN",
+  "WERJIH", "ABDILABO", "SHANKOLI", "KEKU", "ALI-SHITO", "JELDU", "HANBISO",
+  "HAJI-MOHAMEDO", "AWLIJAN", "KELILO", "AWASO", "ISLAMEDIN", "EMERDIN",
   "SHEKRA", "SIMENE", "WEDEFERE", "ABDELO", "MAMEDASH", "WEKREBI", "SERBO",
-  "AKOBI", "ALKEBA", "HAJIALIY", "SHUMREDA", "DINGAYZERO", "ISMAELIYA",
+  "AKOBI", "AL-KEBA", "HAJI-ALIY", "SHUMREDA", "DINGAY-ZERO",
 ];
 
 const STEPS = ["You", "Father's line", "Mother's line", "Connect"];
