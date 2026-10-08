@@ -58,26 +58,26 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        {/* Card container active on both mobile and desktop */}
-        <div className="w-full max-w-[21rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] p-4 sm:p-8 rounded-2xl border border-white/15 shadow-2xl">
+        {/* Glass container on mobile/tablet; transparent clean layout on desktop */}
+        <div className="w-full max-w-[21rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none p-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
           
           {/* Heading */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.35rem] sm:text-[3.9rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.35rem] sm:text-[3.9rem] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8] whitespace-nowrap">
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               Stories Woven in Time.
             </span>
           </h1>
 
           {/* Description */}
-          <p className="mt-2 sm:mt-3 font-[family-name:var(--font-cormorant)] text-[12px] sm:text-[19px] leading-[1.5] sm:leading-[1.6] tracking-normal sm:tracking-wide text-[#cfc6b3]">
+          <p className="mt-2 sm:mt-3 lg:mt-4 font-[family-name:var(--font-cormorant)] text-[12px] sm:text-[19px] lg:text-[18px] leading-[1.5] sm:leading-[1.6] tracking-normal sm:tracking-wide text-[#cfc6b3]">
             Before these threads of history fade, we preserve the ancestral craft of our elders. Every piece carries the resilience of yesterday so the next generation inherits our complete story.
           </p>
 
           {/* Single Action Button */}
-          <div className="mt-3.5 sm:mt-6 flex">
+          <div className="mt-3.5 sm:mt-6 lg:mt-6 flex">
             <a
               href="#unfold-history"
-              className="inline-flex items-center justify-between sm:justify-center gap-2 sm:gap-4 rounded-lg sm:rounded-xl px-4 py-2 sm:px-6 sm:py-3 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.18em] sm:tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/50 bg-black/60 hover:border-[#e88d22] transition-all shadow-md"
+              className="inline-flex items-center justify-between sm:justify-center gap-2 sm:gap-4 rounded-lg sm:rounded-xl px-4 py-2 sm:px-6 sm:py-3 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.18em] sm:tracking-[0.25em] text-[#f1e9d8] border border-[#e88d22]/50 bg-black/60 lg:bg-black/50 hover:border-[#e88d22] transition-all shadow-md"
             >
               <span>Unfold History</span>
               <span className="text-[#e88d22]">→</span>

@@ -161,8 +161,7 @@ export default function LeadershipImage() {
             <span className="italic text-[#d07f05]">Hierarchy</span>
           </h2>
           <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
-            A continuous chain of defense and advocacy across historical epochs. Swipe or tap the
-            stack to explore each custodian of the legacy.
+            A continuous chain of defense and advocacy across historical epochs.
           </p>
         </motion.div>
 
