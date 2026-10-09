@@ -35,7 +35,7 @@ const chapters: Chapter[] = [
     short: "16th c.",
     title: "When the roads called us",
     text:
-      "Then came an age of upheaval. Kingdoms fell, peoples moved across the highlands, and old ways of life could no longer hold. Our elders remember that it was in this season that we left our herds behind and took to the caravan roads, carrying salt, cloth and coffee, and settling beside the markets. They remember the first village, Abdällo, near Šäno, where the story of the highland Werji begins.",
+      "Then came an age of upheaval. Kingdoms fell, peoples moved across the highlands, and old ways of life could no longer hold. Our elders remember that it was in this season that we left our herds behind and took to the caravan roads, carrying salt, cloth and coffee, and settling beside the markets. They remember the first village, Abdällo, near Šäno, where the story of the highland Werjih begins.",
   },
   {
     era: "1813 – 1840",
@@ -63,7 +63,7 @@ const chapters: Chapter[] = [
     short: "1896",
     title: "Adwa: a gift remembered",
     text:
-      "When the nation rose to defend itself against Italy, the people of Daleti remember that a wealthy Werji man lent twelve thousand thalers to Emperor Menilek II. It was one gift among many, and it tells how fully our community saw its own fate bound to Ethiopia's freedom.",
+      "When the nation rose to defend itself against Italy, the people of Daleti remember that a wealthy Werjih man lent twelve thousand thalers to Emperor Menilek II. It was one gift among many, and it tells how fully our community saw its own fate bound to Ethiopia's freedom.",
   },
 ];
 
@@ -285,7 +285,7 @@ export default function UnfoldHistory() {
           transition={{ duration: 0.8 }}
         >
           <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-[#d07f05] sm:text-xs">
-            The Werji Story &middot; Seven Chapters
+            The Werjih Story &middot; Seven Chapters
           </p>
           <h2 className="mt-3 font-[family-name:var(--font-cormorant)] text-4xl sm:text-6xl">
             Unfold History

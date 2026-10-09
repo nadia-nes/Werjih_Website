@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Phone } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -23,22 +23,31 @@ const SELLERS = [
 
 function AdvertCard({ item }: { item: BookAdvertItem }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [prevInView, setPrevInView] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  // Watch the top block (video + text). Its height never changes when the
-  // list opens, so the open/close can't flicker back and forth.
-  const topRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(topRef, { amount: 0.4 });
+  // Auto-collapse when scrolling completely out of view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setIsOpen(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
 
-  // Open when the section comes into view, close when it leaves.
-  // (Updating state during render like this avoids the "setState in effect" lint error.)
-  if (inView !== prevInView) {
-    setPrevInView(inView);
-    setIsOpen(inView);
-  }
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <motion.article
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -48,10 +57,7 @@ function AdvertCard({ item }: { item: BookAdvertItem }) {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#d07f05]/50 to-transparent" />
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#d07f05]/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div
-        ref={topRef}
-        className="relative grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-8 p-4 md:p-6"
-      >
+      <div className="relative grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-8 p-4 md:p-6">
         {/* Video */}
         <div className="md:col-span-3">
           <div className="relative aspect-video rounded-xl overflow-hidden border border-[#d07f05]/30 bg-black shadow-[0_15px_40px_rgba(0,0,0,0.6)]">

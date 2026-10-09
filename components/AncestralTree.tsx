@@ -1,7 +1,7 @@
 // components/AncestralTree.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronDown, ArrowLeft, ArrowRight, Check, Users } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -35,7 +35,6 @@ const inputCls =
 const labelCls =
   "block text-[10px] font-mono uppercase tracking-wider text-[#d07f05] mb-1.5";
 
-// Strip characters that would break the database filter text
 const clean = (s: string) => s.replace(/[,()%*\\]/g, " ").trim();
 const norm = (s?: string) => (s || "").trim().toLowerCase();
 
@@ -112,17 +111,36 @@ function MatchCard({
 }
 
 export default function AncestralTree() {
-  // Clans
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClan, setSelectedClan] = useState<string | null>(null);
   const [showAllClans, setShowAllClans] = useState(false);
 
-  // Tabs + wizard
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Auto-collapse when scrolling out of this section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setShowAllClans(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const [tab, setTab] = useState<"scan" | "radar">("scan");
   const [step, setStep] = useState(0);
   const [formError, setFormError] = useState("");
 
-  // Lineage fields
   const [fullName, setFullName] = useState("");
   const [fatherName, setFatherName] = useState("");
   const [grandfatherName, setGrandfatherName] = useState("");
@@ -132,21 +150,18 @@ export default function AncestralTree() {
   const [contactInfo, setContactInfo] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("Addis Ababa");
 
-  // Scan state
   const [isSearchingRelative, setIsSearchingRelative] = useState(false);
   const [matchResults, setMatchResults] = useState<ScoredRecord[]>([]);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [alertSaved, setAlertSaved] = useState(false);
   const [recordSaved, setRecordSaved] = useState(false);
 
-  // Radar state
   const [radarHandle, setRadarHandle] = useState("");
   const [isCheckingRadar, setIsCheckingRadar] = useState(false);
   const [radarChecked, setRadarChecked] = useState(false);
   const [radarMatches, setRadarMatches] = useState<ScoredRecord[]>([]);
   const [radarMessage, setRadarMessage] = useState("");
 
-  // Registry count
   const [totalRecordsCount, setTotalRecordsCount] = useState(0);
 
   useEffect(() => {
@@ -170,7 +185,6 @@ export default function AncestralTree() {
   const expanded = showAllClans || searchQuery.trim() !== "";
   const visibleClans = expanded ? filteredClans : filteredClans.slice(0, COLLAPSED_CLANS);
 
-  // ---------- Wizard navigation ----------
   const goNext = () => {
     if (step === 1 && (!fatherName.trim() || !grandfatherName.trim())) {
       setFormError("Please enter your father's and grandfather's names.");
@@ -192,7 +206,6 @@ export default function AncestralTree() {
   const handleFindRelatives = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Enter key on an earlier step just moves forward
     if (step < STEPS.length - 1) {
       goNext();
       return;
@@ -210,7 +223,6 @@ export default function AncestralTree() {
     setFormError("");
 
     try {
-      // 1. Save the user's own entry
       const { error: insertError } = await supabase.from("ancestral_records").insert([
         {
           full_name: fullName.trim() ? fullName : "Anonymous",
@@ -231,7 +243,6 @@ export default function AncestralTree() {
         setTotalRecordsCount((prev) => prev + 1);
       }
 
-      // 2. Look for matching father or grandfather names across all regions
       const f = clean(fatherName);
       const g = clean(grandfatherName);
       const { data, error } = await supabase
@@ -241,14 +252,12 @@ export default function AncestralTree() {
 
       if (error) throw error;
 
-      // 3. Remove the user's own record
       const others = (data || []).filter(
         (record: AncestralRecord) =>
           record.full_name?.toLowerCase() !== fullName.toLowerCase() ||
           record.contact_info !== contactInfo
       );
 
-      // 4. Score, then sort: strongest first, then preferred region
       const scored: ScoredRecord[] = others
         .map((record: AncestralRecord) => ({
           ...record,
@@ -353,7 +362,7 @@ export default function AncestralTree() {
   };
 
   return (
-    <section id="community" className="max-w-4xl mx-auto px-4 md:px-6 py-12 md:py-16 relative">
+    <section ref={sectionRef} id="community" className="max-w-4xl mx-auto px-4 md:px-6 py-12 md:py-16 relative">
       {/* Section Header */}
       <div className="text-center mb-8">
         <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#d07f05] px-3 py-1 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 inline-block mb-3">
@@ -413,7 +422,10 @@ export default function AncestralTree() {
                 key={name}
                 type="button"
                 whileTap={{ scale: 0.96 }}
-                onClick={() => setSelectedClan(isSelected ? null : name)}
+                onClick={() => {
+                  setSelectedClan(isSelected ? null : name);
+                  setShowAllClans(false);
+                }}
                 className={`px-3 py-1.5 rounded-full text-[11px] font-serif tracking-wide transition-all flex items-center gap-1.5 border cursor-pointer ${
                   isSelected
                     ? "bg-[#382815] border-[#d07f05] text-[#fcecd0] shadow-[0_0_12px_rgba(208,127,5,0.3)]"
@@ -458,7 +470,6 @@ export default function AncestralTree() {
 
       {/* KINSHIP RADAR CARD (tabs) */}
       <div className="mt-8 rounded-2xl border border-[#d07f05]/30 bg-[#120e0a] shadow-2xl relative">
-        {/* Tabs */}
         <div className="flex border-b border-[#d07f05]/20">
           {[
             { id: "scan" as const, label: "Find Relatives" },
