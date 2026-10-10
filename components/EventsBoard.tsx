@@ -1,9 +1,10 @@
-// components/WerjihGatheringsBoard.tsx
+// components/EventsBoard.tsx
 'use client';
 
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MapPin, Ticket } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { supabase } from '@/lib/supabase';
 
 // Must match your page background so the ticket notches look cut out.
@@ -22,6 +23,7 @@ function daysUntilNextJuly22() {
 const subscribe = () => () => {};
 
 export default function WerjihGatheringsBoard() {
+  const t = useTranslations('Gathering');
   const [open, setOpen] = useState(false);
 
   // null on the server, real number on the client (no setState in an effect)
@@ -64,9 +66,7 @@ export default function WerjihGatheringsBoard() {
       setIsRegistered(true);
     } catch (err) {
       console.error('Registration error:', err);
-      setErrorMessage(
-        (err as Error).message || 'Failed to submit registration. Please try again.'
-      );
+      setErrorMessage((err as Error).message || t('error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -78,6 +78,9 @@ export default function WerjihGatheringsBoard() {
     setPhone('');
     setErrorMessage('');
   };
+
+  const stubLabel =
+    daysLeft === null ? '' : daysLeft === 0 ? t('today') : t('daysToGo', { count: daysLeft });
 
   return (
     <section
@@ -98,11 +101,11 @@ export default function WerjihGatheringsBoard() {
         {/* Stub (date + countdown) */}
         <div className="relative shrink-0 w-24 sm:w-36 flex flex-col items-center justify-center text-center py-4 px-2 border-r border-dashed border-[#d07f05]/40">
           <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.3em] uppercase text-gray-400">
-            Jul
+            {t('month')}
           </span>
           <span className="text-4xl sm:text-6xl font-serif leading-none text-[#d07f05]">22</span>
           <span className="mt-2 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-gray-400 min-h-[14px]">
-            {daysLeft === null ? '' : daysLeft === 0 ? 'Today' : `${daysLeft} days to go`}
+            {stubLabel}
           </span>
 
           {/* Ticket notches */}
@@ -126,13 +129,15 @@ export default function WerjihGatheringsBoard() {
                 <span className="absolute inset-0 rounded-full bg-[#d07f05] animate-ping opacity-70" />
                 <span className="relative w-1.5 h-1.5 rounded-full bg-[#d07f05]" />
               </span>
-              Annual Gathering
+              {t('annual')}
             </span>
             <h2 className="text-lg sm:text-2xl font-serif text-white leading-tight mt-1">
-              Werjih <span className="text-[#d07f05]">Heritage Day</span>
+              {t.rich('title', {
+                b: (chunks) => <span className="text-[#d07f05]">{chunks}</span>,
+              })}
             </h2>
             <p className="mt-1 text-[11px] sm:text-xs text-gray-400 font-light leading-relaxed line-clamp-2">
-              Uniting our community across generations and celebrating our shared legacy.
+              {t('teaser')}
             </p>
           </div>
 
@@ -142,7 +147,7 @@ export default function WerjihGatheringsBoard() {
             className="shrink-0 inline-flex items-center justify-center gap-2 self-start sm:self-auto px-4 py-2.5 rounded-xl bg-[#d07f05] text-black text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-[#e8921a] transition-colors cursor-pointer"
           >
             <Ticket className="w-3.5 h-3.5" />
-            Reserve
+            {t('reserve')}
           </button>
         </div>
       </motion.div>
@@ -167,7 +172,7 @@ export default function WerjihGatheringsBoard() {
             <motion.div
               role="dialog"
               aria-modal="true"
-              aria-label="Werjih Heritage Day registration"
+              aria-label={t('dialogAria')}
               initial={{ y: 60, opacity: 0, scale: 0.98 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 40, opacity: 0 }}
@@ -179,7 +184,7 @@ export default function WerjihGatheringsBoard() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Close"
+                aria-label={t('close')}
                 className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 border border-[#d07f05]/30 text-gray-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -187,28 +192,21 @@ export default function WerjihGatheringsBoard() {
 
               {/* Header */}
               <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#d07f05]">
-                Featured Annual Gathering
+                {t('featured')}
               </span>
               <h3 className="text-2xl sm:text-3xl font-serif text-white mt-1 pr-8">
-                July 22, Werjih Day
+                {t('dialogTitle')}
               </h3>
               <p className="flex items-center gap-1.5 text-xs text-gray-400 mt-1">
                 <MapPin className="w-3.5 h-3.5 text-[#d07f05]" />
-                Global Community Assembly &amp; Cultural Celebration
+                {t('location')}
               </p>
 
               {/* Story */}
               <div className="mt-5 space-y-3 text-gray-300 text-sm font-light leading-relaxed">
-                <p>
-                  July 22 is more than just a date on the calendar, it is the heartbeat of the
-                  Werjih society. It is the sacred day we honor the resilience of our ancestors,
-                  pass down our distinct oral histories to the younger generation, and stand united
-                  under our shared identity.
-                </p>
+                <p>{t('story1')}</p>
                 <p className="text-xs text-gray-400 italic border-l-2 border-[#d07f05] pl-4 py-1">
-                  &ldquo;Gathering together on July 22 ensures that the fires of our unique
-                  culture, heritage, and kinship continue to burn bright for generations to
-                  come.&rdquo;
+                  {t('quote')}
                 </p>
               </div>
 
@@ -217,30 +215,34 @@ export default function WerjihGatheringsBoard() {
                 {isRegistered ? (
                   <div className="p-6 bg-[#0f0b08] border border-[#d07f05]/40 rounded-2xl text-center space-y-3">
                     <span className="text-3xl">🌿</span>
-                    <h4 className="text-xl font-serif text-white">Place Reserved Successfully!</h4>
+                    <h4 className="text-xl font-serif text-white">{t('doneTitle')}</h4>
                     <p className="text-xs text-gray-300 max-w-sm mx-auto">
-                      Thank you, <span className="text-[#d07f05] font-bold">{fullName}</span>. Your
-                      reservation for the July 22 Werjih Gathering has been saved. We will reach out
-                      to <span className="text-white font-bold">{phone}</span> with final event
-                      details.
+                      {t.rich('doneText', {
+                        name: fullName,
+                        phone,
+                        hl: (chunks) => (
+                          <span className="text-[#d07f05] font-bold">{chunks}</span>
+                        ),
+                        wh: (chunks) => <span className="text-white font-bold">{chunks}</span>,
+                      })}
                     </p>
                     <button
                       type="button"
                       onClick={resetForm}
                       className="mt-2 px-5 py-2.5 bg-transparent border border-[#d07f05]/40 text-[#d07f05] hover:bg-[#14100c] hover:text-white font-medium text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
                     >
-                      Register Another Guest
+                      {t('another')}
                     </button>
                   </div>
                 ) : (
                   <form onSubmit={handleRegister} className="space-y-3">
                     <h4 className="text-xs font-mono uppercase tracking-widest text-[#d07f05]">
-                      Reserve Your Place for July 22
+                      {t('formTitle')}
                     </h4>
                     <input
                       type="text"
                       required
-                      placeholder="Full Name"
+                      placeholder={t('fullName')}
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       className="w-full bg-[#0f0b08] border border-[#d07f05]/30 rounded-xl px-4 py-3.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-[#d07f05]"
@@ -248,7 +250,7 @@ export default function WerjihGatheringsBoard() {
                     <input
                       type="tel"
                       required
-                      placeholder="Phone Number"
+                      placeholder={t('phone')}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="w-full bg-[#0f0b08] border border-[#d07f05]/30 rounded-xl px-4 py-3.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-[#d07f05]"
@@ -264,12 +266,12 @@ export default function WerjihGatheringsBoard() {
                       {isSubmitting ? (
                         <>
                           <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                          <span>Saving to Archive...</span>
+                          <span>{t('saving')}</span>
                         </>
                       ) : (
                         <>
                           <Ticket className="w-4 h-4" />
-                          <span>Reserve My Place</span>
+                          <span>{t('submit')}</span>
                         </>
                       )}
                     </button>

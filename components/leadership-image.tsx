@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 type Leader = {
   id: string;
   name: string;
+  name_am?: string | null; // optional new Supabase column with the Amharic name
   image_url: string;
   epoch: string;
   role: string;
@@ -19,33 +21,6 @@ const ACCENT = "#d07f05";
 
 // Generated once on module load to bypass browser image caching safely
 const CACHE_BUSTER = Date.now();
-
-const epochDetails: Record<number, { years: string; subtitle: string; description: string }> = {
-  0: {
-    years: "Late 19th - Early 20th Century",
-    subtitle: "Guardian: Turio Wario",
-    description:
-      "During the intense geopolitical realignments of Emperor Menelik II's era, Turio Wario stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties.",
-  },
-  1: {
-    years: "Mid 20th Century (56-Year Tenure)",
-    subtitle: "Guardian: Hajj Musa Sheikh Abdulrahman",
-    description:
-      "Served as administrator and chief judge under Sharia law, leading his community safely to Arsi during the Italian invasion, and preserving Werjih stability through decades of political shift.",
-  },
-  2: {
-    years: "Federal Transition Era",
-    subtitle: "Guardian: Haji Jamal Abdo",
-    description:
-      "With the establishment of the federal system, Haji Jamal Abdo stepped forward to advocate for formal representation and stake legitimate claims for societal identity and political recognition.",
-  },
-  3: {
-    years: "Present Era",
-    subtitle: "Visionary: Arif Abdulkadir",
-    description:
-      "Transitioning to historical documentation and digital revival, youth leaders and scholars spearheaded groundbreaking initiatives authoring the first definitive Werjih book and uniting the global diaspora.",
-  },
-};
 
 // Works whether the table stores a file name ("Turio Wario.png")
 // or a full public link (https://...supabase.co/storage/...).
@@ -81,6 +56,9 @@ function stackPose(rel: number) {
 }
 
 export default function LeadershipImage() {
+  const t = useTranslations("Leadership");
+  const locale = useLocale();
+
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -141,12 +119,21 @@ export default function LeadershipImage() {
 
   const total = leaders.length;
   const activeLeader = leaders[activeIndex] || leaders[0];
-  const activeEpochInfo = epochDetails[activeIndex] || {
-    years: "Historical Era",
-    subtitle: activeLeader?.role || "Community Guardian",
-    description:
-      "Honoring the legacy of our ancestors and their unwavering commitment to the Werjih lineage.",
-  };
+
+  const displayName = (l: Leader) => (locale === "am" && l.name_am) || l.name;
+
+  const epochKey = `epochs.e${activeIndex}`;
+  const activeEpochInfo = t.has(epochKey)
+    ? {
+        years: t(`${epochKey}.years`),
+        subtitle: t(`${epochKey}.subtitle`),
+        description: t(`${epochKey}.description`),
+      }
+    : {
+        years: t("fallbackYears"),
+        subtitle: activeLeader?.role || t("fallbackRole"),
+        description: t("fallbackDesc"),
+      };
 
   const markFailed = (key: string) => setFailed((f) => ({ ...f, [key]: true }));
   const goTo = (index: number) => setActiveIndex(index);
@@ -177,20 +164,19 @@ export default function LeadershipImage() {
           className="text-center max-w-2xl mx-auto mb-8 md:mb-16"
         >
           <span className="text-[10px] md:text-[11px] font-mono tracking-[0.3em] uppercase text-[#d07f05] px-4 py-1.5 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 inline-block mb-4">
-            UNBROKEN GENERATIONAL SHIELD
+            {t("badge")}
           </span>
           <h2 className="text-2xl md:text-5xl font-serif font-normal text-white tracking-tight mb-3 md:mb-4">
-            Foundational Leadership &amp;{" "}
-            <span className="italic text-[#d07f05]">Hierarchy</span>
+            {t("headingA")}{" "}
+            <span className="italic text-[#d07f05]">{t("headingB")}</span>
           </h2>
           <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
-            A continuous chain of defense and advocacy across historical epochs.
+            {t("sub")}
           </p>
         </motion.div>
 
         {/* STAGE: Left Column (Photo Stack + Controls) & Right Column (Transparent Metadata Container) */}
         <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-14">
-          
           {/* LEFT: PHOTO STACK & CONTROLS */}
           <div className="w-full md:w-[40%] max-w-[280px] mx-auto md:mx-0 shrink-0 flex flex-col items-center">
             <div className="relative w-[80%] aspect-[4/5] mx-auto md:mx-0">
@@ -235,7 +221,7 @@ export default function LeadershipImage() {
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={imageUrl}
-                          alt={leader.name || "Guardian"}
+                          alt={displayName(leader) || t("guardianAlt")}
                           draggable={false}
                           onError={() => markFailed(key)}
                           className={`w-full h-full object-cover object-top select-none transition-all duration-700 ${
@@ -245,7 +231,7 @@ export default function LeadershipImage() {
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1612] to-[#0a0807]">
                           <span className="text-3xl md:text-5xl font-serif text-[#d07f05]/60">
-                            {initials(leader.name)}
+                            {initials(displayName(leader))}
                           </span>
                         </div>
                       )}
@@ -264,7 +250,7 @@ export default function LeadershipImage() {
               <button
                 type="button"
                 onClick={() => step(-1)}
-                aria-label="Previous leader"
+                aria-label={t("prev")}
                 className="w-8 h-8 md:w-11 md:h-11 rounded-full border border-[#d07f05]/40 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors"
               >
                 <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
@@ -276,7 +262,7 @@ export default function LeadershipImage() {
                     key={leader.id || index}
                     type="button"
                     onClick={() => goTo(index)}
-                    aria-label={`View ${leader.name}`}
+                    aria-label={`${t("view")} ${displayName(leader)}`}
                     aria-current={activeIndex === index}
                     className="py-3 px-0.5"
                   >
@@ -294,7 +280,7 @@ export default function LeadershipImage() {
               <button
                 type="button"
                 onClick={() => step(1)}
-                aria-label="Next leader"
+                aria-label={t("next")}
                 className="w-8 h-8 md:w-11 md:h-11 rounded-full border border-[#d07f05]/40 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors"
               >
                 <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
@@ -324,7 +310,7 @@ export default function LeadershipImage() {
 
                 <div className="pt-2">
                   <h3 className="text-xl sm:text-2xl md:text-4xl font-serif font-normal text-white mb-3 leading-tight">
-                    {activeLeader.name}
+                    {displayName(activeLeader)}
                   </h3>
                   <p className="text-gray-300 text-[11px] sm:text-sm md:text-base font-light leading-relaxed">
                     {activeEpochInfo.description}

@@ -193,122 +193,121 @@
       "uploadFailed": "Upload failed: {msg}",
       "saveFailed": "Database save failed: {msg}",
       "generic": "An error occurred during submission."
-    },
-
-    "Nav": {
-  "main": "Main",
-  "homeAria": "The Tigri Werjih's, back to home",
-  "openMenu": "Open navigation menu",
-  "closeMenu": "Close navigation menu",
-  "items": {
-    "home": "Home",
-    "history": "History",
-    "culture": "Culture",
-    "community": "Community",
-    "memorial": "Memorial",
-    "archive": "Archive",
-    "origins": "Origins of the Werjih People",
-    "migration": "Migration History",
-    "timeline": "Historical Timeline",
-    "clothing": "Traditional Clothing",
-    "cuisine": "Food & Cuisine",
-    "music": "Music & Heritage",
-    "marriage": "Marriage Tradition",
-    "programs": "Programs & Events",
-    "vanguard": "Vanguard of Islam"
-  }
-},
-"Gathering": {
-  "month": "Jul",
-  "today": "Today",
-  "daysToGo": "{count, plural, one {# day to go} other {# days to go}}",
-  "annual": "Annual Gathering",
-  "title": "Werjih <b>Heritage Day</b>",
-  "teaser": "Uniting our community across generations and celebrating our shared legacy.",
-  "reserve": "Reserve",
-  "dialogAria": "Werjih Heritage Day registration",
-  "close": "Close",
-  "featured": "Featured Annual Gathering",
-  "dialogTitle": "July 22, Werjih Day",
-  "location": "Global Community Assembly & Cultural Celebration",
-  "story1": "July 22 is more than just a date on the calendar, it is the heartbeat of the Werjih society. It is the sacred day we honor the resilience of our ancestors, pass down our distinct oral histories to the younger generation, and stand united under our shared identity.",
-  "quote": "“Gathering together on July 22 ensures that the fires of our unique culture, heritage, and kinship continue to burn bright for generations to come.”",
-  "doneTitle": "Place Reserved Successfully!",
-  "doneText": "Thank you, <name>{name}</name>. Your reservation for the July 22 Werjih Gathering has been saved. We will reach out to <phone>{phone}</phone> with final event details.",
-  "another": "Register Another Guest",
-  "formTitle": "Reserve Your Place for July 22",
-  "fullName": "Full Name",
-  "phone": "Phone Number",
-  "saving": "Saving to Archive...",
-  "submit": "Reserve My Place",
-  "error": "Failed to submit registration. Please try again."
-},
-"Heroes": {
-  "eyebrow": "- The Heritage Archive • Pillars & Guardians",
-  "title": "Guardians of Our History",
-  "intro": "Tracing the state leadership, historic sacrifices, and authentic archival records of the figures who anchored the Werji identity across generations.",
-  "section1": "Section 01: State Leadership, Lineage & Legacy",
-  "collapse": "− Collapse Record",
-  "expand": "+ Read Detailed Record",
-  "archiveImage": "Archive Image",
-  "imageAlt": "Hero Archive Image",
-  "biography": "Historical Biography",
-  "legacy": "Enduring Legacy",
-  "audio": "🎙️ Archived Radio Broadcast Recording",
-  "audioUnsupported": "Your browser does not support the audio element.",
-  "section2": "Section 02: Preservation & Future",
-  "manifestoTitle": "Will We Stand, or Fade Away?",
-  "manifesto": "Unity and thoughtfulness led our golden society to shine brightly in past eras, empowering our predecessors to build enduring success in their lives. Let us wake up before it is too late, before our identity is completely erased.",
-  "back": "← Return to Home Archive",
-  "items": {
-    "aliAbdo": {
-      "title": "Ali Abdo",
-      "role": "27th Mayor of Addis Ababa & Ambassador",
-      "description": "A proud son of the Werji community, Ali Abdo graduated from Addis Ababa University and joined the Ethiopian People's Revolutionary Party in the 1970s. He served as the 27th Mayor of Addis Ababa, guiding the capital through a critical period of urban expansion and administrative transformation. Following his mayoral term, he represented Ethiopia abroad as Ambassador to Sudan and Nigeria.",
-      "legacy": "The community remembers him for the land he gave to mosques in Addis Ababa, especially Reyan Mosque in Torhailoch. These gifts helped Muslims in the capital have places of worship, and Werji society remembers him with gratitude and pride."
-    },
-    "abaWerjih": {
-      "title": "Fitawrari Aba Werjih",
-      "role": "War Leader & Patriot of Adwa",
-      "description": "When Emperor Menelik called the nation to defend its independence, a war leader known as Aba Werji, “Father of Werji,” answered the call. He led a large force of cavalry from Shewa on the march to Adwa. This was the campaign that ended in 1896 with Ethiopia's historic victory over colonial invasion.\n\nHis full life story is still being gathered from elders and community records. Contributions are welcome.",
-      "legacy": "The Werji community remembers him as a symbol of courage, loyalty, and sacrifice for the homeland. His name stands for the part Werji sons and daughters played in defending Ethiopia's freedom and dignity."
     }
-  }
-},
-"Leadership": {
-  "badge": "UNBROKEN GENERATIONAL SHIELD",
-  "headingA": "Foundational Leadership &",
-  "headingB": "Hierarchy",
-  "sub": "A continuous chain of defense and advocacy across historical epochs.",
-  "prev": "Previous leader",
-  "next": "Next leader",
-  "view": "View",
-  "guardianAlt": "Guardian",
-  "fallbackYears": "Historical Era",
-  "fallbackRole": "Community Guardian",
-  "fallbackDesc": "Honoring the legacy of our ancestors and their unwavering commitment to the Werjih lineage.",
-  "epochs": {
-    "e0": {
-      "years": "Late 19th - Early 20th Century",
-      "subtitle": "Guardian: Turio Wario",
-      "description": "During the intense geopolitical realignments of Emperor Menelik II's era, Turio Wario stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties."
-    },
-    "e1": {
-      "years": "Mid 20th Century (56-Year Tenure)",
-      "subtitle": "Guardian: Hajj Musa Sheikh Abdulrahman",
-      "description": "Served as administrator and chief judge under Sharia law, leading his community safely to Arsi during the Italian invasion, and preserving Werjih stability through decades of political shift."
-    },
-    "e2": {
-      "years": "Federal Transition Era",
-      "subtitle": "Guardian: Haji Jamal Abdo",
-      "description": "With the establishment of the federal system, Haji Jamal Abdo stepped forward to advocate for formal representation and stake legitimate claims for societal identity and political recognition."
-    },
-    "e3": {
-      "years": "Present Era",
-      "subtitle": "Visionary: Arif Abdulkadir",
-      "description": "Transitioning to historical documentation and digital revival, youth leaders and scholars spearheaded groundbreaking initiatives authoring the first definitive Werjih book and uniting the global diaspora."
+  },
+  "Nav": {
+    "main": "Main",
+    "homeAria": "The Tigri Werjih's, back to home",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "items": {
+      "home": "Home",
+      "history": "History",
+      "culture": "Culture",
+      "community": "Community",
+      "memorial": "Memorial",
+      "archive": "Archive",
+      "origins": "Origins of the Werjih People",
+      "migration": "Migration History",
+      "timeline": "Historical Timeline",
+      "clothing": "Traditional Clothing",
+      "cuisine": "Food & Cuisine",
+      "music": "Music & Heritage",
+      "marriage": "Marriage Tradition",
+      "programs": "Programs & Events",
+      "vanguard": "Vanguard of Islam"
     }
-  }
-}
+  },
+  "Gathering": {
+    "month": "Jul",
+    "today": "Today",
+    "daysToGo": "{count, plural, one {# day to go} other {# days to go}}",
+    "annual": "Annual Gathering",
+    "title": "Werjih <b>Heritage Day</b>",
+    "teaser": "Uniting our community across generations and celebrating our shared legacy.",
+    "reserve": "Reserve",
+    "dialogAria": "Werjih Heritage Day registration",
+    "close": "Close",
+    "featured": "Featured Annual Gathering",
+    "dialogTitle": "July 22, Werjih Day",
+    "location": "Global Community Assembly & Cultural Celebration",
+    "story1": "July 22 is more than just a date on the calendar, it is the heartbeat of the Werjih society. It is the sacred day we honor the resilience of our ancestors, pass down our distinct oral histories to the younger generation, and stand united under our shared identity.",
+    "quote": "“Gathering together on July 22 ensures that the fires of our unique culture, heritage, and kinship continue to burn bright for generations to come.”",
+    "doneTitle": "Place Reserved Successfully!",
+    "doneText": "Thank you, <hl>{name}</hl>. Your reservation for the July 22 Werjih Gathering has been saved. We will reach out to <wh>{phone}</wh> with final event details.",
+    "another": "Register Another Guest",
+    "formTitle": "Reserve Your Place for July 22",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "saving": "Saving to Archive...",
+    "submit": "Reserve My Place",
+    "error": "Failed to submit registration. Please try again."
+  },
+  "Heroes": {
+    "eyebrow": "- The Heritage Archive • Pillars & Guardians",
+    "title": "Guardians of Our History",
+    "intro": "Tracing the state leadership, historic sacrifices, and authentic archival records of the figures who anchored the Werji identity across generations.",
+    "section1": "Section 01: State Leadership, Lineage & Legacy",
+    "collapse": "− Collapse Record",
+    "expand": "+ Read Detailed Record",
+    "archiveImage": "Archive Image",
+    "imageAlt": "Hero Archive Image",
+    "biography": "Historical Biography",
+    "legacy": "Enduring Legacy",
+    "audio": "🎙️ Archived Radio Broadcast Recording",
+    "audioUnsupported": "Your browser does not support the audio element.",
+    "section2": "Section 02: Preservation & Future",
+    "manifestoTitle": "Will We Stand, or Fade Away?",
+    "manifesto": "Unity and thoughtfulness led our golden society to shine brightly in past eras, empowering our predecessors to build enduring success in their lives. Let us wake up before it is too late, before our identity is completely erased.",
+    "back": "← Return to Home Archive",
+    "items": {
+      "aliAbdo": {
+        "title": "Ali Abdo",
+        "role": "27th Mayor of Addis Ababa & Ambassador",
+        "description": "A proud son of the Werji community, Ali Abdo graduated from Addis Ababa University and joined the Ethiopian People's Revolutionary Party in the 1970s. He served as the 27th Mayor of Addis Ababa, guiding the capital through a critical period of urban expansion and administrative transformation. Following his mayoral term, he represented Ethiopia abroad as Ambassador to Sudan and Nigeria.",
+        "legacy": "The community remembers him for the land he gave to mosques in Addis Ababa, especially Reyan Mosque in Torhailoch. These gifts helped Muslims in the capital have places of worship, and Werji society remembers him with gratitude and pride."
+      },
+      "abaWerjih": {
+        "title": "Fitawrari Aba Werjih",
+        "role": "War Leader & Patriot of Adwa",
+        "description": "When Emperor Menelik called the nation to defend its independence, a war leader known as Aba Werji, “Father of Werji,” answered the call. He led a large force of cavalry from Shewa on the march to Adwa. This was the campaign that ended in 1896 with Ethiopia's historic victory over colonial invasion.\n\nHis full life story is still being gathered from elders and community records. Contributions are welcome.",
+        "legacy": "The Werji community remembers him as a symbol of courage, loyalty, and sacrifice for the homeland. His name stands for the part Werji sons and daughters played in defending Ethiopia's freedom and dignity."
+      }
+    }
+  },
+  "Leadership": {
+    "badge": "UNBROKEN GENERATIONAL SHIELD",
+    "headingA": "Foundational Leadership &",
+    "headingB": "Hierarchy",
+    "sub": "A continuous chain of defense and advocacy across historical epochs.",
+    "prev": "Previous leader",
+    "next": "Next leader",
+    "view": "View",
+    "guardianAlt": "Guardian",
+    "fallbackYears": "Historical Era",
+    "fallbackRole": "Community Guardian",
+    "fallbackDesc": "Honoring the legacy of our ancestors and their unwavering commitment to the Werjih lineage.",
+    "epochs": {
+      "e0": {
+        "years": "Late 19th - Early 20th Century",
+        "subtitle": "Guardian: Turio Wario",
+        "description": "During the intense geopolitical realignments of Emperor Menelik II's era, Turio Wario stood as a primary defense pillar for the Werjih society, safeguarding kinship systems and ancestral land ties."
+      },
+      "e1": {
+        "years": "Mid 20th Century (56-Year Tenure)",
+        "subtitle": "Guardian: Hajj Musa Sheikh Abdulrahman",
+        "description": "Served as administrator and chief judge under Sharia law, leading his community safely to Arsi during the Italian invasion, and preserving Werjih stability through decades of political shift."
+      },
+      "e2": {
+        "years": "Federal Transition Era",
+        "subtitle": "Guardian: Haji Jamal Abdo",
+        "description": "With the establishment of the federal system, Haji Jamal Abdo stepped forward to advocate for formal representation and stake legitimate claims for societal identity and political recognition."
+      },
+      "e3": {
+        "years": "Present Era",
+        "subtitle": "Visionary: Arif Abdulkadir",
+        "description": "Transitioning to historical documentation and digital revival, youth leaders and scholars spearheaded groundbreaking initiatives authoring the first definitive Werjih book and uniting the global diaspora."
+      }
+    }
   }
 }

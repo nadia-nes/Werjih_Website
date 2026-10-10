@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
+import { useTranslations } from 'next-intl';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import {
   AnimatePresence,
@@ -24,40 +25,41 @@ const sans = Inter({ subsets: ['latin'], display: 'swap' });
 // Set to false if you want the navbar to always stay visible.
 const HIDE_ON_SCROLL = true;
 
-type Child = { label: string; href: string };
-type Item = { label: string; href?: string; children?: Child[] };
+// "key" is the translation key (messages: Nav.items.<key>)
+type Child = { key: string; href: string };
+type Item = { key: string; href?: string; children?: Child[] };
 
 const LEFT: Item[] = [
-  { label: 'Home', href: '/' },
+  { key: 'home', href: '/' },
   {
-    label: 'History',
+    key: 'history',
     children: [
-      { label: 'Origins of the Werjih People', href: '/history/origins' },
-      { label: 'Migration History', href: '/history/migration' },
-      { label: 'Historical Timeline', href: '/history/timeline' },
+      { key: 'origins', href: '/history/origins' },
+      { key: 'migration', href: '/history/migration' },
+      { key: 'timeline', href: '/history/timeline' },
     ],
   },
   {
-    label: 'Culture',
+    key: 'culture',
     children: [
-      { label: 'Traditional Clothing', href: '/culture/clothing' },
-      { label: 'Food & Cuisine', href: '/culture/cuisine' },
-      { label: 'Music & Heritage', href: '/culture/music' },
-      { label: 'Marriage Tradition', href: '/culture/marriage-tradition' },
+      { key: 'clothing', href: '/culture/clothing' },
+      { key: 'cuisine', href: '/culture/cuisine' },
+      { key: 'music', href: '/culture/music' },
+      { key: 'marriage', href: '/culture/marriage-tradition' },
     ],
   },
 ];
 
 const RIGHT: Item[] = [
   {
-    label: 'Community',
+    key: 'community',
     children: [
-      { label: 'Programs & Events', href: '/community/programs-and-events' },
-      { label: 'Vanguard of Islam', href: '/community/vanguard-of-islam' },
+      { key: 'programs', href: '/community/programs-and-events' },
+      { key: 'vanguard', href: '/community/vanguard-of-islam' },
     ],
   },
-  { label: 'Memorial', href: '/memorial' },
-  { label: 'Archive', href: '/archive' },
+  { key: 'memorial', href: '/memorial' },
+  { key: 'archive', href: '/archive' },
 ];
 
 const MOBILE_ORDER = [...LEFT, ...RIGHT];
@@ -99,11 +101,12 @@ function DesktopItem({
   item: Item;
   pathname: string;
   open: boolean;
-  setOpen: (label: string | null) => void;
+  setOpen: (key: string | null) => void;
   reduce: boolean;
 }) {
+  const t = useTranslations('Nav.items');
   const active = isItemActive(item, pathname);
-  const menuId = `menu-${item.label.toLowerCase()}`;
+  const menuId = `menu-${item.key}`;
 
   const label = (
     <span className="relative inline-flex items-center gap-1.5 px-3 py-2.5">
@@ -112,7 +115,7 @@ function DesktopItem({
           active || open ? 'text-[#f1e9d8]' : 'text-[#cfc6b3] group-hover:text-[#f1e9d8]'
         }`}
       >
-        {item.label}
+        {t(item.key)}
       </span>
 
       {item.children && (
@@ -135,7 +138,7 @@ function DesktopItem({
   return (
     <li
       className="group relative"
-      onMouseEnter={() => item.children && setOpen(item.label)}
+      onMouseEnter={() => item.children && setOpen(item.key)}
       onMouseLeave={() => item.children && setOpen(null)}
       onBlur={(e) => {
         if (item.children && !e.currentTarget.contains(e.relatedTarget as Node)) setOpen(null);
@@ -158,7 +161,7 @@ function DesktopItem({
             type="button"
             aria-expanded={open}
             aria-controls={menuId}
-            onClick={() => setOpen(open ? null : item.label)}
+            onClick={() => setOpen(open ? null : item.key)}
             className="block rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70"
           >
             {label}
@@ -195,7 +198,7 @@ function DesktopItem({
                               childActive ? 'bg-[#c98a3c]' : 'bg-[#c98a3c]/40'
                             }`}
                           />
-                          {c.label}
+                          {t(c.key)}
                         </Link>
                       );
                     })}
@@ -211,6 +214,7 @@ function DesktopItem({
 }
 
 export default function Navbar() {
+  const t = useTranslations('Nav');
   const reduce = useReducedMotion() ?? false;
   const pathname = usePathname() ?? '';
 
@@ -312,7 +316,7 @@ export default function Navbar() {
 
       <div className="mx-auto max-w-7xl relative z-50">
         <nav
-          aria-label="Main"
+          aria-label={t('main')}
           className={`relative grid grid-cols-[auto_1fr_auto] items-center rounded-full border px-4 backdrop-blur-xl transition-all duration-500 sm:px-7 lg:grid-cols-[1fr_auto_1fr] ${
             scrolled
               ? 'h-16 border-[#c98a3c]/25 bg-[#080604]/90 shadow-[0_14px_40px_rgba(0,0,0,0.6)] lg:h-[68px]'
@@ -323,10 +327,10 @@ export default function Navbar() {
           <ul className="hidden items-center justify-start gap-0.5 lg:flex xl:gap-1.5">
             {LEFT.map((i) => (
               <DesktopItem
-                key={i.label}
+                key={i.key}
                 item={i}
                 pathname={pathname}
-                open={openMenu === i.label}
+                open={openMenu === i.key}
                 setOpen={setOpenMenu}
                 reduce={reduce}
               />
@@ -337,9 +341,8 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={handleLogoClick}
-            translate="no"
-            aria-label="The Tigri Werjih's, back to home"
-            className="notranslate group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-2 py-2 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:col-start-2 lg:items-center lg:justify-self-center"
+            aria-label={t('homeAria')}
+            className="group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-2 py-2 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:col-start-2 lg:items-center lg:justify-self-center"
           >
             <span
               className={`${display.className} text-[15px] font-medium italic tracking-[0.08em] text-[#c98a3c] sm:text-base`}
@@ -358,10 +361,10 @@ export default function Navbar() {
             <ul className="hidden items-center justify-end gap-0.5 lg:flex xl:gap-1.5">
               {RIGHT.map((i) => (
                 <DesktopItem
-                  key={i.label}
+                  key={i.key}
                   item={i}
                   pathname={pathname}
-                  open={openMenu === i.label}
+                  open={openMenu === i.key}
                   setOpen={setOpenMenu}
                   reduce={reduce}
                 />
@@ -373,7 +376,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileOpen((p) => !p)}
-              aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-label={mobileOpen ? t('closeMenu') : t('openMenu')}
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-[#f1e9d8] outline-none transition-colors duration-300 hover:border-[#c98a3c]/60 hover:bg-[#c98a3c]/10 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:hidden"
@@ -421,7 +424,7 @@ export default function Navbar() {
                 <ul className="flex flex-col gap-0.5">
                   {MOBILE_ORDER.map((item, index) => {
                     const active = isItemActive(item, pathname);
-                    const open = mobileSection === item.label;
+                    const open = mobileSection === item.key;
                     const rowClass = `flex min-h-[54px] w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-[18px] font-medium outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 ${
                       active
                         ? 'bg-[#c98a3c]/[0.12] text-[#f1e9d8]'
@@ -448,7 +451,7 @@ export default function Navbar() {
 
                     if (item.href) {
                       return (
-                        <motion.li key={item.label} {...enter}>
+                        <motion.li key={item.key} {...enter}>
                           <Link
                             href={item.href}
                             aria-current={active ? 'page' : undefined}
@@ -456,7 +459,7 @@ export default function Navbar() {
                           >
                             <span className="flex items-center">
                               {dot}
-                              {item.label}
+                              {t(`items.${item.key}`)}
                             </span>
                           </Link>
                         </motion.li>
@@ -464,16 +467,16 @@ export default function Navbar() {
                     }
 
                     return (
-                      <motion.li key={item.label} {...enter}>
+                      <motion.li key={item.key} {...enter}>
                         <button
                           type="button"
                           className={rowClass}
                           aria-expanded={open}
-                          onClick={() => setMobileSection(open ? null : item.label)}
+                          onClick={() => setMobileSection(open ? null : item.key)}
                         >
                           <span className="flex items-center">
                             {dot}
-                            {item.label}
+                            {t(`items.${item.key}`)}
                           </span>
                           <Chevron
                             className={`text-[#c98a3c] transition-transform duration-300 ${
@@ -505,7 +508,7 @@ export default function Navbar() {
                                           : 'text-[#cfc6b3] hover:bg-white/[0.05] hover:text-[#f1e9d8] active:bg-white/[0.08]'
                                       }`}
                                     >
-                                      {c.label}
+                                      {t(`items.${c.key}`)}
                                     </Link>
                                   );
                                 })}
