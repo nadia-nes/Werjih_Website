@@ -85,6 +85,7 @@ export default function LeadershipImage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [failed, setFailed] = useState<Record<string, boolean>>({});
+  const [sectionEl, setSectionEl] = useState<HTMLElement | null>(null);
 
   const shouldReduceMotion = useReducedMotion();
 
@@ -104,6 +105,25 @@ export default function LeadershipImage() {
     }
 
     fetchLeaders();
+  }, []);
+
+  // Reset to the first leader (Turio Wario) whenever the section scrolls out of view
+  useEffect(() => {
+    if (!sectionEl) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) setActiveIndex(0);
+    });
+    observer.observe(sectionEl);
+    return () => observer.disconnect();
+  }, [sectionEl]);
+
+  // Reset when returning via the browser back/forward button (restored from cache)
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setActiveIndex(0);
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
   }, []);
 
   if (loading) {
@@ -133,7 +153,10 @@ export default function LeadershipImage() {
   const step = (dir: number) => setActiveIndex((i) => (i + dir + total) % total);
 
   return (
-    <section className="w-full py-12 md:py-20 px-4 md:px-8 relative overflow-hidden">
+    <section
+      ref={setSectionEl}
+      className="w-full py-12 md:py-20 px-4 md:px-8 relative overflow-hidden"
+    >
       {/* Ambient background */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
