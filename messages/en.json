@@ -309,5 +309,65 @@
         "description": "Transitioning to historical documentation and digital revival, youth leaders and scholars spearheaded groundbreaking initiatives authoring the first definitive Werjih book and uniting the global diaspora."
       }
     }
+  },
+  "History": {
+    "eyebrow": "The Werjih Story · Seven Chapters",
+    "title": "Unfold History",
+    "subtitle": "Nine centuries of herders, traders and settlers, told the way our elders tell it.",
+    "unfold": "Unfold the story",
+    "fold": "Fold the story",
+    "openChapterAria": "Open chapter {n}: {title}",
+    "chapter": "Chapter {n} · {era}",
+    "source": "This telling draws on Deresse Ayenachew’s study, <em>“A historical overview of the Wärğəḥ Muslim community in the Christian highland of Šäwa”</em> (Afriques, 2016, doi:10.4000/afriques.1944), together with the oral traditions of our villages.",
+    "chapters": {
+      "c1": {
+        "era": "1128",
+        "short": "1128",
+        "title": "A name in the record",
+        "text": "Our story begins with a single line in an old Arabic chronicle. In the year 1128, the Wärğiḥ are named as a people who stood on their own land and held it, turning back armies that pushed south from the north. Before there were cities, before there were kings in Shewa, we were already remembered by name."
+      },
+      "c2": {
+        "era": "1332",
+        "short": "1332",
+        "title": "Keepers of camels, defenders of home",
+        "text": "Two centuries later, the chronicles of King Amdä Ṣəyon describe us as herdsmen, keepers of camels, and strong in battle. We were a people of the open lowlands, guarding our herds and our freedom, and our neighbours knew us as fighters who did not give up their ground easily."
+      },
+      "c3": {
+        "era": "The 16th century",
+        "short": "16th c.",
+        "title": "When the roads called us",
+        "text": "Then came an age of upheaval. Kingdoms fell, peoples moved across the highlands, and old ways of life could no longer hold. Our elders remember that it was in this season that we left our herds behind and took to the caravan roads, carrying salt, cloth and coffee, and settling beside the markets. They remember the first village, Abdällo, near Šäno, where the story of the highland Werjih begins."
+      },
+      "c4": {
+        "era": "1813 – 1840",
+        "short": "1813",
+        "title": "A refuge and a gift of land",
+        "text": "In the days of King Śahlä Śəlase of Shewa, our traders became trusted friends of the court. Oral tradition tells of Abdure-Lottu, who found refuge with the king and received a wide land at Ṭoṭose. There he founded a village that became a home for generations. Our merchants carried goods, and they also carried news of the lands beyond the king's reach."
+      },
+      "c5": {
+        "era": "1865 – 1889",
+        "short": "1865",
+        "title": "“Do not touch their lands”",
+        "text": "When a governor tried to move the people of Tigri Teracha from their homes, the elders walked to the court of King Menilek and made their appeal. The king answered that the Wärğəḥ paid a yearly tax of one thaler for every mule, and he ordered the governor to leave their land alone. Because of those words, the village still stands today."
+      },
+      "c6": {
+        "era": "1879 E.C.",
+        "short": "1879",
+        "title": "A new capital, a new home",
+        "text": "When Addis Ababa rose as the new capital, the great market of Rogge, where our traders had gathered, fell silent as the road moved away. Our chief, Ture-Waryo, went to Menilek and asked for new land, and the king settled our people at Daleti, which is today a major part of Sebeta. In 1881 Empress Taytu invited us to Enṭoṭṭo to help trade grow there."
+      },
+      "c7": {
+        "era": "1896",
+        "short": "1896",
+        "title": "Adwa: a gift remembered",
+        "text": "When the nation rose to defend itself against Italy, the people of Daleti remember that a wealthy Werjih man lent twelve thousand thalers to Emperor Menilek II. It was one gift among many, and it tells how fully our community saw its own fate bound to Ethiopia's freedom."
+      }
+    }
+  },
+  "Slideshow": {
+    "loading": "Loading Visual Archive...",
+    "empty": "No visual heritage slides found.",
+    "counter": "Visual Archive ({current} of {total})",
+    "goTo": "Go to slide {n}"
   }
 }
