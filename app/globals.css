@@ -48,3 +48,18 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* Hide Google's default UI */
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame { display: none !important; }
+body { top: 0 !important; position: static !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+
+/* Amharic styling (Google adds this class to <html> when translated) */
+html.translated-ltr .font-serif,
+html.translated-ltr .font-mono { font-family: var(--font-ethiopic), sans-serif; }
+html.translated-ltr .italic { font-style: normal; }
+html.translated-ltr [class*="tracking-"] { letter-spacing: normal; }
+html.translated-ltr .uppercase { text-transform: none; }

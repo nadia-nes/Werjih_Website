@@ -1,10 +1,10 @@
-// components/Navbar.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
+import TranslateToggle from '@/components/TranslateToggle';
 import {
   AnimatePresence,
   motion,
@@ -337,8 +337,9 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={handleLogoClick}
+            translate="no"
             aria-label="The Tigri Werjih's, back to home"
-            className="group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-2 py-2 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:col-start-2 lg:items-center lg:justify-self-center"
+            className="notranslate group col-start-1 flex flex-col items-start justify-self-start rounded-xl px-2 py-2 leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:col-start-2 lg:items-center lg:justify-self-center"
           >
             <span
               className={`${display.className} text-[15px] font-medium italic tracking-[0.08em] text-[#c98a3c] sm:text-base`}
@@ -352,47 +353,50 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Right links */}
-          <ul className="hidden items-center justify-end gap-0.5 lg:flex xl:gap-1.5">
-            {RIGHT.map((i) => (
-              <DesktopItem
-                key={i.label}
-                item={i}
-                pathname={pathname}
-                open={openMenu === i.label}
-                setOpen={setOpenMenu}
-                reduce={reduce}
-              />
-            ))}
-          </ul>
+          {/* Right side: links + language toggle + mobile menu button */}
+          <div className="col-start-3 flex items-center justify-end gap-1 sm:gap-2">
+            <ul className="hidden items-center justify-end gap-0.5 lg:flex xl:gap-1.5">
+              {RIGHT.map((i) => (
+                <DesktopItem
+                  key={i.label}
+                  item={i}
+                  pathname={pathname}
+                  open={openMenu === i.label}
+                  setOpen={setOpenMenu}
+                  reduce={reduce}
+                />
+              ))}
+            </ul>
 
-          {/* Mobile toggle */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen((p) => !p)}
-            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-menu"
-            className="col-start-3 flex h-12 w-12 items-center justify-center justify-self-end rounded-full border border-white/15 text-[#f1e9d8] outline-none transition-colors duration-300 hover:border-[#c98a3c]/60 hover:bg-[#c98a3c]/10 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:hidden"
-          >
-            <span className="relative block h-4 w-6">
-              <span
-                className={`absolute left-0 h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
-                  mobileOpen ? 'top-[7px] rotate-45' : 'top-0'
-                }`}
-              />
-              <span
-                className={`absolute left-0 top-[7px] h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
-                  mobileOpen ? 'scale-x-0 opacity-0' : 'scale-x-100 opacity-100'
-                }`}
-              />
-              <span
-                className={`absolute left-0 h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
-                  mobileOpen ? 'top-[7px] -rotate-45' : 'top-[14px]'
-                }`}
-              />
-            </span>
-          </button>
+            <TranslateToggle />
+
+            <button
+              type="button"
+              onClick={() => setMobileOpen((p) => !p)}
+              aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-[#f1e9d8] outline-none transition-colors duration-300 hover:border-[#c98a3c]/60 hover:bg-[#c98a3c]/10 focus-visible:ring-2 focus-visible:ring-[#e6cfa6]/70 lg:hidden"
+            >
+              <span className="relative block h-4 w-6">
+                <span
+                  className={`absolute left-0 h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
+                    mobileOpen ? 'top-[7px] rotate-45' : 'top-0'
+                  }`}
+                />
+                <span
+                  className={`absolute left-0 top-[7px] h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
+                    mobileOpen ? 'scale-x-0 opacity-0' : 'scale-x-100 opacity-100'
+                  }`}
+                />
+                <span
+                  className={`absolute left-0 h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
+                    mobileOpen ? 'top-[7px] -rotate-45' : 'top-[14px]'
+                  }`}
+                />
+              </span>
+            </button>
+          </div>
 
           {/* Reading progress line */}
           <motion.span
