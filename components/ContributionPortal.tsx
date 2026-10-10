@@ -14,6 +14,7 @@ import {
   Upload,
   X,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { supabase } from '@/lib/supabase';
 
 type Tab = 'text' | 'voice' | 'media';
@@ -21,18 +22,13 @@ type Tab = 'text' | 'voice' | 'media';
 const MAX_MB = 25;
 const MAX_REC_SECONDS = 300; // 5 minutes
 
-const TABS: { id: Tab; icon: string; title: string; sub: string }[] = [
-  { id: 'text', icon: '✍️', title: 'Written story', sub: 'Type a memory or record' },
-  { id: 'voice', icon: '🎙️', title: 'Voice note', sub: 'Record or upload audio' },
-  { id: 'media', icon: '🖼️', title: 'Photo / document', sub: 'Images or scanned PDFs' },
+const TABS: { id: Tab; icon: string }[] = [
+  { id: 'text', icon: '✍️' },
+  { id: 'voice', icon: '🎙️' },
+  { id: 'media', icon: '🖼️' },
 ];
 
-const PROMPTS = [
-  'A story my grandparents told me:',
-  'Where our family came from:',
-  'A tradition I remember:',
-  'A person our community should never forget:',
-];
+const PROMPT_KEYS = ['p1', 'p2', 'p3', 'p4'] as const;
 
 const inputCls =
   'w-full bg-black/50 border border-[#d07f05]/30 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#d07f05] transition-colors';
@@ -70,6 +66,7 @@ function isAllowed(tab: Tab, file: File) {
 }
 
 export default function ContributionPortal() {
+  const t = useTranslations('Contribute');
   const [activeTab, setActiveTab] = useState<Tab>('text');
 
   const [fullName, setFullName] = useState('');
@@ -110,8 +107,8 @@ export default function ContributionPortal() {
   // Recording timer + auto stop
   useEffect(() => {
     if (!isRecording) return;
-    const t = setInterval(() => setSeconds((s) => s + 1), 1000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => clearInterval(timer);
   }, [isRecording]);
 
   useEffect(() => {
@@ -121,7 +118,7 @@ export default function ContributionPortal() {
   // Release the microphone if the component goes away
   useEffect(() => {
     return () => {
-      streamRef.current?.getTracks().forEach((t) => t.stop());
+      streamRef.current?.getTracks().forEach((track) => track.stop());
     };
   }, []);
 
@@ -129,7 +126,7 @@ export default function ContributionPortal() {
     setErrorMsg('');
 
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
-      setErrorMsg('Recording is not supported in this browser. Please upload an audio file instead.');
+      setErrorMsg(t('errors.noRecording'));
       return;
     }
 
@@ -151,7 +148,7 @@ export default function ContributionPortal() {
         const blob = new Blob(chunksRef.current, { type });
         const ext = type.includes('mp4') ? 'm4a' : 'webm';
         setSelectedFile(new File([blob], `voice-note-${Date.now()}.${ext}`, { type }));
-        stream.getTracks().forEach((t) => t.stop());
+        stream.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
         setIsRecording(false);
       };
@@ -161,7 +158,7 @@ export default function ContributionPortal() {
       rec.start();
       setIsRecording(true);
     } catch {
-      setErrorMsg('Microphone access was blocked. Allow it in your browser, or upload an audio file instead.');
+      setErrorMsg(t('errors.micBlocked'));
     }
   };
 
@@ -177,14 +174,12 @@ export default function ContributionPortal() {
     if (!file) return;
     if (!isAllowed(activeTab, file)) {
       setErrorMsg(
-        activeTab === 'voice'
-          ? 'Please choose an audio file (MP3, WAV or M4A).'
-          : 'Please choose an image or a PDF.'
+        activeTab === 'voice' ? t('errors.needAudioFile') : t('errors.needImageOrPdf')
       );
       return;
     }
     if (file.size > MAX_MB * 1024 * 1024) {
-      setErrorMsg(`That file is too large. The limit is ${MAX_MB} MB.`);
+      setErrorMsg(t('errors.tooLarge', { max: MAX_MB }));
       return;
     }
     setErrorMsg('');
@@ -214,11 +209,7 @@ export default function ContributionPortal() {
     setErrorMsg('');
 
     if (activeTab !== 'text' && !selectedFile) {
-      setErrorMsg(
-        activeTab === 'voice'
-          ? 'Please record or attach your voice note first.'
-          : 'Please attach a photo or document first.'
-      );
+      setErrorMsg(activeTab === 'voice' ? t('errors.attachVoice') : t('errors.attachMedia'));
       return;
     }
 
@@ -237,13 +228,13 @@ export default function ContributionPortal() {
             contentType: selectedFile.type.split(';')[0] || undefined,
           });
 
-        if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
+        if (uploadError) throw new Error(t('errors.uploadFailed', { msg: uploadError.message }));
 
         const { data: urlData } = supabase.storage.from('archive_files').getPublicUrl(fileName);
         fileUrl = urlData.publicUrl;
       }
 
-      // 2. Save the submission
+      // 2. Save the submission (stored values stay in English)
       const { error: insertError } = await supabase.from('archive_contributions').insert([
         {
           contribution_type: activeTab.toUpperCase(),
@@ -257,12 +248,12 @@ export default function ContributionPortal() {
         },
       ]);
 
-      if (insertError) throw new Error(`Database save failed: ${insertError.message}`);
+      if (insertError) throw new Error(t('errors.saveFailed', { msg: insertError.message }));
 
       setSubmittedName(fullName);
     } catch (err) {
       console.error(err);
-      setErrorMsg((err as Error).message || 'An error occurred during submission.');
+      setErrorMsg((err as Error).message || t('errors.generic'));
     } finally {
       setIsSubmitting(false);
     }
@@ -295,19 +286,21 @@ export default function ContributionPortal() {
           </div>
 
           <span className="inline-block text-[10px] font-bold text-[#d07f05] uppercase tracking-[0.25em] bg-[#d07f05]/10 px-3 py-1 rounded-full border border-[#d07f05]/30">
-            Digital Heritage Vault
+            {t('badge')}
           </span>
           <h2 className="text-2xl md:text-3xl font-bold text-white mt-3 mb-1.5 leading-tight">
-            Contribute to the <span className="text-[#d07f05]">Archive</span>
+            {t.rich('heading', {
+              b: (chunks) => <span className="text-[#d07f05]">{chunks}</span>,
+            })}
           </h2>
           <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
-            Share oral histories, ancestral accounts, photos or documents to preserve our lineage.
+            {t('intro')}
           </p>
 
           {/* Type selector */}
           <div
             role="tablist"
-            aria-label="Contribution type"
+            aria-label={t('typeAria')}
             className="mt-5 grid grid-cols-3 md:grid-cols-1 gap-2"
           >
             {TABS.map((tab) => {
@@ -331,14 +324,14 @@ export default function ContributionPortal() {
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] md:text-sm font-bold uppercase md:normal-case tracking-wider md:tracking-normal">
-                      {tab.title}
+                      {t(`tabs.${tab.id}.title`)}
                     </span>
                     <span
                       className={`hidden md:block text-[11px] ${
                         active ? 'text-black/70' : 'text-gray-500'
                       }`}
                     >
-                      {tab.sub}
+                      {t(`tabs.${tab.id}.sub`)}
                     </span>
                   </span>
                 </button>
@@ -347,7 +340,7 @@ export default function ContributionPortal() {
           </div>
 
           <p className="hidden md:block mt-5 text-[11px] text-gray-500 font-serif leading-relaxed">
-            Every contribution is reviewed before it joins the archive.
+            {t('reviewed')}
           </p>
         </div>
 
@@ -377,10 +370,11 @@ export default function ContributionPortal() {
                   </motion.span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Sealed in the vault</h3>
+                  <h3 className="text-xl font-bold text-white">{t('doneTitle')}</h3>
                   <p className="mt-1 text-sm text-gray-300 font-light max-w-xs mx-auto">
-                    Thank you{submittedName ? `, ${submittedName}` : ''}. Your contribution was
-                    submitted for review and archival.
+                    {submittedName
+                      ? t('thanks', { name: submittedName })
+                      : t('thanksNoName')}
                   </p>
                 </div>
                 <button
@@ -388,7 +382,7 @@ export default function ContributionPortal() {
                   onClick={resetAll}
                   className="mt-1 px-5 py-2.5 rounded-full border border-[#d07f05]/50 text-[#d07f05] text-[11px] font-mono uppercase tracking-widest hover:bg-[#d07f05] hover:text-black transition-colors cursor-pointer"
                 >
-                  Add another contribution
+                  {t('addAnother')}
                 </button>
               </motion.div>
             ) : (
@@ -404,24 +398,24 @@ export default function ContributionPortal() {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className={labelCls}>Your Name / Lineage</label>
+                    <label className={labelCls}>{t('nameLabel')}</label>
                     <input
                       type="text"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="e.g., Ahmed Werjih"
+                      placeholder={t('namePlaceholder')}
                       className={inputCls}
                     />
                   </div>
                   <div>
-                    <label className={labelCls}>Region / Settlement</label>
+                    <label className={labelCls}>{t('regionLabel')}</label>
                     <input
                       type="text"
                       required
                       value={region}
                       onChange={(e) => setRegion(e.target.value)}
-                      placeholder="e.g., Addis Ababa / Jimma"
+                      placeholder={t('regionPlaceholder')}
                       className={inputCls}
                     />
                   </div>
@@ -441,9 +435,9 @@ export default function ContributionPortal() {
                       {activeTab === 'text' && (
                         <div>
                           <div className="flex items-end justify-between">
-                            <label className={labelCls}>Your Story or Historical Record</label>
+                            <label className={labelCls}>{t('storyLabel')}</label>
                             <span className="mb-1.5 text-[10px] font-mono text-gray-500">
-                              {storyRecord.length} chars
+                              {t('chars', { count: storyRecord.length })}
                             </span>
                           </div>
                           <textarea
@@ -451,23 +445,26 @@ export default function ContributionPortal() {
                             required
                             value={storyRecord}
                             onChange={(e) => setStoryRecord(e.target.value)}
-                            placeholder="Describe historical events, family migration accounts, or traditional customs..."
+                            placeholder={t('storyPlaceholder')}
                             className={`${inputCls} resize-none`}
                           />
                           <div className="mt-2 flex flex-wrap items-center gap-1.5">
                             <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500">
-                              Need a start?
+                              {t('needStart')}
                             </span>
-                            {PROMPTS.map((p) => (
-                              <button
-                                key={p}
-                                type="button"
-                                onClick={() => addPrompt(p)}
-                                className="px-2.5 py-1 rounded-full border border-[#d07f05]/25 bg-[#d07f05]/5 text-[10px] text-[#d8c5a8] hover:border-[#d07f05] hover:text-white transition-colors cursor-pointer"
-                              >
-                                + {p.replace(':', '')}
-                              </button>
-                            ))}
+                            {PROMPT_KEYS.map((key) => {
+                              const prompt = t(`prompts.${key}`);
+                              return (
+                                <button
+                                  key={key}
+                                  type="button"
+                                  onClick={() => addPrompt(prompt)}
+                                  className="px-2.5 py-1 rounded-full border border-[#d07f05]/25 bg-[#d07f05]/5 text-[10px] text-[#d8c5a8] hover:border-[#d07f05] hover:text-white transition-colors cursor-pointer"
+                                >
+                                  + {prompt.replace(/[:፦]\s*$/, '')}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
@@ -475,7 +472,7 @@ export default function ContributionPortal() {
                       {/* ----- VOICE NOTE ----- */}
                       {activeTab === 'voice' && (
                         <div>
-                          <label className={labelCls}>Your Voice Note</label>
+                          <label className={labelCls}>{t('voiceLabel')}</label>
 
                           <div className="rounded-2xl border border-[#d07f05]/30 bg-black/40 p-4">
                             {selectedFile && isAudio && previewUrl ? (
@@ -495,12 +492,12 @@ export default function ContributionPortal() {
                                       }}
                                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#d07f05]/40 text-[#d07f05] text-[10px] font-mono uppercase tracking-wider hover:bg-[#d07f05] hover:text-black transition-colors cursor-pointer"
                                     >
-                                      <RotateCcw className="w-3 h-3" /> Re-record
+                                      <RotateCcw className="w-3 h-3" /> {t('rerecord')}
                                     </button>
                                     <button
                                       type="button"
                                       onClick={clearFile}
-                                      aria-label="Remove recording"
+                                      aria-label={t('removeRec')}
                                       className="w-7 h-7 rounded-full border border-[#d07f05]/30 text-gray-400 hover:text-white hover:border-[#d07f05] flex items-center justify-center transition-colors cursor-pointer"
                                     >
                                       <X className="w-3.5 h-3.5" />
@@ -518,7 +515,7 @@ export default function ContributionPortal() {
                                   <button
                                     type="button"
                                     onClick={isRecording ? stopRecording : startRecording}
-                                    aria-label={isRecording ? 'Stop recording' : 'Start recording'}
+                                    aria-label={isRecording ? t('stopAria') : t('startAria')}
                                     className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
                                       isRecording
                                         ? 'bg-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.5)]'
@@ -554,17 +551,15 @@ export default function ContributionPortal() {
                                         / {formatTime(MAX_REC_SECONDS)}
                                       </span>
                                     </p>
-                                    <p className="text-[11px] text-gray-400">
-                                      Recording... tap the square to finish.
-                                    </p>
+                                    <p className="text-[11px] text-gray-400">{t('recording')}</p>
                                   </>
                                 ) : (
                                   <>
                                     <p className="text-sm font-semibold text-white">
-                                      Tap to record your memory
+                                      {t('tapRecord')}
                                     </p>
                                     <p className="text-[11px] text-gray-400">
-                                      Speak freely, up to {MAX_REC_SECONDS / 60} minutes.
+                                      {t('speakFree', { minutes: MAX_REC_SECONDS / 60 })}
                                     </p>
                                   </>
                                 )}
@@ -587,7 +582,7 @@ export default function ContributionPortal() {
                                   className="inline-flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-[#d07f05] transition-colors cursor-pointer"
                                 >
                                   <Upload className="w-3.5 h-3.5" />
-                                  or upload an audio file (MP3, WAV, M4A)
+                                  {t('uploadAudio')}
                                 </label>
                               </div>
                             )}
@@ -598,7 +593,7 @@ export default function ContributionPortal() {
                       {/* ----- PHOTO / DOCUMENT ----- */}
                       {activeTab === 'media' && (
                         <div>
-                          <label className={labelCls}>Your Photo or Document</label>
+                          <label className={labelCls}>{t('mediaLabel')}</label>
 
                           <input
                             ref={fileInputRef}
@@ -616,7 +611,7 @@ export default function ContributionPortal() {
                                   // eslint-disable-next-line @next/next/no-img-element
                                   <img
                                     src={previewUrl}
-                                    alt="Selected file preview"
+                                    alt={t('previewAlt')}
                                     className="w-full h-full object-cover"
                                   />
                                 ) : (
@@ -626,13 +621,13 @@ export default function ContributionPortal() {
                               <div className="min-w-0 flex-1">
                                 <p className="truncate text-sm text-white">{selectedFile.name}</p>
                                 <p className="text-[10px] font-mono text-[#d07f05]">
-                                  {formatSize(selectedFile.size)} · ready to upload
+                                  {t('ready', { size: formatSize(selectedFile.size) })}
                                 </p>
                               </div>
                               <button
                                 type="button"
                                 onClick={clearFile}
-                                aria-label="Remove file"
+                                aria-label={t('removeFile')}
                                 className="shrink-0 w-8 h-8 rounded-full border border-[#d07f05]/30 text-gray-400 hover:text-white hover:border-[#d07f05] flex items-center justify-center transition-colors cursor-pointer"
                               >
                                 <X className="w-4 h-4" />
@@ -661,10 +656,10 @@ export default function ContributionPortal() {
                                 <Upload className="w-5 h-5" />
                               </span>
                               <span className="text-sm font-semibold text-white">
-                                Drop a photo or document here
+                                {t('dropTitle')}
                               </span>
                               <span className="text-[11px] text-gray-400">
-                                or tap to browse · JPG, PNG or scanned PDF · max {MAX_MB} MB
+                                {t('dropSub', { max: MAX_MB })}
                               </span>
                             </label>
                           )}
@@ -694,10 +689,10 @@ export default function ContributionPortal() {
                   )}
                   <span>
                     {isSubmitting
-                      ? 'Saving to the vault...'
+                      ? t('saving')
                       : isRecording
-                      ? 'Finish recording first'
-                      : 'Submit to the Vault'}
+                      ? t('finishRec')
+                      : t('submit')}
                   </span>
                 </button>
               </motion.form>

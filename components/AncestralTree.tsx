@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronDown, ArrowLeft, ArrowRight, Check, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 
 interface AncestralRecord {
@@ -27,8 +28,16 @@ const clansList = [
   "AKOBI", "AL-KEBA", "HAJI-ALIY", "SHUMREDA", "DINGAY-ZERO",
 ];
 
-const STEPS = ["You", "Father's line", "Mother's line", "Connect"];
+const STEP_KEYS = ["you", "father", "mother", "connect"] as const;
 const COLLAPSED_CLANS = 10;
+
+// Stored region values stay in English (they're saved in Supabase); only the display is translated
+const REGION_KEYS: Record<string, string> = {
+  "Addis Ababa": "addisAbaba",
+  "Harar / Dire Dawa": "harar",
+  "Oromia Region": "oromia",
+  "Other Diaspora": "other",
+};
 
 const inputCls =
   "w-full bg-[#1b140f] border border-[#d07f05]/30 text-[#f4e8d1] placeholder-[#8a7960] text-sm px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#d07f05] font-serif";
@@ -56,7 +65,11 @@ function MatchCard({
   score: number;
   highlightRegion?: string;
 }) {
+  const t = useTranslations("Ancestral");
   const strong = score >= 2;
+  const regionKey = REGION_KEYS[record.ancestral_region];
+  const regionText = regionKey ? t(`regions.${regionKey}`) : record.ancestral_region;
+
   return (
     <div className="p-3.5 bg-[#140f0a] border border-[#d07f05]/20 rounded-xl text-xs text-[#f4e8d1] flex flex-col gap-1.5">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -69,7 +82,7 @@ function MatchCard({
                 : "bg-transparent text-[#d07f05] border-[#d07f05]/40"
             }`}
           >
-            {strong ? "Strong match" : "Possible match"}
+            {strong ? t("match.strong") : t("match.possible")}
           </span>
           <span
             className={`text-[9px] px-2 py-0.5 rounded-full font-mono ${
@@ -78,22 +91,22 @@ function MatchCard({
                 : "bg-gray-800 text-gray-300"
             }`}
           >
-            📍 {record.ancestral_region}
+            📍 {regionText}
           </span>
         </div>
       </div>
       <p className="text-gray-300">
-        <span className="text-[#d07f05]">Lineage:</span> {record.father_name} →{" "}
-        {record.grandfather_name} (grandfather)
+        <span className="text-[#d07f05]">{t("match.lineage")}</span> {record.father_name} →{" "}
+        {record.grandfather_name} {t("match.grandfather")}
       </p>
       {record.mother_name && (
         <p className="text-gray-300">
-          <span className="text-[#d07f05]">Mother:</span> {record.mother_name}
+          <span className="text-[#d07f05]">{t("match.mother")}</span> {record.mother_name}
         </p>
       )}
       {record.clan && (
         <p className="text-gray-300">
-          <span className="text-[#d07f05]">Clan:</span> {record.clan}
+          <span className="text-[#d07f05]">{t("match.clan")}</span> {record.clan}
         </p>
       )}
       {record.contact_info && (
@@ -103,7 +116,7 @@ function MatchCard({
           rel="noopener noreferrer"
           className="mt-1 self-start bg-[#d07f05] hover:bg-[#b56b04] text-black font-semibold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full transition"
         >
-          Connect via Telegram ({record.contact_info})
+          {t("match.connectVia", { handle: record.contact_info })}
         </a>
       )}
     </div>
@@ -111,6 +124,8 @@ function MatchCard({
 }
 
 export default function AncestralTree() {
+  const t = useTranslations("Ancestral");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClan, setSelectedClan] = useState<string | null>(null);
   const [showAllClans, setShowAllClans] = useState(false);
@@ -185,17 +200,21 @@ export default function AncestralTree() {
   const expanded = showAllClans || searchQuery.trim() !== "";
   const visibleClans = expanded ? filteredClans : filteredClans.slice(0, COLLAPSED_CLANS);
 
+  const boldTag = (chunks: React.ReactNode) => (
+    <strong className="text-[#d07f05]">{chunks}</strong>
+  );
+
   const goNext = () => {
     if (step === 1 && (!fatherName.trim() || !grandfatherName.trim())) {
-      setFormError("Please enter your father's and grandfather's names.");
+      setFormError(t("errors.needFatherGrand"));
       return;
     }
     if (step === 2 && !motherName.trim()) {
-      setFormError("Please enter your mother's name.");
+      setFormError(t("errors.needMother"));
       return;
     }
     setFormError("");
-    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    setStep((s) => Math.min(s + 1, STEP_KEYS.length - 1));
   };
 
   const goBack = () => {
@@ -206,13 +225,13 @@ export default function AncestralTree() {
   const handleFindRelatives = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (step < STEPS.length - 1) {
+    if (step < STEP_KEYS.length - 1) {
       goNext();
       return;
     }
 
     if (!fatherName.trim() || !grandfatherName.trim() || !motherName.trim()) {
-      setFormError("Father, grandfather and mother names are required.");
+      setFormError(t("errors.needAll"));
       return;
     }
 
@@ -274,7 +293,7 @@ export default function AncestralTree() {
       setSearchPerformed(true);
     } catch (err: unknown) {
       console.error("Kinship scan error:", err);
-      setFormError((err as Error).message || "Failed to scan records. Please try again.");
+      setFormError((err as Error).message || t("errors.scanFailed"));
     } finally {
       setIsSearchingRelative(false);
     }
@@ -297,7 +316,9 @@ export default function AncestralTree() {
       setAlertSaved(true);
     } catch (err: unknown) {
       console.error("Error saving alert:", err);
-      setFormError("Failed to save alert: " + ((err as Error).message || "Unknown error"));
+      setFormError(
+        t("errors.alertFailed", { msg: (err as Error).message || t("errors.unknown") })
+      );
     }
   };
 
@@ -320,9 +341,7 @@ export default function AncestralTree() {
       if (alertError) throw alertError;
 
       if (!alertData || alertData.length === 0) {
-        setRadarMessage(
-          "No active radar found with that handle or name. Try running a new scan first!"
-        );
+        setRadarMessage(t("errors.radarNotFound"));
         return;
       }
 
@@ -348,7 +367,7 @@ export default function AncestralTree() {
       setRadarChecked(true);
     } catch (err: unknown) {
       console.error("Error checking radar:", err);
-      setRadarMessage("Failed to check radar status. Please try again.");
+      setRadarMessage(t("errors.radarFailed"));
     } finally {
       setIsCheckingRadar(false);
     }
@@ -366,13 +385,13 @@ export default function AncestralTree() {
       {/* Section Header */}
       <div className="text-center mb-8">
         <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#d07f05] px-3 py-1 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 inline-block mb-3">
-          Heritage &amp; Lineage Archives
+          {t("badge")}
         </span>
         <h2 className="text-3xl md:text-4xl font-serif text-white tracking-tight mb-2">
-          Family Clans &amp; <span className="italic text-[#d07f05]">Ancestral Roots</span>
+          {t("headingA")} <span className="italic text-[#d07f05]">{t("headingB")}</span>
         </h2>
         <p className="text-gray-300 text-xs md:text-sm font-light max-w-lg mx-auto">
-          Explore the 26 foundational ancestral branches and trace your family lineage.
+          {t("intro")}
         </p>
       </div>
 
@@ -382,10 +401,7 @@ export default function AncestralTree() {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d07f05] opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#d07f05]"></span>
         </span>
-        <span>
-          <strong className="text-[#d07f05]">{totalRecordsCount}</strong> lineages indexed in the
-          living registry
-        </span>
+        <span>{t.rich("registry", { count: totalRecordsCount, b: boldTag })}</span>
       </div>
 
       {/* CLANS (compact) */}
@@ -399,14 +415,14 @@ export default function AncestralTree() {
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
           <h3 className="text-base md:text-lg font-serif text-[#f4e8d1] flex items-center gap-2">
-            <span>📜</span> Core Societal Clans{" "}
+            <span>📜</span> {t("clansTitle")}{" "}
             <span className="text-xs font-mono text-[#d07f05]">({clansList.length})</span>
           </h3>
           <div className="relative w-full sm:w-56">
             <Search className="w-3.5 h-3.5 text-[#d07f05]/70 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search clan..."
+              placeholder={t("searchClan")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-[#1c150f] border border-[#d07f05]/40 text-[#f4e8d1] placeholder-[#a89880] text-xs pl-8 pr-3 py-2 rounded-full focus:outline-none focus:border-[#d07f05] font-serif"
@@ -438,20 +454,15 @@ export default function AncestralTree() {
             );
           })}
           {filteredClans.length === 0 && (
-            <p className="text-xs text-gray-400 font-serif">No clan matches that search.</p>
+            <p className="text-xs text-gray-400 font-serif">{t("noClan")}</p>
           )}
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-3">
           <p className="text-[11px] text-gray-400 font-serif min-h-[16px]">
-            {selectedClan ? (
-              <>
-                Selected: <span className="text-[#d07f05]">{selectedClan}</span> (used in your scan
-                below)
-              </>
-            ) : (
-              "Tap a clan to use it in your scan."
-            )}
+            {selectedClan
+              ? t.rich("selected", { clan: selectedClan, b: boldTag })
+              : t("tapClan")}
           </p>
           {searchQuery.trim() === "" && filteredClans.length > COLLAPSED_CLANS && (
             <button
@@ -459,7 +470,7 @@ export default function AncestralTree() {
               onClick={() => setShowAllClans((v) => !v)}
               className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-widest text-[#d07f05] hover:text-white transition-colors cursor-pointer shrink-0"
             >
-              {showAllClans ? "Show less" : `Show all ${clansList.length}`}
+              {showAllClans ? t("showLess") : t("showAll", { count: clansList.length })}
               <ChevronDown
                 className={`w-3.5 h-3.5 transition-transform ${showAllClans ? "rotate-180" : ""}`}
               />
@@ -471,21 +482,18 @@ export default function AncestralTree() {
       {/* KINSHIP RADAR CARD (tabs) */}
       <div className="mt-8 rounded-2xl border border-[#d07f05]/30 bg-[#120e0a] shadow-2xl relative">
         <div className="flex border-b border-[#d07f05]/20">
-          {[
-            { id: "scan" as const, label: "Find Relatives" },
-            { id: "radar" as const, label: "Check My Radar" },
-          ].map((t) => (
+          {(["scan", "radar"] as const).map((id) => (
             <button
-              key={t.id}
+              key={id}
               type="button"
-              onClick={() => setTab(t.id)}
+              onClick={() => setTab(id)}
               className={`flex-1 py-3.5 text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] transition-all cursor-pointer ${
-                tab === t.id
+                tab === id
                   ? "text-[#d07f05] bg-[#1a130d] border-b-2 border-[#d07f05]"
                   : "text-gray-500 hover:text-gray-300 border-b-2 border-transparent"
               }`}
             >
-              {t.label}
+              {t(`tabs.${id}`)}
             </button>
           ))}
         </div>
@@ -498,16 +506,16 @@ export default function AncestralTree() {
                 <div className="absolute top-3.5 left-[12.5%] right-[12.5%] h-px bg-[#d07f05]/20" />
                 <motion.div
                   className="absolute top-3.5 left-[12.5%] h-px bg-[#d07f05] shadow-[0_0_8px_#d07f05]"
-                  animate={{ width: `${(step / (STEPS.length - 1)) * 75}%` }}
+                  animate={{ width: `${(step / (STEP_KEYS.length - 1)) * 75}%` }}
                   transition={{ duration: 0.4 }}
                 />
                 <div className="relative grid grid-cols-4">
-                  {STEPS.map((label, i) => {
+                  {STEP_KEYS.map((key, i) => {
                     const done = i < step;
                     const current = i === step;
                     return (
                       <button
-                        key={label}
+                        key={key}
                         type="button"
                         disabled={i > step}
                         onClick={() => {
@@ -532,7 +540,7 @@ export default function AncestralTree() {
                             current ? "text-[#d07f05]" : "text-gray-500"
                           }`}
                         >
-                          {label}
+                          {t(`steps.${key}`)}
                         </span>
                       </button>
                     );
@@ -554,21 +562,21 @@ export default function AncestralTree() {
                       {step === 0 && (
                         <>
                           <div>
-                            <label className={labelCls}>Your Full Name (Optional)</label>
+                            <label className={labelCls}>{t("form.fullNameLabel")}</label>
                             <input
                               type="text"
-                              placeholder="Registers you in the archive"
+                              placeholder={t("form.fullNamePlaceholder")}
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
                               className={inputCls}
                             />
                           </div>
                           <div>
-                            <label className={labelCls}>Clan / Lineage Branch</label>
+                            <label className={labelCls}>{t("form.clanLabel")}</label>
                             <input
                               type="text"
                               list="clan-options"
-                              placeholder={selectedClan ? selectedClan : "e.g. Werjih Sub-clan"}
+                              placeholder={selectedClan ? selectedClan : t("form.clanPlaceholder")}
                               value={clan}
                               onChange={(e) => setClan(e.target.value)}
                               className={inputCls}
@@ -585,20 +593,20 @@ export default function AncestralTree() {
                       {step === 1 && (
                         <>
                           <div>
-                            <label className={labelCls}>Father&apos;s Name *</label>
+                            <label className={labelCls}>{t("form.fatherLabel")}</label>
                             <input
                               type="text"
-                              placeholder="e.g. Kedir"
+                              placeholder={t("form.fatherPlaceholder")}
                               value={fatherName}
                               onChange={(e) => setFatherName(e.target.value)}
                               className={inputCls}
                             />
                           </div>
                           <div>
-                            <label className={labelCls}>Grandfather&apos;s Name *</label>
+                            <label className={labelCls}>{t("form.grandfatherLabel")}</label>
                             <input
                               type="text"
-                              placeholder="e.g. Ahmed"
+                              placeholder={t("form.grandfatherPlaceholder")}
                               value={grandfatherName}
                               onChange={(e) => setGrandfatherName(e.target.value)}
                               className={inputCls}
@@ -610,20 +618,20 @@ export default function AncestralTree() {
                       {step === 2 && (
                         <>
                           <div>
-                            <label className={labelCls}>Mother&apos;s Full Name *</label>
+                            <label className={labelCls}>{t("form.motherLabel")}</label>
                             <input
                               type="text"
-                              placeholder="e.g. Amina"
+                              placeholder={t("form.motherPlaceholder")}
                               value={motherName}
                               onChange={(e) => setMotherName(e.target.value)}
                               className={inputCls}
                             />
                           </div>
                           <div>
-                            <label className={labelCls}>Mother&apos;s Father Name (Optional)</label>
+                            <label className={labelCls}>{t("form.motherFatherLabel")}</label>
                             <input
                               type="text"
-                              placeholder="Maternal grandfather"
+                              placeholder={t("form.motherFatherPlaceholder")}
                               value={motherFatherName}
                               onChange={(e) => setMotherFatherName(e.target.value)}
                               className={inputCls}
@@ -635,29 +643,29 @@ export default function AncestralTree() {
                       {step === 3 && (
                         <>
                           <div>
-                            <label className={labelCls}>Telegram Username (Optional)</label>
+                            <label className={labelCls}>{t("form.telegramLabel")}</label>
                             <input
                               type="text"
-                              placeholder="e.g. @username"
+                              placeholder={t("form.telegramPlaceholder")}
                               value={contactInfo}
                               onChange={(e) => setContactInfo(e.target.value)}
                               className={inputCls}
                             />
                             <p className="mt-1.5 text-[10px] text-gray-500 font-serif">
-                              If you add this, matching relatives will see it and can message you.
+                              {t("form.telegramHelp")}
                             </p>
                           </div>
                           <div>
-                            <label className={labelCls}>Preferred Region (Prioritized)</label>
+                            <label className={labelCls}>{t("form.regionLabel")}</label>
                             <select
                               value={selectedRegion}
                               onChange={(e) => setSelectedRegion(e.target.value)}
                               className={inputCls}
                             >
-                              <option value="Addis Ababa">Addis Ababa</option>
-                              <option value="Harar / Dire Dawa">Harar / Dire Dawa</option>
-                              <option value="Oromia Region">Oromia Region</option>
-                              <option value="Other Diaspora">Other Regions</option>
+                              <option value="Addis Ababa">{t("regions.addisAbaba")}</option>
+                              <option value="Harar / Dire Dawa">{t("regions.harar")}</option>
+                              <option value="Oromia Region">{t("regions.oromia")}</option>
+                              <option value="Other Diaspora">{t("regions.other")}</option>
                             </select>
                           </div>
                         </>
@@ -677,16 +685,16 @@ export default function AncestralTree() {
                     disabled={step === 0}
                     className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-[#d07f05]/30 text-[#d07f05] text-[11px] font-mono uppercase tracking-wider hover:bg-[#1f160e] transition disabled:opacity-30 disabled:cursor-default cursor-pointer"
                   >
-                    <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    <ArrowLeft className="w-3.5 h-3.5" /> {t("form.back")}
                   </button>
 
-                  {step < STEPS.length - 1 ? (
+                  {step < STEP_KEYS.length - 1 ? (
                     <button
                       type="button"
                       onClick={goNext}
                       className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#d07f05] hover:bg-[#b56b04] text-black font-bold text-[11px] font-mono uppercase tracking-wider transition cursor-pointer"
                     >
-                      Next <ArrowRight className="w-3.5 h-3.5" />
+                      {t("form.next")} <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   ) : (
                     <button
@@ -694,7 +702,7 @@ export default function AncestralTree() {
                       disabled={isSearchingRelative}
                       className="px-5 py-2.5 rounded-full bg-[#d07f05] hover:bg-[#b56b04] text-black font-serif font-bold text-[11px] uppercase tracking-widest transition shadow-[0_0_15px_rgba(208,127,5,0.3)] disabled:opacity-50 cursor-pointer"
                     >
-                      {isSearchingRelative ? "Scanning Chronicles..." : "Scan & Match Relatives"}
+                      {isSearchingRelative ? t("form.scanning") : t("form.submit")}
                     </button>
                   )}
                 </div>
@@ -711,21 +719,22 @@ export default function AncestralTree() {
                   >
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-[10px] font-mono text-[#d07f05] uppercase tracking-[0.2em]">
-                        ✨ Kinship Scan Results
+                        {t("results.title")}
                       </span>
                       <button
                         type="button"
                         onClick={restartScan}
                         className="text-[10px] font-mono uppercase tracking-widest text-gray-400 hover:text-white transition cursor-pointer"
                       >
-                        New scan
+                        {t("results.newScan")}
                       </button>
                     </div>
 
                     {recordSaved && (
                       <div className="mb-3 p-2.5 bg-[#140f0a] border border-emerald-500/40 rounded-lg text-xs text-emerald-400 font-mono">
-                        ✓ Your profile ({fullName.trim() ? fullName : "Anonymous"}) has been
-                        recorded in the archive.
+                        {t("results.saved", {
+                          name: fullName.trim() ? fullName : t("anonymous"),
+                        })}
                       </div>
                     )}
 
@@ -733,8 +742,7 @@ export default function AncestralTree() {
                       <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
                         <p className="flex items-center gap-1.5 text-xs text-gray-300 font-serif">
                           <Users className="w-3.5 h-3.5 text-[#d07f05]" />
-                          {matchResults.length} possible relative
-                          {matchResults.length === 1 ? "" : "s"} found
+                          {t("results.found", { count: matchResults.length })}
                         </p>
                         {matchResults.map((record, idx) => (
                           <MatchCard
@@ -747,26 +755,23 @@ export default function AncestralTree() {
                       </div>
                     ) : (
                       <div className="space-y-3 text-center">
-                        <p className="text-xs text-[#f4e8d1] font-serif">
-                          No matches found across any region yet for these lineage names.
-                        </p>
+                        <p className="text-xs text-[#f4e8d1] font-serif">{t("results.none")}</p>
                         {!alertSaved ? (
                           <div className="p-4 bg-[#140f0a] border border-[#d07f05]/30 rounded-xl">
                             <p className="text-[11px] text-gray-300 mb-3 font-serif">
-                              Want us to hold your lineage radar? Save your search so you can be
-                              connected when a relative registers later.
+                              {t("results.radarPrompt")}
                             </p>
                             <button
                               type="button"
                               onClick={handleSaveAlert}
                               className="px-4 py-2 bg-[#d07f05]/20 hover:bg-[#d07f05] text-[#d07f05] hover:text-black border border-[#d07f05] text-[10px] uppercase font-mono tracking-widest rounded-full transition cursor-pointer"
                             >
-                              Activate Future Match Radar
+                              {t("results.activate")}
                             </button>
                           </div>
                         ) : (
                           <p className="text-xs text-emerald-400 font-mono">
-                            ✓ Radar activated! Your lineage is saved for future family matches.
+                            {t("results.activated")}
                           </p>
                         )}
                       </div>
@@ -778,18 +783,13 @@ export default function AncestralTree() {
           ) : (
             /* ---------- RADAR TAB ---------- */
             <div className="max-w-md mx-auto text-center">
-              <h4 className="text-base font-serif text-[#f4e8d1] mb-2">
-                🔍 Already Activated Your Radar?
-              </h4>
-              <p className="text-xs text-gray-400 mb-5 font-serif">
-                Enter your Telegram username or saved name to check if new relatives have
-                registered since your last visit.
-              </p>
+              <h4 className="text-base font-serif text-[#f4e8d1] mb-2">{t("radar.title")}</h4>
+              <p className="text-xs text-gray-400 mb-5 font-serif">{t("radar.desc")}</p>
 
               <form onSubmit={handleCheckRadar} className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
-                  placeholder="e.g. @username or Full Name"
+                  placeholder={t("radar.placeholder")}
                   value={radarHandle}
                   onChange={(e) => setRadarHandle(e.target.value)}
                   className={`${inputCls} flex-1`}
@@ -799,7 +799,7 @@ export default function AncestralTree() {
                   disabled={isCheckingRadar}
                   className="px-5 py-2.5 bg-[#d07f05] hover:bg-[#b56b04] text-black text-[11px] font-bold uppercase font-mono tracking-wider rounded-lg transition disabled:opacity-50 cursor-pointer"
                 >
-                  {isCheckingRadar ? "Scanning..." : "Check Radar"}
+                  {isCheckingRadar ? t("radar.checking") : t("radar.check")}
                 </button>
               </form>
 
@@ -816,12 +816,12 @@ export default function AncestralTree() {
                     className="mt-6 text-left"
                   >
                     <span className="text-[10px] font-mono text-[#d07f05] uppercase tracking-[0.2em] block mb-3 text-center">
-                      📡 Radar Status Results
+                      {t("radar.resultsTitle")}
                     </span>
                     {radarMatches.length > 0 ? (
                       <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
                         <p className="text-emerald-400 font-mono text-center text-xs">
-                          🎉 Matching relative(s) found!
+                          {t("radar.found")}
                         </p>
                         {radarMatches.map((rec, i) => (
                           <MatchCard key={i} record={rec} score={rec.score} />
@@ -829,7 +829,7 @@ export default function AncestralTree() {
                       </div>
                     ) : (
                       <p className="text-gray-300 text-center font-serif text-xs py-2">
-                        No new relatives have registered under your lineage yet. Check back soon!
+                        {t("radar.none")}
                       </p>
                     )}
                   </motion.div>
