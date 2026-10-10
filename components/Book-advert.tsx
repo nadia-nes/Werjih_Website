@@ -4,26 +4,34 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Phone } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 
 interface BookAdvertItem {
   id: string;
   title: string;
   description: string;
+  title_am?: string | null; // optional new Supabase columns
+  description_am?: string | null;
   video_url: string;
 }
 
 const SELLERS = [
-  { name: "Roza Siraj", place: "Bethel", phone: "0988022885" },
-  { name: "Hamid Hamza", place: "Autobis Tera", phone: "0911646448" },
-  { name: "Ali Usman", place: "Jemo Mall", phone: "0912008319" },
-  { name: "Hussein Ali", place: "Daleti", phone: "0922158994" },
-  { name: "Adam Mohammed", place: "Sebeta", phone: "0923433183" },
+  { key: "roza", phone: "0988022885" },
+  { key: "hamid", phone: "0911646448" },
+  { key: "ali", phone: "0912008319" },
+  { key: "hussein", phone: "0922158994" },
+  { key: "adam", phone: "0923433183" },
 ];
 
 function AdvertCard({ item }: { item: BookAdvertItem }) {
+  const t = useTranslations("BookAdvert");
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const title = (locale === "am" && item.title_am) || item.title;
+  const description = (locale === "am" && item.description_am) || item.description;
 
   // Auto-collapse when scrolling completely out of view
   useEffect(() => {
@@ -68,7 +76,7 @@ function AdvertCard({ item }: { item: BookAdvertItem }) {
               className="absolute inset-0 w-full h-full object-contain"
             >
               <source src={item.video_url} type="video/mp4" />
-              Your browser does not support the video tag.
+              {t("videoUnsupported")}
             </video>
           </div>
         </div>
@@ -77,13 +85,13 @@ function AdvertCard({ item }: { item: BookAdvertItem }) {
         <div className="md:col-span-2 flex flex-col justify-center gap-4">
           <div>
             <span className="inline-block text-[10px] font-mono tracking-[0.25em] uppercase text-[#d07f05] px-3 py-1 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5 mb-3">
-              Now Available
+              {t("nowAvailable")}
             </span>
             <h3 className="text-xl md:text-2xl font-serif text-[#f4e8d1] leading-tight mb-2">
-              {item.title}
+              {title}
             </h3>
             <p className="text-xs md:text-sm text-gray-300 font-light leading-relaxed">
-              {item.description}
+              {description}
             </p>
           </div>
 
@@ -99,10 +107,10 @@ function AdvertCard({ item }: { item: BookAdvertItem }) {
           >
             <span>
               <span className="block text-[9px] font-mono uppercase tracking-[0.25em] opacity-80">
-                Get Your Copy
+                {t("getCopy")}
               </span>
               <span className="block text-sm font-bold">
-                {SELLERS.length} Authorized Distributors
+                {t("distributors", { count: SELLERS.length })}
               </span>
             </span>
             <ChevronDown
@@ -126,34 +134,38 @@ function AdvertCard({ item }: { item: BookAdvertItem }) {
           >
             <div className="px-4 md:px-6 pb-4 pt-3 border-t border-[#d07f05]/20">
               <p className="text-[10px] text-gray-500 font-serif mb-2">
-                Addis Ababa &amp; surroundings. Tap to call.
+                {t("area")}
               </p>
 
               <ul className="rounded-xl border border-[#d07f05]/20 bg-[#181615] divide-y divide-white/5 overflow-hidden">
-                {SELLERS.map((seller, i) => (
-                  <li
-                    key={seller.phone}
-                    className="flex items-center gap-2.5 px-3 py-2 hover:bg-[#d07f05]/5 transition-colors"
-                  >
-                    <span className="shrink-0 w-4 text-[10px] font-mono text-[#d07f05]/70">
-                      {i + 1}
-                    </span>
-
-                    <p className="min-w-0 flex-1 truncate text-xs text-gray-100">
-                      <span className="font-medium">{seller.name}</span>
-                      <span className="text-[#d07f05] text-[10px]"> · {seller.place}</span>
-                    </p>
-
-                    <a
-                      href={`tel:${seller.phone}`}
-                      aria-label={`Call ${seller.name}`}
-                      className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 hover:bg-[#d07f05] hover:text-black text-[#d07f05] text-[10px] font-mono transition-colors"
+                {SELLERS.map((seller, i) => {
+                  const name = t(`sellers.${seller.key}.name`);
+                  const place = t(`sellers.${seller.key}.place`);
+                  return (
+                    <li
+                      key={seller.phone}
+                      className="flex items-center gap-2.5 px-3 py-2 hover:bg-[#d07f05]/5 transition-colors"
                     >
-                      <Phone className="w-3 h-3" />
-                      {seller.phone}
-                    </a>
-                  </li>
-                ))}
+                      <span className="shrink-0 w-4 text-[10px] font-mono text-[#d07f05]/70">
+                        {i + 1}
+                      </span>
+
+                      <p className="min-w-0 flex-1 truncate text-xs text-gray-100">
+                        <span className="font-medium">{name}</span>
+                        <span className="text-[#d07f05] text-[10px]"> · {place}</span>
+                      </p>
+
+                      <a
+                        href={`tel:${seller.phone}`}
+                        aria-label={t("callAria", { name })}
+                        className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 hover:bg-[#d07f05] hover:text-black text-[#d07f05] text-[10px] font-mono transition-colors"
+                      >
+                        <Phone className="w-3 h-3" />
+                        {seller.phone}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </motion.div>
@@ -164,6 +176,7 @@ function AdvertCard({ item }: { item: BookAdvertItem }) {
 }
 
 export default function BookAdvertSection() {
+  const t = useTranslations("BookAdvert");
   const [adverts, setAdverts] = useState<BookAdvertItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -190,7 +203,7 @@ export default function BookAdvertSection() {
   if (loading) {
     return (
       <div className="text-center py-10 text-xs font-mono text-[#d07f05]">
-        Loading book movement archives...
+        {t("loading")}
       </div>
     );
   }

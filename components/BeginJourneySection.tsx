@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface JourneyCardProps {
   id: string;
@@ -57,6 +58,7 @@ function JourneyCard({ title, description, isOpen, setIsOpen, children }: Journe
 }
 
 export default function BeginJourneySection() {
+  const t = useTranslations("Journey");
   const [openCard1, setOpenCard1] = useState(true);
   const [openCard2, setOpenCard2] = useState(false);
 
@@ -64,10 +66,10 @@ export default function BeginJourneySection() {
     <section id="notice" className="max-w-5xl mx-auto px-6 sm:px-12 py-20 font-serif">
       <div className="space-y-3 mb-12 text-center">
         <div className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#d07f05]">
-          • The Heritage Archive • Prologue
+          {t("eyebrow")}
         </div>
         <h2 className="text-3xl sm:text-4xl font-normal text-[#f4efe6] tracking-tight">
-          Begin The Journey
+          {t("title")}
         </h2>
       </div>
       
@@ -76,36 +78,36 @@ export default function BeginJourneySection() {
         {/* Card 1 */}
         <JourneyCard 
           id="card1"
-          title="🌍 Before We Become a Memory"
-          description="Click to read about the ancestral roots, ancient trade routes, and geographical dispersion of the Werji people."
+          title={t("card1.title")}
+          description={t("card1.desc")}
           isOpen={openCard1}
           setIsOpen={setOpenCard1}
         >
-          <p><strong className="text-[#d07f05] font-normal">Heads Up:</strong> A Call to the Werjih. For the youth, for the elders, for what remains.</p>
-          <p>There was a time when the name Werji did not need explaining. It meant a family whose word was worth more than gold, merchants who carried honesty as far as they carried goods, a people who built their own future out of trade, faith, and family.</p>
-          <p>And then it was taken. In the Derg years, generations of wealth were confiscated almost overnight, and families were forced to start again from zero.</p>
-          <p>But that is not the only reason we are diminishing today. Pride has kept us apart, small disagreements hardening into permanent distance, while our numbers shrink and our children grow up as strangers to each other. A king could take our land; only we can give away our unity.</p>
-          <p>Meanwhile, &quot;Daleti&quot; the home that has carried the Werjih name longer than almost anywhere else is not guaranteed to stay ours. And our history, if we don&apos;t write it ourselves, will be told by others, and pieces of it will quietly stop being ours at all.</p>
-          <p>This is not a call to blame. It&apos;s a call to wake up. Learn our history before it&apos;s lost. Ask your elders while they&apos;re still here. Let go of old grievances. We survived exile, assassination, confiscation we will not survive our own ego, unless we choose, together, to drop it.</p>
+          <p><strong className="text-[#d07f05] font-normal">{t("card1.headsUp")}</strong> {t("card1.p0")}</p>
+          <p>{t("card1.p1")}</p>
+          <p>{t("card1.p2")}</p>
+          <p>{t("card1.p3")}</p>
+          <p>{t("card1.p4")}</p>
+          <p>{t("card1.p5")}</p>
         </JourneyCard>
 
         {/* Card 2 */}
         <JourneyCard 
           id="card2"
-          title="📜 Legacy Worth Preserving"
-          description="Click to read about the linguistic heritage, customary laws, and communal daily practices."
+          title={t("card2.title")}
+          description={t("card2.desc")}
           isOpen={openCard2}
           setIsOpen={setOpenCard2}
         >
-          <p><strong className="text-[#d07f05] font-normal">From Our Roots to Our Future:</strong> On what we&apos;ve already lost, and the gathering that could stop us losing the rest.</p>
-          <p>There was a time when a Werji household was rich in more than trade, rich in the proverbs a mother spoke before bed, in a rhythm of marriage, prayer, mourning, and celebration no one had to explain because we lived inside it. That was never written in a ledger, but it was wealth all the same.</p>
-          <p>And piece by piece, we let it go. We already lost our language, not overnight, but slowly, generation by generation, until the languages we borrowed to trade with the world became the only ones our children would speak. We told ourselves it didn&apos;t matter, because we still had our name, our stories, each other.</p>
-          <p>But now even that isn&apos;t certain. Our identity as a people is thinning with every year that passes—our young growing up further from Daleti, from the names Turio Wario and Sheikh Muhammed Danu, scattered across cities and continents, many never having met each other. How do you stay one people when you&apos;ve never stood in the same room?</p>
-          <p>We already lost the language. We are not going to lose the rest.</p>
-          <p><strong className="text-[#d07f05] font-normal">A Gathering, Every June:</strong> So here is what we&apos;re proposing: once a year, every June, no matter where we&apos;ve scattered Addis Ababa, Daleti, the diaspora we come back together. Not out of obligation, but out of the stubborn refusal to let distance finish what history started.</p>
-          <p>Let it  become the season the Werji renew themselves, together one gathering, one people, every year, until it becomes something we simply do, the way our ancestors simply traded, simply prayed, simply endured.</p>
-          <p>Bring your children. Bring your grandparents. Bring the language you remember and the one you never learned. Bring your pride and leave your ego at the door.</p>
-          <p>We were gold once. Let this be the year we remind ourselves what gold looks like when it chooses, on its own, to come back together.</p>
+          <p><strong className="text-[#d07f05] font-normal">{t("card2.fromRoots")}</strong> {t("card2.p0")}</p>
+          <p>{t("card2.p1")}</p>
+          <p>{t("card2.p2")}</p>
+          <p>{t("card2.p3")}</p>
+          <p>{t("card2.p4")}</p>
+          <p><strong className="text-[#d07f05] font-normal">{t("card2.gathering")}</strong> {t("card2.p5")}</p>
+          <p>{t("card2.p6")}</p>
+          <p>{t("card2.p7")}</p>
+          <p>{t("card2.p8")}</p>
         </JourneyCard>
 
       </div>

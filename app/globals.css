@@ -45,21 +45,19 @@ body {
   white-space: nowrap;
   animation: marquee 25s linear infinite;
 }
+
 html {
   scroll-behavior: smooth;
 }
 
-/* Hide Google's default UI */
-iframe.goog-te-banner-frame,
-.goog-te-banner-frame,
-#goog-gt-tt,
-.goog-te-balloon-frame { display: none !important; }
-body { top: 0 !important; position: static !important; }
-.goog-text-highlight { background: none !important; box-shadow: none !important; }
-
-/* Amharic styling (Google adds this class to <html> when translated) */
-html.translated-ltr .font-serif,
-html.translated-ltr .font-mono { font-family: var(--font-ethiopic), sans-serif; }
-html.translated-ltr .italic { font-style: normal; }
-html.translated-ltr [class*="tracking-"] { letter-spacing: normal; }
-html.translated-ltr .uppercase { text-transform: none; }
+/* Amharic rendering (html lang is set by layout.tsx) */
+html[lang="am"] body,
+html[lang="am"] .font-serif,
+html[lang="am"] .font-sans,
+html[lang="am"] .font-mono,
+html[lang="am"] [class*="--font-cormorant"] {
+  font-family: var(--font-ethiopic), sans-serif !important;
+}
+html[lang="am"] .italic { font-style: normal; }
+html[lang="am"] [class*="tracking-"] { letter-spacing: normal; }
+html[lang="am"] .uppercase { text-transform: none; }

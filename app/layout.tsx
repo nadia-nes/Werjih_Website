@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Ethiopic } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import Navbar from "@/components/Navbar";
-import ScrollThumb from "@/components/ScrollToTop"; // Replaced ScrollToTop with ScrollThumb
+import ScrollThumb from "@/components/ScrollToTop";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,6 +16,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const ethiopic = Noto_Sans_Ethiopic({
+  variable: "--font-ethiopic",
+  subsets: ["ethiopic"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "The Werjih Society",
   description: "Ancient Heritage & Legacy",
@@ -23,16 +31,25 @@ export const viewport: Viewport = {
   themeColor: "#0c0a09",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang={locale}
+      className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0c0a09] text-white">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <ScrollThumb /> {/* The new interactive slider */}
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <ScrollThumb />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

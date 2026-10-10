@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
-import TranslateToggle from '@/components/TranslateToggle';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import {
   AnimatePresence,
   motion,
@@ -368,7 +368,7 @@ export default function Navbar() {
               ))}
             </ul>
 
-            <TranslateToggle />
+            <LanguageSwitcher />
 
             <button
               type="button"

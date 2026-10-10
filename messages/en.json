@@ -1,0 +1,54 @@
+{
+  "Hero": {
+    "alt": "A Werjih woman weaving a coiled basket",
+    "title": "Stories Woven in Time.",
+    "description": "Before these threads of history fade, we preserve the ancestral craft of our elders. Every piece carries the resilience of yesterday so the next generation inherits our complete story.",
+    "cta": "Unfold History"
+  },
+  "Journey": {
+    "eyebrow": "• The Heritage Archive • Prologue",
+    "title": "Begin The Journey",
+    "card1": {
+      "title": "🌍 Before We Become a Memory",
+      "desc": "Click to read about the ancestral roots, ancient trade routes, and geographical dispersion of the Werji people.",
+      "headsUp": "Heads Up:",
+      "p0": "A Call to the Werjih. For the youth, for the elders, for what remains.",
+      "p1": "There was a time when the name Werji did not need explaining. It meant a family whose word was worth more than gold, merchants who carried honesty as far as they carried goods, a people who built their own future out of trade, faith, and family.",
+      "p2": "And then it was taken. In the Derg years, generations of wealth were confiscated almost overnight, and families were forced to start again from zero.",
+      "p3": "But that is not the only reason we are diminishing today. Pride has kept us apart, small disagreements hardening into permanent distance, while our numbers shrink and our children grow up as strangers to each other. A king could take our land; only we can give away our unity.",
+      "p4": "Meanwhile, “Daleti” the home that has carried the Werjih name longer than almost anywhere else is not guaranteed to stay ours. And our history, if we don’t write it ourselves, will be told by others, and pieces of it will quietly stop being ours at all.",
+      "p5": "This is not a call to blame. It’s a call to wake up. Learn our history before it’s lost. Ask your elders while they’re still here. Let go of old grievances. We survived exile, assassination, confiscation we will not survive our own ego, unless we choose, together, to drop it."
+    },
+    "card2": {
+      "title": "📜 Legacy Worth Preserving",
+      "desc": "Click to read about the linguistic heritage, customary laws, and communal daily practices.",
+      "fromRoots": "From Our Roots to Our Future:",
+      "p0": "On what we’ve already lost, and the gathering that could stop us losing the rest.",
+      "p1": "There was a time when a Werji household was rich in more than trade, rich in the proverbs a mother spoke before bed, in a rhythm of marriage, prayer, mourning, and celebration no one had to explain because we lived inside it. That was never written in a ledger, but it was wealth all the same.",
+      "p2": "And piece by piece, we let it go. We already lost our language, not overnight, but slowly, generation by generation, until the languages we borrowed to trade with the world became the only ones our children would speak. We told ourselves it didn’t matter, because we still had our name, our stories, each other.",
+      "p3": "But now even that isn’t certain. Our identity as a people is thinning with every year that passes—our young growing up further from Daleti, from the names Turio Wario and Sheikh Muhammed Danu, scattered across cities and continents, many never having met each other. How do you stay one people when you’ve never stood in the same room?",
+      "p4": "We already lost the language. We are not going to lose the rest.",
+      "gathering": "A Gathering, Every June:",
+      "p5": "So here is what we’re proposing: once a year, every June, no matter where we’ve scattered Addis Ababa, Daleti, the diaspora we come back together. Not out of obligation, but out of the stubborn refusal to let distance finish what history started.",
+      "p6": "Let it become the season the Werji renew themselves, together one gathering, one people, every year, until it becomes something we simply do, the way our ancestors simply traded, simply prayed, simply endured.",
+      "p7": "Bring your children. Bring your grandparents. Bring the language you remember and the one you never learned. Bring your pride and leave your ego at the door.",
+      "p8": "We were gold once. Let this be the year we remind ourselves what gold looks like when it chooses, on its own, to come back together."
+    }
+  },
+  "BookAdvert": {
+    "loading": "Loading book movement archives...",
+    "nowAvailable": "Now Available",
+    "getCopy": "Get Your Copy",
+    "distributors": "{count} Authorized Distributors",
+    "area": "Addis Ababa & surroundings. Tap to call.",
+    "callAria": "Call {name}",
+    "videoUnsupported": "Your browser does not support the video tag.",
+    "sellers": {
+      "roza": { "name": "Roza Siraj", "place": "Bethel" },
+      "hamid": { "name": "Hamid Hamza", "place": "Autobis Tera" },
+      "ali": { "name": "Ali Usman", "place": "Jemo Mall" },
+      "hussein": { "name": "Hussein Ali", "place": "Daleti" },
+      "adam": { "name": "Adam Mohammed", "place": "Sebeta" }
+    }
+  }
+}
