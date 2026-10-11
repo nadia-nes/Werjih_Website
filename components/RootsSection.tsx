@@ -4,18 +4,20 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import { ChevronLeft, ChevronRight, Compass } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type LeafletLib = typeof import("leaflet");
 type ReactLeafletLib = typeof import("react-leaflet");
 
 type Coords = [number, number];
 
-const eventRoots: { id: string; name: string; region: string; coords: Coords }[] = [
-  { id: "1", name: "Addis Ababa", region: "Central Hub", coords: [9.03, 38.74] },
-  { id: "2", name: "Daleti", region: "Surrounding Area", coords: [8.89, 38.64] },
-  { id: "3", name: "Rogge", region: "Historical Area", coords: [8.86, 38.95] },
-  { id: "4", name: "Chacha", region: "Northern Route", coords: [9.53, 39.45] },
-  { id: "5", name: "Sendafa", region: "Eastern Outskirt", coords: [9.15, 39.02] },
+// Names and regions are translated in messages/*.json under "Roots.places.<key>"
+const eventRoots: { id: string; key: string; coords: Coords }[] = [
+  { id: "1", key: "addis", coords: [9.03, 38.74] },
+  { id: "2", key: "daleti", coords: [8.89, 38.64] },
+  { id: "3", key: "rogge", coords: [8.86, 38.95] },
+  { id: "4", key: "chacha", coords: [9.53, 39.45] },
+  { id: "5", key: "sendafa", coords: [9.15, 39.02] },
 ];
 
 const HUB = eventRoots[0];
@@ -56,6 +58,10 @@ const MAP_CSS = `
 `;
 
 export default function RootsSection() {
+  const t = useTranslations("Roots");
+  const placeName = (key: string) => t(`places.${key}.name`);
+  const placeRegion = (key: string) => t(`places.${key}.region`);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [Lf, setLf] = useState<LeafletLib | null>(null);
   const [RL, setRL] = useState<ReactLeafletLib | null>(null);
@@ -114,14 +120,15 @@ export default function RootsSection() {
 
       <div className="max-w-5xl mx-auto text-center mb-8 md:mb-10">
         <span className="text-[10px] md:text-xs font-mono tracking-[0.3em] uppercase text-[#d07f05] px-3 py-1 rounded-full border border-[#d07f05]/30 bg-[#d07f05]/5">
-          Ancestral Geography &amp; Legacy
+          {t("badge")}
         </span>
         <h2 className="text-3xl md:text-4xl font-serif text-white mt-4 mb-3">
-          Roots &amp; <span className="italic text-[#d07f05]">Homeland</span> Map
+          {t.rich("heading", {
+            hl: (chunks) => <span className="italic text-[#d07f05]">{chunks}</span>,
+          })}
         </h2>
         <p className="text-gray-400 text-xs md:text-sm max-w-xl mx-auto font-light leading-relaxed">
-          Follow the threads from Addis Ababa out to the places that shaped us. Pick a root to fly
-          there.
+          {t("intro")}
         </p>
       </div>
 
@@ -170,14 +177,14 @@ export default function RootsSection() {
                   eventHandlers={{ click: () => setActiveIndex(i) }}
                 >
                   <RL.Tooltip permanent direction="top" offset={[0, -16]} className="root-tip">
-                    {root.name}
+                    {placeName(root.key)}
                   </RL.Tooltip>
                 </RL.Marker>
               ))}
             </RL.MapContainer>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-[#0c0907] text-gray-500 font-mono text-xs tracking-widest uppercase">
-              Charting the roots...
+              {t("loading")}
             </div>
           )}
 
@@ -185,13 +192,13 @@ export default function RootsSection() {
           <div className="absolute left-3 bottom-8 z-[1000] w-[220px] sm:w-[280px] rounded-2xl border border-[#d07f05]/40 bg-[#0c0907]/85 backdrop-blur-md p-3.5 sm:p-4 shadow-2xl">
             <div className="flex items-center justify-between">
               <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-[#d07f05]">
-                Root {pad(activeIndex + 1)} / {pad(total)}
+                {t("rootCounter", { n: pad(activeIndex + 1), total: pad(total) })}
               </span>
               <button
                 type="button"
                 onClick={showAll}
-                aria-label="Show all roots"
-                title="Show all"
+                aria-label={t("showAllAria")}
+                title={t("showAll")}
                 className="w-6 h-6 rounded-full border border-[#d07f05]/30 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors cursor-pointer"
               >
                 <Compass className="w-3.5 h-3.5" />
@@ -199,18 +206,18 @@ export default function RootsSection() {
             </div>
 
             <h3 className="text-lg sm:text-xl font-serif text-white mt-1 leading-tight">
-              {active.name}
+              {placeName(active.key)}
             </h3>
-            <p className="text-[11px] text-gray-400 font-light">{active.region}</p>
+            <p className="text-[11px] text-gray-400 font-light">{placeRegion(active.key)}</p>
             <p className="mt-2 text-[10px] font-mono tracking-wider text-[#d07f05]/90">
-              {km === 0 ? "The center of it all" : `≈ ${km} km from ${HUB.name}`}
+              {km === 0 ? t("center") : t("distance", { km, hub: placeName(HUB.key) })}
             </p>
 
             <div className="flex items-center gap-2 mt-3">
               <button
                 type="button"
                 onClick={() => step(-1)}
-                aria-label="Previous place"
+                aria-label={t("prev")}
                 className="w-8 h-8 rounded-full border border-[#d07f05]/40 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -218,7 +225,7 @@ export default function RootsSection() {
               <button
                 type="button"
                 onClick={() => step(1)}
-                aria-label="Next place"
+                aria-label={t("next")}
                 className="w-8 h-8 rounded-full border border-[#d07f05]/40 text-[#d07f05] flex items-center justify-center hover:bg-[#d07f05] hover:text-black transition-colors cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -243,14 +250,14 @@ export default function RootsSection() {
                 }`}
               >
                 <span className={isSelected ? "opacity-70" : "text-[#d07f05]"}>{pad(i + 1)}</span>
-                {item.name}
+                {placeName(item.key)}
               </button>
             );
           })}
         </div>
 
         <p className="mt-3 text-center text-[10px] font-mono tracking-widest uppercase text-gray-600">
-          Lines show straight-line distance from the hub, not roads
+          {t("note")}
         </p>
       </div>
     </section>

@@ -369,5 +369,68 @@
     "empty": "No visual heritage slides found.",
     "counter": "Visual Archive ({current} of {total})",
     "goTo": "Go to slide {n}"
+  },
+  "Roots": {
+    "badge": "Ancestral Geography & Legacy",
+    "heading": "Roots & <hl>Homeland</hl> Map",
+    "intro": "Follow the threads from Addis Ababa out to the places that shaped us. Pick a root to fly there.",
+    "loading": "Charting the roots...",
+    "rootCounter": "Root {n} / {total}",
+    "showAll": "Show all",
+    "showAllAria": "Show all roots",
+    "center": "The center of it all",
+    "distance": "≈ {km} km from {hub}",
+    "prev": "Previous place",
+    "next": "Next place",
+    "note": "Lines show straight-line distance from the hub, not roads",
+    "places": {
+      "addis": { "name": "Addis Ababa", "region": "Central Hub" },
+      "daleti": { "name": "Daleti", "region": "Surrounding Area" },
+      "rogge": { "name": "Rogge", "region": "Historical Area" },
+      "chacha": { "name": "Chacha", "region": "Northern Route" },
+      "sendafa": { "name": "Sendafa", "region": "Eastern Outskirt" }
+    }
+  },
+  "Programs": {
+    "crumbArchive": "Community Archive",
+    "crumbPage": "Programs & Events",
+    "title": "Now or Never",
+    "intro": "For generations, we carried our history the only way we could: in our mouths, in our memories, in the voices of our elders.",
+    "part1": {
+      "label": "Part I • Surviving Without Writing",
+      "title": "We Never Had a Written History",
+      "p1": "Nobody wrote us down. So while other peoples sat in the safety of their archives, we were busy surviving.",
+      "p2": "And we paid for it. We lost our language, the sound our grandmothers’ prayers and lullabies once had. We lost our land, the soil our fathers walked, traded on and were buried in. We were scattered across cities, regions and continents, so far apart that cousins now meet as strangers.",
+      "p3": "Now the last thing we hold is slipping away. Our elders are growing old. Each year, a little more is forgotten. Each funeral buries a library with no catalogue. Some stories are told with certainty, others only with assumption, and the gaps between them widen every season. While we hesitate, others are speaking for us, claiming our identity and telling our stories as their own."
+    },
+    "part2": {
+      "label": "Part II • A Dream Made Real",
+      "title": "From Whisper to Print",
+      "quote": "“For years, this was only a dream whispered in living rooms and at gatherings: ‘One day, someone will write our story.’”",
+      "p1": "Then the dream became a book. To our author, <b>Arif Abdulkadir</b>, thank you. You took the scattered memories of a people and gave them a home on paper. You listened, you searched, you gathered, and you wrote with a love that every Werji reader can feel. You gave us what generations before us could only wish for. Because of you, our grandchildren will not have to ask whether we existed. They will hold the proof.",
+      "p2": "To the <b>Werji diaspora</b>, thank you. You are far from the land, yet you never stopped carrying it in your hearts. You gave your support, your resources, your encouragement and your belief when this was still only an idea. Distance did not make you forget. It made you hold on tighter. This book belongs to you as much as to those who stayed.",
+      "p3": "What we dreamed of has become real. The first part is a <b>336-page book in Amharic</b> that tells of the golden age of the Werji people, their struggles and their trade, the Ulamas remembered in poetry, and the heroes, merchants and well known figures who carried our name. People who had only heard fragments saw the names of their ancestors printed on a page. Elders wept. Young people asked, “Is this really us?” And the answer was yes: we existed, we mattered, and we built."
+    },
+    "gallery": {
+      "eyebrow": "Est. Tradition & Heritage • Archival Record",
+      "band": "Sacred Moments in Hand",
+      "fragment": "Archive Fragment",
+      "fragmentTitle": "Archive Fragment 0{n}",
+      "alt": "Community Moment",
+      "empty": "No event images found in Supabase storage bucket yet."
+    },
+    "part3": {
+      "label": "Part III • The Call to Action",
+      "title": "The Work Is Not Finished",
+      "p1": "But one book cannot save everything. It opened the door, and now we must walk through it.",
+      "p2": "Every photograph sitting in a drawer, every story an elder has never told, every recording of a selewat, every memory of those we lost under the Derg, every account of how our wealth and our scholars were taken: all of it is evidence that we were here. If we don’t gather it now, it is gone, and the people who would rewrite us will fill the silence."
+    },
+    "closing": {
+      "eyebrow": "It Is Now or Never",
+      "title": "We Choose Now.",
+      "text": "Sit with your grandfather and record his voice before it fades. Send us the photographs. Write down what you remember, even if you think it is small. Tell us the names. Tell us the struggles. Tell us who we are, in our own words, before someone else does.",
+      "thanks": "Thank you, Arif. Thank you, diaspora. Thank you, every Werji heart that refused to forget."
+    },
+    "back": "Return to Home Chronicle"
   }
 }

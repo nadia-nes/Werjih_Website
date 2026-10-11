@@ -7,68 +7,14 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
+import { useTranslations } from "next-intl";
 
-type Chapter = {
-  era: string;
-  short: string;
-  title: string;
-  text: string;
-};
-
-const chapters: Chapter[] = [
-  {
-    era: "1128",
-    short: "1128",
-    title: "A name in the record",
-    text:
-      "Our story begins with a single line in an old Arabic chronicle. In the year 1128, the Wärğiḥ are named as a people who stood on their own land and held it, turning back armies that pushed south from the north. Before there were cities, before there were kings in Shewa, we were already remembered by name.",
-  },
-  {
-    era: "1332",
-    short: "1332",
-    title: "Keepers of camels, defenders of home",
-    text:
-      "Two centuries later, the chronicles of King Amdä Ṣəyon describe us as herdsmen, keepers of camels, and strong in battle. We were a people of the open lowlands, guarding our herds and our freedom, and our neighbours knew us as fighters who did not give up their ground easily.",
-  },
-  {
-    era: "The 16th century",
-    short: "16th c.",
-    title: "When the roads called us",
-    text:
-      "Then came an age of upheaval. Kingdoms fell, peoples moved across the highlands, and old ways of life could no longer hold. Our elders remember that it was in this season that we left our herds behind and took to the caravan roads, carrying salt, cloth and coffee, and settling beside the markets. They remember the first village, Abdällo, near Šäno, where the story of the highland Werjih begins.",
-  },
-  {
-    era: "1813 – 1840",
-    short: "1813",
-    title: "A refuge and a gift of land",
-    text:
-      "In the days of King Śahlä Śəlase of Shewa, our traders became trusted friends of the court. Oral tradition tells of Abdure-Lottu, who found refuge with the king and received a wide land at Ṭoṭose. There he founded a village that became a home for generations. Our merchants carried goods, and they also carried news of the lands beyond the king's reach.",
-  },
-  {
-    era: "1865 – 1889",
-    short: "1865",
-    title: "\u201CDo not touch their lands\u201D",
-    text:
-      "When a governor tried to move the people of Tigri Teracha from their homes, the elders walked to the court of King Menilek and made their appeal. The king answered that the Wärğəḥ paid a yearly tax of one thaler for every mule, and he ordered the governor to leave their land alone. Because of those words, the village still stands today.",
-  },
-  {
-    era: "1879 E.C.",
-    short: "1879",
-    title: "A new capital, a new home",
-    text:
-      "When Addis Ababa rose as the new capital, the great market of Rogge, where our traders had gathered, fell silent as the road moved away. Our chief, Ture-Waryo, went to Menilek and asked for new land, and the king settled our people at Daleti, which is today a major part of Sebeta. In 1881 Empress Taytu invited us to Enṭoṭṭo to help trade grow there.",
-  },
-  {
-    era: "1896",
-    short: "1896",
-    title: "Adwa: a gift remembered",
-    text:
-      "When the nation rose to defend itself against Italy, the people of Daleti remember that a wealthy Werjih man lent twelve thousand thalers to Emperor Menilek II. It was one gift among many, and it tells how fully our community saw its own fate bound to Ethiopia's freedom.",
-  },
-];
+// Text for each chapter lives in messages/*.json under "History.chapters.<key>"
+const CHAPTER_KEYS = ["c1", "c2", "c3", "c4", "c5", "c6", "c7"] as const;
 
 /* ---------- Expanded story (mounted only while open) ---------- */
 function Story({ onFold }: { onFold: () => void }) {
+  const t = useTranslations("History");
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -90,9 +36,9 @@ function Story({ onFold }: { onFold: () => void }) {
       />
 
       <div className="space-y-14 pl-8 sm:space-y-20 sm:pl-14">
-        {chapters.map((c, i) => (
+        {CHAPTER_KEYS.map((key, i) => (
           <motion.article
-            key={c.era}
+            key={key}
             id={`chapter-${i}`}
             className="relative scroll-mt-24"
             initial={{ opacity: 0, y: 28 }}
@@ -110,14 +56,14 @@ function Story({ onFold }: { onFold: () => void }) {
               aria-hidden
               className="pointer-events-none absolute -top-5 right-0 select-none font-[family-name:var(--font-cormorant)] text-[4.5rem] font-light leading-none text-[#d07f05]/[0.07] sm:-top-8 sm:text-[9rem]"
             >
-              {c.short}
+              {t(`chapters.${key}.short`)}
             </span>
 
             <p className="relative font-sans text-[11px] uppercase tracking-[0.25em] text-[#d07f05] sm:text-sm">
-              Chapter {i + 1} &middot; {c.era}
+              {t("chapter", { n: i + 1, era: t(`chapters.${key}.era`) })}
             </p>
             <h3 className="relative mt-2 font-[family-name:var(--font-cormorant)] text-2xl leading-tight text-[#f1e9d8] sm:text-4xl">
-              {c.title}
+              {t(`chapters.${key}.title`)}
             </h3>
             <p
               className={`relative mt-3 font-[family-name:var(--font-cormorant)] text-[15px] leading-[1.75] text-[#e4dac4] sm:text-xl sm:leading-[1.8] ${
@@ -126,7 +72,7 @@ function Story({ onFold }: { onFold: () => void }) {
                   : ""
               }`}
             >
-              {c.text}
+              {t(`chapters.${key}.text`)}
             </p>
           </motion.article>
         ))}
@@ -134,20 +80,16 @@ function Story({ onFold }: { onFold: () => void }) {
 
       <div className="mt-14 flex flex-col items-start gap-6 pl-8 sm:pl-14">
         <p className="border-t border-[#d07f05]/20 pt-6 font-sans text-[11px] leading-relaxed text-[#f1e9d8]/50 sm:text-xs">
-          This telling draws on Deresse Ayenachew&rsquo;s study,{" "}
-          <em>
-            &ldquo;A historical overview of the W&auml;r&#287;&#601;&#7717; Muslim
-            community in the Christian highland of &Scaron;&auml;wa&rdquo;
-          </em>{" "}
-          (Afriques, 2016, doi:10.4000/afriques.1944), together with the oral
-          traditions of our villages.
+          {t.rich("source", {
+            em: (chunks) => <em>{chunks}</em>,
+          })}
         </p>
         <button
           type="button"
           onClick={onFold}
           className="inline-flex items-center gap-3 rounded-xl border border-[#d07f05]/40 px-5 py-2.5 font-sans text-[10px] uppercase tracking-[0.25em] text-[#d07f05] transition-colors hover:border-[#d07f05] hover:bg-[#d07f05]/10 sm:text-[11px]"
         >
-          <span>Fold the story</span>
+          <span>{t("fold")}</span>
           <span aria-hidden>&uarr;</span>
         </button>
       </div>
@@ -157,6 +99,8 @@ function Story({ onFold }: { onFold: () => void }) {
 
 /* ---------- Section ---------- */
 export default function UnfoldHistory() {
+  const t = useTranslations("History");
+
   const [open, setOpen] = useState(false);
   const [instant, setInstant] = useState(false);
   const [jumpTo, setJumpTo] = useState<number | null>(null);
@@ -190,10 +134,10 @@ export default function UnfoldHistory() {
 
     document.addEventListener("click", onClick);
     window.addEventListener("hashchange", onHash);
-    const t = setTimeout(onHash, 0);
+    const timer = setTimeout(onHash, 0);
 
     return () => {
-      clearTimeout(t);
+      clearTimeout(timer);
       document.removeEventListener("click", onClick);
       window.removeEventListener("hashchange", onHash);
     };
@@ -202,13 +146,13 @@ export default function UnfoldHistory() {
   // Jump to a chapter after opening from an era dot
   useEffect(() => {
     if (open && jumpTo !== null) {
-      const t = setTimeout(() => {
+      const timer = setTimeout(() => {
         document
           .getElementById(`chapter-${jumpTo}`)
           ?.scrollIntoView({ behavior: "smooth", block: "start" });
         setJumpTo(null);
       }, 500);
-      return () => clearTimeout(t);
+      return () => clearTimeout(timer);
     }
   }, [open, jumpTo]);
 
@@ -285,14 +229,13 @@ export default function UnfoldHistory() {
           transition={{ duration: 0.8 }}
         >
           <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-[#d07f05] sm:text-xs">
-            The Werjih Story &middot; Seven Chapters
+            {t("eyebrow")}
           </p>
           <h2 className="mt-3 font-[family-name:var(--font-cormorant)] text-4xl sm:text-6xl">
-            Unfold History
+            {t("title")}
           </h2>
           <p className="mt-4 max-w-xl font-[family-name:var(--font-cormorant)] text-base italic leading-relaxed text-[#cfc6b3] sm:text-xl">
-            Nine centuries of herders, traders and settlers, told the way our
-            elders tell it.
+            {t("subtitle")}
           </p>
         </motion.div>
 
@@ -300,20 +243,23 @@ export default function UnfoldHistory() {
         <div className="mt-8 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="relative flex min-w-[560px] items-start justify-between pt-[5px]">
             <div className="absolute left-0 right-0 top-[10px] h-px bg-gradient-to-r from-[#d07f05]/10 via-[#d07f05]/50 to-[#d07f05]/10" />
-            {chapters.map((c, i) => (
+            {CHAPTER_KEYS.map((key, i) => (
               <button
-                key={c.era}
+                key={key}
                 type="button"
                 onClick={() => {
                   openStory();
                   setJumpTo(i);
                 }}
-                aria-label={`Open chapter ${i + 1}: ${c.title}`}
+                aria-label={t("openChapterAria", {
+                  n: i + 1,
+                  title: t(`chapters.${key}.title`),
+                })}
                 className="group relative flex flex-col items-center gap-2 px-1"
               >
                 <span className="h-[11px] w-[11px] rounded-full border border-[#d07f05] bg-[#0b0a09] transition-all duration-300 group-hover:scale-125 group-hover:bg-[#d07f05]" />
                 <span className="font-sans text-[10px] uppercase tracking-widest text-[#cfc6b3]/70 transition-colors group-hover:text-[#d07f05] sm:text-xs">
-                  {c.short}
+                  {t(`chapters.${key}.short`)}
                 </span>
               </button>
             ))}
@@ -328,7 +274,7 @@ export default function UnfoldHistory() {
           aria-controls="unfold-history-story"
           className="mt-6 inline-flex items-center gap-3 rounded-xl border border-[#e88d22]/40 bg-black/50 px-5 py-2.5 font-sans text-[10px] uppercase tracking-[0.25em] text-[#f1e9d8] transition-all hover:border-[#e88d22] sm:px-6 sm:py-3 sm:text-[11px]"
         >
-          <span>{open ? "Fold the story" : "Unfold the story"}</span>
+          <span>{open ? t("fold") : t("unfold")}</span>
           <motion.span
             aria-hidden
             animate={{ rotate: open ? 180 : 0 }}
