@@ -70,7 +70,7 @@
     "badge": "Heritage & Lineage Archives",
     "headingA": "Family Clans &",
     "headingB": "Ancestral Roots",
-    "intro": "Explore the 25 foundational ancestral branches and trace your family lineage.",
+    "intro": "Explore the 26 foundational ancestral branches and trace your family lineage.",
     "registry": "<b>{count}</b> lineages indexed in the living registry",
     "clansTitle": "Core Societal Clans",
     "searchClan": "Search clan...",
@@ -665,6 +665,245 @@
         "title": "Walcha / Post-Wedding Visit",
         "amharic": "ዋልቻ",
         "content": "Within a month after the wedding, the bride's friends and Mize visit her new home bearing traditional dishes like Doro Wat, Chuko, and fresh fruits. The groom's family hosts them warmly, further cementing generational bonds between both extended families."
+      }
+    }
+  },
+  "Migration": {
+    "badge": "✦ The Heritage Archive • Migration History ✦",
+    "titleA": "Migration History of the Werjih",
+    "titleB": "A Thousand Years of Movement",
+    "intro": "Tracing a thousand years of movement, trade, faith, and survival across the Horn of Africa.",
+    "hide": "− Hide Details",
+    "read": "+ Read Detailed Record",
+    "back": "Return to Home Chronicle",
+    "eras": {
+      "e1": {
+        "period": "Pre-1500s – Early 1500s",
+        "title": "Era 1 — Two Branches, One Convergence",
+        "summary": "Exploring the northern Tigray and eastern Harar ancestral streams converging in north Shewa.",
+        "p1": "The migration history begins not with a single point of origin, but with two distinct geographical streams that eventually merged into one people:",
+        "l1": "<b>The Northern Branch:</b> Traces roots to Tigray, preserving the specific designation <b>Tigray-Werjih</b> (<hl>*Təgray/i Wärğəḥ*</hl>) as a marker of their path.",
+        "l2": "<b>The Eastern Branch:</b> Traces ancestry to the ancient plateau of Harar (distinctly separating themselves from a related trading group, the *Tegri* or *Warjih Tegri*).",
+        "p2": "Oral tradition pinpoints their physical convergence to the <b>early 16th century</b> in the highlands of north Shewa."
+      },
+      "e2": {
+        "period": "8th–9th Centuries",
+        "title": "Era 2 — Faith Before Empire",
+        "summary": "Tracing their early acceptance of Islam and their Semitic cultural transmission into the Shewan lowlands.",
+        "p1": "Predating the Shewan convergence, the spiritual foundation of the Werjih shaped every subsequent movement. The Werjih were among the earliest groups in the entire Horn of Africa to accept Islam, doing so as early as the <b>8th century</b>.",
+        "p2": "By the 9th century, they resided within the historic <b>Sultanate of Shewa</b>. Alongside the Gebel people (ancestors of today’s Argobba), they carried Semitic language elements and high-altitude customs down into the Shewan lowlands, forging an identity that anchored future trade and politics."
+      },
+      "e3": {
+        "period": "Middle Ages – 16th Century",
+        "title": "Era 3 — Siding With the Sultanates",
+        "summary": "Reviewing their alliances with the Ifat and Adal Sultanates along the regional frontier.",
+        "p1": "As Islamic political power consolidated, the Werjih integrated directly into its defense and administration. They allied with the <b>Ifat Sultanate</b> during its medieval rise and subsequently with the <b>Adal Sultanate</b> during the protracted Ethiopian–Adal War.",
+        "p2": "Positioned on the frontier between Muslim sultanates and Christian highlands, commercial routes and military alliances went hand in hand."
+      },
+      "e4": {
+        "period": "16th Century Onward",
+        "title": "Era 4 — The Oromo Expansion & Assimilation Pressure",
+        "summary": "Seeing how they preserved their distinct identity despite regional restructuring and linguistic shifts.",
+        "p1": "Centuries of regional conflict destabilized borders, opening the door for Oromo northward migration into lands previously held by groups like the Werjih. While many local communities assimilated, adopting Afaan Oromoo and blending into the social fabric, the Werji retained their distinct ethnic core.",
+        "p2": "They adopted Amharic and Afaan Oromoo as languages of the road, but preserved their memory anchored in their historic hometown of <b>Daleti</b>, Shewa."
+      },
+      "e5": {
+        "period": "19th Century",
+        "title": "Era 5 — Holding the Awash Trade Corridor",
+        "summary": "Inspecting caravan routes connecting the Awash valley to Jimma, Ennarea, and Agaro.",
+        "p1": "By the 1800s, the Werjih dominated a vital economic geography: <b>the Awash valley</b>. Caravan routes stretched westward toward the Kingdom of Ennarea.",
+        "p2": "This network connects directly to the community’s internal records (<hl>The Werjih’s: History of Trade and Struggle, Vol. 01</hl>), detailing master merchants like <hl>Nagadras Menase Hada</hl> operating inside King Aba Jifar’s court in Jimma."
+      },
+      "e6": {
+        "period": "Late 19th Century",
+        "title": "Era 6 — Danu & Imperial Pressure",
+        "summary": "Learning about the 1883 E.C. displacement crisis, the Salale relocation, and the Danu stand.",
+        "p1": "Under Menelik’s expanding Shewan crown, Werji settlements centered around <b>Danu</b> (near Yerer Mountain) faced heavy pressure. In <b>1883 E.C.</b>, the community split geographically:",
+        "l1": "<b>Ture Waro and followers</b> moved to Salale, where local Werjih welcomed them and accepted Ture Waro as leader.",
+        "l2": "<b>Sheikh Muhammed Danu and followers</b> remained in Danu, leading directly to the historic “dig your own graves” confrontation with imperial forces."
+      },
+      "e7": {
+        "period": "1885–1888 E.C.",
+        "title": "Era 7 — Entoto & the Founding of Addis Ababa",
+        "summary": "Uncovering how urban expansion swallowed settled Werjih lands on Entoto.",
+        "p1": "When the imperial court relocated first to Entoto under Empress Taytu, then to the newly founded capital of <b>Addis Ababa</b>—Werjih communities farming and trading on those lands were absorbed by urban growth.",
+        "p2": "82 Werjih families on Entoto were pressed into royal service, while those refusing were displaced to Yerer Balo as the capital expanded over community land."
+      },
+      "e8": {
+        "period": "Post-Niggad Era",
+        "title": "Era 8 — The Post-Assassination Strategic Fracture",
+        "summary": "Exploring the split between northern trade realignment with Sudan/Yemen and southern integration.",
+        "p1": "Following Turio Wario’s assassination at Niggad, the Werjih population split along profound strategic lines:",
+        "l1": "<b>Northern Shewa Werjih</b> (Niggad, Sanzakba, Danu, Karsa, etc.) chose economic resistance, rerouting trade away from central markets toward <b>Sudan and Yemen</b>.",
+        "l2": "<b>Southern/Southwestern Werjih</b> (Salale) chose continued integration with the central economy, building security through internal community cohesion."
+      },
+      "e9": {
+        "period": "20th Century – Present",
+        "title": "Era 9 — Settling Into the Modern Pattern",
+        "summary": "Viewing current demographic footprints, census statistics, and modern city bases.",
+        "p1": "Following post-conflict boundary shifts and the incorporation of Salale into Empress Menen’s landholding (<hl>gult</hl>), the contemporary distribution took shape:",
+        "l1": "<b>Daleti</b> remains the primary ancestral hometown.",
+        "l2": "Communities are dispersed across <b>Shewa and Wollo</b>.",
+        "l3": "Urban footholds remain active in <b>Addis Ababa</b> and <b>Kemise</b>.",
+        "l4": "Official census counts place the population between <b>13,000 and 20,500 people</b> (20,536 in 1994)."
+      },
+      "e10": {
+        "period": "Archive Summary",
+        "title": "Era 10 — Migration Mapping & Legacy",
+        "summary": "Examine the overarching geographical trajectory and enduring heritage landmarks of the Werjih diaspora.",
+        "p1": "The historical mapping of the Werjih reflects a continuous narrative of resilience, commercial adaptation, and territorial persistence across centuries of political evolution in the Horn of Africa.",
+        "b1Title": "Key Geographic Nodes",
+        "b1Text": "From northern Tigray and eastern Harar to the convergent heartlands of north Shewa, the Awash valley trade lanes, and modern settlements in Addis Ababa and Kemise.",
+        "b2Title": "Cultural Continuity",
+        "b2Text": "Preservation of oral traditions, linguistic adaptations (Amharic and Afaan Oromoo), and deeply rooted commercial legacy across regional marketplaces."
+      }
+    }
+  },
+  "Origins": {
+    "badge": "✦ The Heritage Archive • Origins ✦",
+    "titleA": "Origins: Where the Werjih Come From",
+    "titleB": "Before Written History",
+    "intro": "Before written history, there was a word and the word already explained everything.",
+    "section1": "Section 01: Identity, Lineage & Trade Corridors",
+    "section2": "Section 02: Demographics & Historical Evidence",
+    "hide": "− Hide Details",
+    "read": "+ Read Detailed Record",
+    "back": "Return to Home Chronicle",
+    "maps": {
+      "loading": "LOADING ARCHIVED MAPS FROM SUPABASE...",
+      "none": "No maps found in the ‘old-maps’ database table yet.",
+      "imageMissing": "[Image URL missing for this record]",
+      "defaultAlt": "Historical Map Archive",
+      "defaultTitle": "Historical Map"
+    },
+    "cards": {
+      "c1": {
+        "badge": "Etymology & Language",
+        "title": "The Name Tells the Story & The Language of the Road",
+        "summary": "How “Tigri-Werjih” defines a trade bound identity and why they speak the languages of the road.",
+        "p1": "<b>Tigri Werjih:</b> Long before written chronicles, identity and occupation were one. “Tigri” originates from the Arabic word for merchant. Put simply, <b>Tigri-Werjih</b> means <hl>“merchant of Werji.”</hl> To be Werjih was to be a trader building life out of routes, cross-border commerce, and movement rather than stone walls.",
+        "p2": "<b>A People Without a Single Bound Language:</b> This explains why the Werjih are uniquely one of the only ethnic groups in Ethiopia without a standalone native tongue. Those who make their living on the open road learn whatever language the road requires. Today, Werjih communities fluently speak <b>Amharic</b> and <b>Affan Oromo</b>, holding faith, name, and collective memory as their true core."
+      },
+      "c2": {
+        "badge": "Lineage",
+        "title": "Two Rivers, One People: Dual Ancestry",
+        "summary": "The convergence of northern Tigray and eastern Harar lineages in 16th-century Shewa.",
+        "p1": "Ask Werjih elders where their ancestors originated, and two narratives emerge, carried forward side by side rather than argued into one:",
+        "l1": "<b>The Northern Branch:</b> Traces back north to Tigray (preserving the distinct name <hl>Tigray-Werjih</hl>).",
+        "l2": "<b>The Eastern Branch:</b> Traces east to the ancient plateau of Harar (distinctly separating themselves from a related trading community called the <hl>Tegri</hl> or <hl>Warjih Tegri</hl>).",
+        "p2": "Oral history points to the exact historical intersection: the <b>early 16th century</b> in the highlands of north Shewa. Two historical currents meeting to form a single, enduring identity."
+      },
+      "c3": {
+        "badge": "Faith & History",
+        "title": "Among the First to Believe",
+        "summary": "Tracing their early acceptance of Islam by the 8th century and their foundational cultural footprint in Shewa.",
+        "p1": "Long before Islam swept across the wider Horn of Africa, the Werjih had already made it their foundational faith. Historical and academic accounts place their conversion as early as the <b>8th century</b>, placing them inside the powerful orbit of the <b>Sultanate of Shewa</b> by the 9th century.",
+        "p2": "Alongside the ancient Gebel people (ancestors of the Argobba), the Werji carried Semitic language elements, faith, and high altitude custom down from the Harari plateau directly into the Shewa plains weaving a cultural thread that outlived regional kingdoms."
+      },
+      "c4": {
+        "badge": "Trade Networks",
+        "title": "The Roads They Held & Centers of Power",
+        "summary": "How guarded Awash valley corridors and nagadras market authorities shaped regional courts.",
+        "p1": "<b>Defended Corridors:</b> By the 19th century, Werjih trade networks controlled critical passages through the Awash valley, reaching west toward the Kingdom of Ennarea, the court of King Aba Jifar in Jimma, and Agaro. Trade was never a side job; it was the vessel that carried survival across turbulent centuries.",
+        "p2": "<b>Structural Political Influence:</b> In Gibe region kingdoms, the position of <hl>nagadras</hl> (chief of trade and markets) often doubling as provincial governors was entrusted to master merchants. Werjih traders stepped naturally into these roles because commerce was their lived legacy."
+      },
+      "c5": {
+        "badge": "Demographics",
+        "title": "Demographic Scale & Modern Settlements",
+        "summary": "Reviewing official census counts, modern hometown bases like Daleti, and broader ethnic alignments.",
+        "p1": "<b>Population Scale:</b> Ethiopian census tracking places the Werjih population between roughly <b>13,000 and 20,500 people</b> (with <b>20,536</b> logged in the 1994 census). A striking reminder that immense historical footprint does not require massive headcounts.",
+        "p2": "<b>Where They Reside Today:</b>",
+        "l1": "<b>Core Hometown:</b> Daleti (Shewa).",
+        "l2": "<b>Regional Spread:</b> Pastoral and rural trading communities across Shewa and Wollo.",
+        "l3": "<b>Urban Hubs:</b> Prominent commercial footholds in Addis Ababa and Kemise.",
+        "l4": "<b>Broader Affiliations:</b> Ethnographically linked with Muslim trading networks like the Jeberti, Gurage, Harari, Silte, Afar, and Argobba (known in Somali as <hl>Warjeex</hl>)."
+      },
+      "c6": {
+        "badge": "Visual Archives",
+        "title": "Archival Evidence & Trade Route Map",
+        "summary": "Inspect historical trade maps, primary manuscripts, and visual reference layouts.",
+        "quote": "“Before Danu, before Turio Wario, before Addis Ababa took its name from a flower: two horizons, one people, and a name that means merchant.”"
+      }
+    }
+  },
+  "Timeline": {
+    "badge": "✦ Chronological Archive & Heritage ✦",
+    "titleA": "Werjih Historical Timeline",
+    "titleB": "Ancestral Chronicles",
+    "intro": "A thousand-year journey through faith, trade corridors, imperial friction, and community survival.",
+    "tabs": {
+      "full": "Full Timeline",
+      "part1": "Part One: Ancient & Medieval",
+      "part2": "Part Two: Menelik Era & Modern"
+    },
+    "heads": {
+      "part1": "Part One: Ancient & Medieval Origins (8th Century – Early 1500s)",
+      "part2": "Part Two: The Menelik Era & Modern Settlement (19th Century – Present)"
+    },
+    "note": "Note: Entries before 1883 E.C. rest primarily on oral tradition and secondary academic sourcing.",
+    "hide": "− Hide Details",
+    "read": "+ Read Detailed Record",
+    "back": "Return to Home Chronicle",
+    "cards": {
+      "t1": {
+        "period": "8th Century",
+        "title": "Islam Adopted Early",
+        "summary": "Among the first peoples in the entire Horn of Africa to embrace Islam.",
+        "detail": "<b>Detailed Record:</b> The Werji accepted Islam centuries ahead of most neighboring groups. This deep, early spiritual alignment formed the bedrock of their identity, anchoring them as natural allies to later regional Muslim sultanates."
+      },
+      "t2": {
+        "period": "9th Century",
+        "title": "Under the Sultanate of Shewa",
+        "summary": "Carried Semitic language and culture into the lowlands of Shewa.",
+        "detail": "<b>Detailed Record:</b> Alongside the ancestors of today’s Argobba people, the Werjih transmitted high-altitude custom and Semitic language threads from the Harari plateau directly into the Shewan lowlands, outlasting the political boundaries of the era."
+      },
+      "t3": {
+        "period": "Middle Ages",
+        "title": "Allied with Ifat, then Adal",
+        "summary": "Muslim sultanate alliances against Christian Abyssinian expansion.",
+        "detail": "<b>Detailed Record:</b> As Muslim power consolidated across the Horn, the Werji stood with it—allied with the Ifat Sultanate during its rise, and subsequently with the Adal Sultanate during the protracted Ethiopian Adal War."
+      },
+      "t4": {
+        "period": "Early 1500s",
+        "title": "Two Branches Converge",
+        "summary": "Tigray-descended and Harar-descended lines unite in north Shewa.",
+        "detail": "<b>Detailed Record:</b> Oral tradition pins the physical convergence of the two ancestral streams to this exact era. The northern branch preserved its distinct title—<b>Tigray-Werjih</b>—as a permanent marker of the road they walked before becoming one community."
+      },
+      "t5": {
+        "period": "16th Century Onward",
+        "title": "Oromo Expansion Pressure",
+        "summary": "Linguistic assimilation begins; distinctive identity survives, centered on Daleti.",
+        "detail": "<b>Detailed Record:</b> As Oromo populations expanded northward, many local groups assimilated linguistically, adopting Afaan Oromoo. The Werjih adapted to the language of the road while maintaining their core identity, anchoring themselves in their historic hometown of Daleti."
+      },
+      "t6": {
+        "period": "19th Century",
+        "title": "Awash Valley Trade Held",
+        "summary": "Caravan routes reach west toward the Kingdom of Ennarea.",
+        "detail": "<b>Detailed Record:</b> Werjih trade networks secured crucial passages through the Awash valley, feeding commercial networks reaching into Jimma’s markets and the Gibe region under master traders like Nagadras Menase Hada."
+      },
+      "t7": {
+        "period": "1883 E.C.",
+        "title": "Exiled from Danu",
+        "summary": "Ture Waro leads the community’s move to Salale under royal pressure.",
+        "detail": "<b>Detailed Record:</b> Escalating imperial pressure from King Menelik forced a split: Ture Waro led followers to Salale where they were welcomed, while Sheikh Muhammed Danu’s faction remained behind in Danu, triggering a historic stand."
+      },
+      "t8": {
+        "period": "1885–1888 E.C.",
+        "title": "Addis Ababa Founded",
+        "summary": "Werjih land on Entoto and labor absorbed into the new imperial capital.",
+        "detail": "<b>Detailed Record:</b> Empress Taytu moved the royal camp to Entoto in 1885 E.C., where 82 Werjih families were pressed into royal service. By 1888 E.C., the capital took root over land the community had long farmed and traded upon."
+      },
+      "t9": {
+        "period": "Post-Emperial",
+        "title": "Turio Wario Assassinated & Strategic Split",
+        "summary": "Community divides into Hard Power (north) and Soft Power (south) strategies.",
+        "detail": "<b>Detailed Record:</b> Following Turio Wario’s assassination, Northern Shewa Werjih chose confrontation, rerouting trade outward toward Sudan and Yemen. Southern Werji in Salale chose internal community, religion, and economic resilience."
+      },
+      "t10": {
+        "period": "20th C. – Today",
+        "title": "Modern Settlement Pattern",
+        "summary": "Centered on Daleti, with communities across Shewa, Wollo, Addis Ababa, and Kemise.",
+        "detail": "<b>Detailed Record:</b> Following succession disputes and the incorporation of Salale into Empress Menen’s personal gult, the modern footprint stabilized. Census tracking registers the population between 13,000 and 20,500 people."
       }
     }
   }
