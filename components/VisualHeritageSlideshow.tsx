@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import Reveal from "@/components/Reveal";
 
 interface Slide {
   id: string;
@@ -60,71 +61,83 @@ export default function VisualHeritageSlideshow() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  if (loading) {
-    return (
-      <div className="w-full h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
-        Loading Visual Archive...
-      </div>
-    );
-  }
-
-  if (slides.length === 0) {
-    return (
-      <div className="w-full h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
-        No visual heritage slides found.
-      </div>
-    );
-  }
-
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="relative w-full h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,189,19,0.35)] overflow-hidden shadow-2xl flex items-center justify-center">
-        
-        {/* Blurred background atmospheric image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src={slides[currentIndex].image_url} 
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-40 scale-110"
-        />
-
-        {/* Main uncropped image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src={slides[currentIndex].image_url}
-          alt={slides[currentIndex].title}
-          className="relative z-10 max-h-full max-w-full object-contain shadow-lg"
-        />
-
-        {/* Slide Info Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 z-20 pointer-events-none">
-          <span className="text-[10px] font-mono text-[#d07f05] tracking-widest uppercase mb-1">
-            Visual Archive ({currentIndex + 1} of {slides.length})
+    <section className="py-20 px-6 bg-[#0a0806] border-t border-[#d07f05]/20">
+      <Reveal>
+        <div className="text-center mb-10">
+          <span className="text-xs font-mono tracking-[0.3em] text-[#d07f05] uppercase">
+            Gallery
           </span>
-          <h3 className="text-lg md:text-xl font-bold text-white mb-1">
-            {slides[currentIndex].title}
-          </h3>
-          {slides[currentIndex].description && (
-            <p className="text-gray-300 text-xs md:text-sm font-light line-clamp-2 max-w-2xl">
-              {slides[currentIndex].description}
-            </p>
-          )}
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mt-2">
+            Visual Heritage Slideshow
+          </h2>
+          <p className="text-gray-400 text-sm mt-1 max-w-xl mx-auto font-light">
+            Glimpses into our ancestral artifacts, gatherings, and historical landmarks
+            dynamically fetched from the archive database.
+          </p>
         </div>
 
-        {/* Navigation Dots */}
-        <div className="absolute bottom-4 right-6 flex items-center space-x-1.5 z-30">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                currentIndex === idx ? "w-6 bg-[#d07f05]" : "w-1.5 bg-white/40 hover:bg-white"
-              }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+        {loading ? (
+          <div className="w-full max-w-4xl mx-auto h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
+            Loading Visual Archive...
+          </div>
+        ) : slides.length === 0 ? (
+          <div className="w-full max-w-4xl mx-auto h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
+            No visual heritage slides found.
+          </div>
+        ) : (
+          <div className="w-full max-w-4xl mx-auto">
+            <div className="relative w-full h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,189,19,0.35)] overflow-hidden shadow-2xl flex items-center justify-center">
+              
+              {/* Blurred background atmospheric image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={slides[currentIndex].image_url} 
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-40 scale-110"
+              />
+
+              {/* Main uncropped image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={slides[currentIndex].image_url}
+                alt={slides[currentIndex].title}
+                className="relative z-10 max-h-full max-w-full object-contain shadow-lg"
+              />
+
+              {/* Slide Info Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 z-20 pointer-events-none">
+                <span className="text-[10px] font-mono text-[#d07f05] tracking-widest uppercase mb-1">
+                  Visual Archive ({currentIndex + 1} of {slides.length})
+                </span>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-1">
+                  {slides[currentIndex].title}
+                </h3>
+                {slides[currentIndex].description && (
+                  <p className="text-gray-300 text-xs md:text-sm font-light line-clamp-2 max-w-2xl">
+                    {slides[currentIndex].description}
+                  </p>
+                )}
+              </div>
+
+              {/* Navigation Dots */}
+              <div className="absolute bottom-4 right-6 flex items-center space-x-1.5 z-30">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      currentIndex === idx ? "w-6 bg-[#d07f05]" : "w-1.5 bg-white/40 hover:bg-white"
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </Reveal>
+    </section>
   );
 }
