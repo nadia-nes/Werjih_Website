@@ -44,11 +44,26 @@
     "callAria": "Call {name}",
     "videoUnsupported": "Your browser does not support the video tag.",
     "sellers": {
-      "roza": { "name": "Roza Siraj", "place": "Bethel" },
-      "hamid": { "name": "Hamid Hamza", "place": "Autobis Tera" },
-      "ali": { "name": "Ali Usman", "place": "Jemo Mall" },
-      "hussein": { "name": "Hussein Ali", "place": "Daleti" },
-      "adam": { "name": "Adam Mohammed", "place": "Sebeta" }
+      "roza": {
+        "name": "Roza Siraj",
+        "place": "Bethel"
+      },
+      "hamid": {
+        "name": "Hamid Hamza",
+        "place": "Autobis Tera"
+      },
+      "ali": {
+        "name": "Ali Usman",
+        "place": "Jemo Mall"
+      },
+      "hussein": {
+        "name": "Hussein Ali",
+        "place": "Daleti"
+      },
+      "adam": {
+        "name": "Adam Mohammed",
+        "place": "Sebeta"
+      }
     }
   },
   "Ancestral": {
@@ -65,8 +80,16 @@
     "showLess": "Show less",
     "showAll": "Show all {count}",
     "anonymous": "Anonymous",
-    "tabs": { "scan": "Find Relatives", "radar": "Check My Radar" },
-    "steps": { "you": "You", "father": "Father's line", "mother": "Mother's line", "connect": "Connect" },
+    "tabs": {
+      "scan": "Find Relatives",
+      "radar": "Check My Radar"
+    },
+    "steps": {
+      "you": "You",
+      "father": "Father's line",
+      "mother": "Mother's line",
+      "connect": "Connect"
+    },
     "regions": {
       "addisAbaba": "Addis Ababa",
       "harar": "Harar / Dire Dawa",
@@ -142,9 +165,18 @@
     "reviewed": "Every contribution is reviewed before it joins the archive.",
     "typeAria": "Contribution type",
     "tabs": {
-      "text": { "title": "Written story", "sub": "Type a memory or record" },
-      "voice": { "title": "Voice note", "sub": "Record or upload audio" },
-      "media": { "title": "Photo / document", "sub": "Images or scanned PDFs" }
+      "text": {
+        "title": "Written story",
+        "sub": "Type a memory or record"
+      },
+      "voice": {
+        "title": "Voice note",
+        "sub": "Record or upload audio"
+      },
+      "media": {
+        "title": "Photo / document",
+        "sub": "Images or scanned PDFs"
+      }
     },
     "prompts": {
       "p1": "A story my grandparents told me:",
@@ -384,11 +416,26 @@
     "next": "Next place",
     "note": "Lines show straight-line distance from the hub, not roads",
     "places": {
-      "addis": { "name": "Addis Ababa", "region": "Central Hub" },
-      "daleti": { "name": "Daleti", "region": "Surrounding Area" },
-      "rogge": { "name": "Rogge", "region": "Historical Area" },
-      "chacha": { "name": "Chacha", "region": "Northern Route" },
-      "sendafa": { "name": "Sendafa", "region": "Eastern Outskirt" }
+      "addis": {
+        "name": "Addis Ababa",
+        "region": "Central Hub"
+      },
+      "daleti": {
+        "name": "Daleti",
+        "region": "Surrounding Area"
+      },
+      "rogge": {
+        "name": "Rogge",
+        "region": "Historical Area"
+      },
+      "chacha": {
+        "name": "Chacha",
+        "region": "Northern Route"
+      },
+      "sendafa": {
+        "name": "Sendafa",
+        "region": "Eastern Outskirt"
+      }
     }
   },
   "Programs": {
@@ -432,5 +479,193 @@
       "thanks": "Thank you, Arif. Thank you, diaspora. Thank you, every Werji heart that refused to forget."
     },
     "back": "Return to Home Chronicle"
+  },
+  "Memorial": {
+    "badge": "In Memoriam",
+    "titleA": "The Werji Sons and Daughters",
+    "titleB": "of the Derg Era",
+    "subtitle": "A chronicle of prosperity, sudden devastation, unyielding grief, and the sacred fight to reclaim our identity.",
+    "intro": {
+      "title": "Introduction: Beyond Numbers, Into Memory",
+      "p1": "This section is written in solemn memory of the children of the Werji community who lost their lives during the dark years of the Derg regime. It is not a clinical table of numbers or dry statistics. It is the living story of families, bright dreams, relentless hard work, and unshakeable hopes for tomorrow.",
+      "quote": "“We remember their names, we tell their stories, and we pass their memory on like a flame through the dark to the generations to come.”"
+    },
+    "commerce": {
+      "title": "The Pillars of Commerce and Community",
+      "p1": "For generations, the Werjihs were deeply woven into the economic fabric of the region. Historically renowned as master traders, merchants, and pastoralist networks, major households among the community held prominent positions in the lucrative coffee trade, export markets, urban real estate development, and land stewardship.",
+      "p2": "From this honest sweat came the lifeblood of our society: they fed families, built schools, supported mosques, and sustained neighbors in need. Their wealth was never just gold or grain; it was the fruit of patience, culture, language, dress, and a proud way of life.",
+      "tag": "Heritage & Prosperity"
+    },
+    "upheaval": {
+      "title": "The Midnight of Upheaval (1966 E.C.)",
+      "p1": "When the imperial system fell in 1966 E.C., the country pivoted into a fierce ideological storm. For the Werji community, the blow was catastrophic. Sweeping state proclamations nationalized the coffee export trade, seized properties, and confiscated family homes by decree.",
+      "p2": "In a single day, by the stroke of a pen, the accumulated sweat and labor of generations vanished. Families who once stood in security and civic prominence were cast overnight into suspicion, poverty, and profound anxiety.",
+      "tag": "The Sudden Loss"
+    },
+    "terror": {
+      "title": "The Red Terror and the Silence of Grief (1969 E.C.)",
+      "p1": "As students and youth rose in passionate protest in 1969 E.C., the Derg's state machinery retaliated with calculated, brutal terror. The brightest minds of the Werjih generation scholars, dreamers, and future leaders were snatched away.",
+      "p2": "The cruelty was compounded by silence. Parents were forbidden from mourning openly. Many never discovered where their children were buried or how they drew their final breath.",
+      "p3": "For years, mothers sat by heavy wooden doors at dusk, straining their eyes for the silhouette of a child who would never walk home again."
+    },
+    "wounds": {
+      "title": "Two Wounds: Wealth and Youth",
+      "p1": "The community bled from two fatal wounds simultaneously: the total erasure of its economic spine, and the slaughter of its youth. The true damage could never be calculated in currency. It was measured in broken lineages, lost leadership, and a vacuum of tomorrow. This shared national trauma passed quietly, heavily, from generation to generation in hushed whispers."
+    },
+    "identity": {
+      "title": "The Fracturing and Loss of Identity",
+      "p1": "Perhaps the most insidious wound was the assault on our collective identity. Displaced, fractured, and hunted, surviving family members were forced into hiding or assimilation, terrified to practice native customs, or wear traditional clothing openly.",
+      "p2": "Our history, oral traditions, and shared memory nearly faded into the shadows. This memorial stands as our fierce vow against that erasure: a sacred promise that our identity will never be extinguished."
+    },
+    "remembrance": {
+      "title": "Words of Remembrance",
+      "q1": "“We remember your names.”",
+      "q2": "“We carry your dreams.”",
+      "q3": "“Your lives, cut short, continue through our work, our knowledge, and our kindness.”",
+      "d1": "May Allah have mercy on your souls and grant you Jannah.",
+      "d2": "May He grant your families patience and peace."
+    },
+    "banner": {
+      "title": "Want to Honor an Ancestor?",
+      "text": "Submit historical notes, photographs, or memorial entries to be included in our community registry.",
+      "button": "Submit a Tribute →"
+    },
+    "back": "Return to Home Chronicle",
+    "modal": {
+      "close": "Close",
+      "title": "Submit an Ancestor's Tribute",
+      "intro": "Share a memory, historical note, or name to preserve their legacy in our community archives.",
+      "success": "Thank you. Your tribute has been securely saved to the Supabase registry for review.",
+      "nameLabel": "Ancestor's Full Name",
+      "namePlaceholder": "e.g., Turio Wario",
+      "roleLabel": "Role or Historical Context",
+      "rolePlaceholder": "e.g., Elder / Merchant / Student Lost in 1969 E.C.",
+      "notesLabel": "Historical Notes or Memory",
+      "notesPlaceholder": "Describe their life, contributions, or story...",
+      "submit": "Submit to Registry →",
+      "submitting": "Submitting to Registry...",
+      "error": "Failed to submit tribute. Please try again."
+    }
+  },
+  "Archive": {
+    "badge": "The Sacred Repository Hub",
+    "title": "Digital Archive",
+    "intro": "A curated sanctuary of our books, research manuscripts, elders' oral accounts, visual memories, and historical chronicles preserving centuries of Werjih legacy.",
+    "categories": {
+      "all": "All Chronicles",
+      "book": "Books & Literature",
+      "research": "Research Papers",
+      "voice": "Oral History & Voices",
+      "video": "Video Chronicles",
+      "photo": "Visual Snapshots"
+    },
+    "blurbs": {
+      "all": {
+        "title": "Complete Sanctuary Repository",
+        "quote": "Exploring every facet of our shared heritage where history, research, voices, and deeply bonded community traditions converge under one roof."
+      },
+      "book": {
+        "title": "Literary Works & Manuscripts",
+        "quote": "Written records and compiled volumes that map out our historical journey, preserving the profound identity, wisdom, and literature of our ancestors for future generations."
+      },
+      "research": {
+        "title": "Invaluable Research Papers",
+        "quote": "Gathering information for these research papers was a monumental task, often met with scarcity. These records stand as testaments to invaluable minds who persevered through countless barriers to bring these truths to light."
+      },
+      "voice": {
+        "title": "Oral History & Elders' Voices",
+        "quote": "Listening directly to the spoken words of our elders preserving oral traditions, ancestral wisdom, and lived histories passed down from generation to generation."
+      },
+      "video": {
+        "title": "Visual Chronicles & Documentaries",
+        "quote": "Moving imagery and captured cultural events depicting community gatherings, traditional ceremonies, and milestones in motion."
+      },
+      "photo": {
+        "title": "Visual Kinship & Heritage",
+        "quote": "What makes the Werjih community uniquely close-knit is our deep rooted kinship nearly everyone knows one another, and open door family gatherings echo in every home because, one way or another, we are all family."
+      }
+    },
+    "tags": {
+      "book": "Book",
+      "research": "Research",
+      "voice": "Voice",
+      "video": "Video",
+      "photo": "Photo"
+    },
+    "loading": "Unfolding Archive Records...",
+    "defaultDescription": "Historical preservation record documenting the rich heritage, lineage, and cultural traditions of the Werjih society.",
+    "pause": "Pause Audio Account",
+    "listen": "Listen Voice Account",
+    "read": "Read / Download PDF",
+    "view": "View Full Record",
+    "emptyTitle": "Catalog Notice",
+    "empty": "No records have been filed under this category in Supabase yet.",
+    "back": "Return to Home Chronicle"
+  },
+  "Marriage": {
+    "badge": "• Ancestral Customs & Ceremonies",
+    "titleA": "The Traditional Marriage Ceremony",
+    "titleB": "of the Werjih People",
+    "intro": "An immersive chronicle through sacred ancestral milestones—from the initial steps of sending elders and the meeting of fathers, to sacred rituals, community celebrations, and post-wedding unions (<hl>Walcha</hl>).",
+    "mediaSlot": "Visual & Audio Archive — Step {num}",
+    "loadMedia": "Load Media +",
+    "back": "Return to Home Chronicle",
+    "steps": {
+      "s1": {
+        "title": "The Sending of Elders",
+        "amharic": "የሽማግሌዎች ምልልስ",
+        "content": "The groom's family carefully assesses the prospective bride's character and family background. Once certain, female elders are sent to propose. The bride's family traditionally delays the response through three polite visits to thoroughly verify the young man's background, conduct, and financial independence. Upon approval, male elders return. During these visits, the groom's elders traditionally consume nothing from the house until agreement is reached. On the final day, they kiss the bride's father's forehead in deep respect. Chechebsa bread and coffee are served, a prayer (Dua) is offered, and the date for the meeting of fathers is set."
+      },
+      "s2": {
+        "title": "The Meeting of the Two Fathers",
+        "amharic": "የሁለት አባት መገናኛ",
+        "content": "The bride's family prepares an intimate feast, welcoming close relatives, uncles, and aunts. The groom's father or a designated paternal representative—arrives alongside key elders. They are received with deep hospitality, sharing traditional Anebabero bread with Deka sauce and coffee, formally cementing family ties before setting the engagement ring date."
+      },
+      "s3": {
+        "title": "The Ring Ceremony",
+        "amharic": "ቀለበት",
+        "content": "A festive celebration hosted by the bride's family. The groom's family presents meaningful gifts: blankets, shawls, and caps for the father, alongside traditional attire and a money pouch (Mekremya) for the mother. The Nikah (marriage contract) or formal engagement is finalized, the ring and belt are presented to the bride, and future wedding milestones are charted. From this day forward, the groom continuously gifts full outfits to the bride every four months until the wedding."
+      },
+      "s4": {
+        "title": "Malt Breaking Ritual",
+        "amharic": "ብቅል ሰበራ",
+        "content": "Held one week before the wedding, female relatives, neighbors, and friends gather to break the malt (prepared from barley or wheat for traditional beverages). Guests bring contributions, songs rise into the air, and a respected elder woman breaks the malt over the bride's shoulder or head amidst joyful ululations."
+      },
+      "s5": {
+        "title": "Eve of the Wedding & Nail Cutting",
+        "amharic": "ዘመድ ማደሪያ / ቀሳ ሙራ",
+        "content": "On the Saturday before the wedding, close friends and relatives gather. The groom sends attire through his best men (Mize). During Qesa Mura, the bride sits at the center, shielded by a traditional Netela shawl held at its four corners by her Mize friends. Surrounded by family poetry, her fingernails are traditionally trimmed. Guests then present their wedding gifts, ranging from gold heirlooms to household goods."
+      },
+      "s6": {
+        "title": "The Groom's House Preparation",
+        "amharic": "የሙሽራው ቤት ስነስርዓት",
+        "content": "At the groom's household, female relatives known as Kuli (sisters and aunts) prepare traditional dishes like Chuko and injera, arriving with joyous songs and ululations. The groom undergoes his own preparation and nail cutting ritual while surrounded by his groomsmen and family."
+      },
+      "s7": {
+        "title": "The Wedding Day",
+        "amharic": "የሰርጉ ዕለት",
+        "content": "The groom, adorned in traditional attire and a cape (Kaba) and blessed by elders with milk and honey, travels to the bride's home. The bride wears stunning traditional garments, jewelry, and a veil. She is handed over alongside a rich array of household gifts. As they depart, the community chants sacred nasheeds and blessing poetry, marching toward the groom's house for evening traditional dancing and the entering of the bridal chamber (Chagula)."
+      },
+      "s8": {
+        "title": "The Day After the Wedding",
+        "amharic": "የሰርጉ ማግስት",
+        "content": "Groomsmen visit the bride's family early in the morning to celebrate and collect tokens of gold and money to present to the bride. Roasted meats (Lada), butter, and traditional dishes prepared from the wedding cattle are distributed among family members, neighbors, and participating Kuli groups."
+      },
+      "s9": {
+        "title": "Mels / Return Visit",
+        "amharic": "መልስ",
+        "content": "On Tuesday, the groom, accompanied by his groomsmen and elders, visits the bride's family bearing gifts of sheep, bread, and traditional dishes, paying respect to her parents. A playful tradition occurs where young girls hide the groomsmen's shoes and sing satirical teasing poetry. The groomsmen negotiate their release with sweets or gifts, followed by celebratory dancing."
+      },
+      "s10": {
+        "title": "Bareta",
+        "amharic": "ባሬታ",
+        "content": "During the wedding week, young girls and peers visit the newlywed bride, bringing tokens of affection like sweets, biscuits, and fruits to keep her company and celebrate her transition into community life."
+      },
+      "s11": {
+        "title": "Walcha / Post-Wedding Visit",
+        "amharic": "ዋልቻ",
+        "content": "Within a month after the wedding, the bride's friends and Mize visit her new home bearing traditional dishes like Doro Wat, Chuko, and fresh fruits. The groom's family hosts them warmly, further cementing generational bonds between both extended families."
+      }
+    }
   }
 }

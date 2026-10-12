@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 
 export default function MemorialPage() {
+  const t = useTranslations("Memorial");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState("");
@@ -37,7 +40,7 @@ export default function MemorialPage() {
       }, 3500);
     } catch (err: unknown) {
       const error = err as Error;
-      setErrorMessage(error.message || "Failed to submit tribute. Please try again.");
+      setErrorMessage(error.message || t("modal.error"));
     } finally {
       setLoading(false);
     }
@@ -45,7 +48,6 @@ export default function MemorialPage() {
 
   return (
     <main className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#D97706] selection:text-black py-10 px-6 relative">
-
       {/* Hero Header */}
       <div className="max-w-4xl mx-auto text-center mb-16">
         <motion.div
@@ -54,32 +56,29 @@ export default function MemorialPage() {
           transition={{ duration: 0.6 }}
         >
           <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-[#D97706] px-4 py-1.5 rounded-full border border-[#D97706]/40 bg-[#D97706]/10 inline-block mb-4 shadow-[0_0_25px_rgba(217,119,6,0.18)]">
-            In Memoriam
+            {t("badge")}
           </span>
           <h1 className="text-3xl md:text-5xl font-serif text-white tracking-tight mb-4">
-            The Werji Sons and Daughters <br />
-            <span className="italic text-[#D97706]">of the Derg Era</span>
+            {t("titleA")} <br />
+            <span className="italic text-[#D97706]">{t("titleB")}</span>
           </h1>
           <p className="text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto">
-            A chronicle of prosperity, sudden devastation, unyielding grief, and the sacred fight to reclaim our identity.
+            {t("subtitle")}
           </p>
         </motion.div>
       </div>
 
       {/* Main Narrative Content Container */}
       <div className="max-w-4xl mx-auto space-y-12 text-gray-300 font-light text-sm md:text-base leading-relaxed">
-        
         {/* Introduction */}
         <section className="bg-gradient-to-b from-[#161514] to-[#12100e] border border-[#D97706]/30 rounded-2xl p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97706]/50 to-transparent"></div>
           <h2 className="text-xl md:text-2xl font-serif font-bold mb-4 text-[#D97706]">
-            Introduction: Beyond Numbers, Into Memory
+            {t("intro.title")}
           </h2>
-          <p className="mb-4">
-            This section is written in solemn memory of the children of the Werji community who lost their lives during the dark years of the Derg regime. It is not a clinical table of numbers or dry statistics. It is the living story of families, bright dreams, relentless hard work, and unshakeable hopes for tomorrow.
-          </p>
+          <p className="mb-4">{t("intro.p1")}</p>
           <p className="italic text-gray-400 border-l-2 border-[#D97706] pl-4 my-4">
-            &ldquo;We remember their names, we tell their stories, and we pass their memory on like a flame through the dark to the generations to come.&rdquo;
+            {t("intro.quote")}
           </p>
         </section>
 
@@ -88,31 +87,35 @@ export default function MemorialPage() {
           <div className="bg-[#141210] border border-[#D97706]/30 hover:border-[#D97706]/60 transition-all rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-lg">
             <div>
               <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
-                The Pillars of Commerce and Community
+                {t("commerce.title")}
               </h3>
               <p className="text-xs md:text-sm text-gray-300 leading-relaxed mb-4">
-                For generations, the Werjihs were deeply woven into the economic fabric of the region. Historically renowned as master traders, merchants, and pastoralist networks, major households among the community held prominent positions in the lucrative coffee trade, export markets, urban real estate development, and land stewardship.
+                {t("commerce.p1")}
               </p>
               <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-                From this honest sweat came the lifeblood of our society: they fed families, built schools, supported mosques, and sustained neighbors in need. Their wealth was never just gold or grain; it was the fruit of patience, culture, language, dress, and a proud way of life.
+                {t("commerce.p2")}
               </p>
             </div>
-            <span className="text-[10px] font-mono text-[#D97706]/80 mt-6 uppercase tracking-widest">Heritage & Prosperity</span>
+            <span className="text-[10px] font-mono text-[#D97706]/80 mt-6 uppercase tracking-widest">
+              {t("commerce.tag")}
+            </span>
           </div>
 
           <div className="bg-[#141210] border border-[#D97706]/30 hover:border-[#D97706]/60 transition-all rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-lg">
             <div>
               <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
-                The Midnight of Upheaval (1966 E.C.)
+                {t("upheaval.title")}
               </h3>
               <p className="text-xs md:text-sm text-gray-300 leading-relaxed mb-4">
-                When the imperial system fell in 1966 E.C., the country pivoted into a fierce ideological storm. For the Werji community, the blow was catastrophic. Sweeping state proclamations nationalized the coffee export trade, seized properties, and confiscated family homes by decree.
+                {t("upheaval.p1")}
               </p>
               <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-                In a single day, by the stroke of a pen, the accumulated sweat and labor of generations vanished. Families who once stood in security and civic prominence were cast overnight into suspicion, poverty, and profound anxiety.
+                {t("upheaval.p2")}
               </p>
             </div>
-            <span className="text-[10px] font-mono text-[#D97706]/80 mt-6 uppercase tracking-widest">The Sudden Loss</span>
+            <span className="text-[10px] font-mono text-[#D97706]/80 mt-6 uppercase tracking-widest">
+              {t("upheaval.tag")}
+            </span>
           </div>
         </div>
 
@@ -120,39 +123,29 @@ export default function MemorialPage() {
         <section className="bg-gradient-to-b from-[#161514] to-[#12100e] border border-[#D97706]/30 rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97706]/50 to-transparent"></div>
           <h2 className="text-xl md:text-2xl font-serif font-bold mb-4 text-[#D97706]">
-            The Red Terror and the Silence of Grief (1969 E.C.)
+            {t("terror.title")}
           </h2>
-          <p className="mb-4 text-xs md:text-sm leading-relaxed">
-            As students and youth rose in passionate protest in 1969 E.C., the Derg&apos;s state machinery retaliated with calculated, brutal terror. The brightest minds of the Werjih generation scholars, dreamers, and future leaders were snatched away.
-          </p>
-          <p className="mb-4 text-xs md:text-sm leading-relaxed">
-            The cruelty was compounded by silence. Parents were forbidden from mourning openly. Many never discovered where their children were buried or how they drew their final breath. 
-          </p>
-          <p className="text-xs md:text-sm text-gray-400 italic">
-            For years, mothers sat by heavy wooden doors at dusk, straining their eyes for the silhouette of a child who would never walk home again.
-          </p>
+          <p className="mb-4 text-xs md:text-sm leading-relaxed">{t("terror.p1")}</p>
+          <p className="mb-4 text-xs md:text-sm leading-relaxed">{t("terror.p2")}</p>
+          <p className="text-xs md:text-sm text-gray-400 italic">{t("terror.p3")}</p>
         </section>
 
         {/* Two Wounds & The Shattering of Identity */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-[#141210] border border-[#D97706]/30 rounded-2xl p-6 md:p-8 shadow-lg">
             <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
-              Two Wounds: Wealth and Youth
+              {t("wounds.title")}
             </h3>
-            <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-              The community bled from two fatal wounds simultaneously: the total erasure of its economic spine, and the slaughter of its youth. The true damage could never be calculated in currency. It was measured in broken lineages, lost leadership, and a vacuum of tomorrow. This shared national trauma passed quietly, heavily, from generation to generation in hushed whispers.
-            </p>
+            <p className="text-xs md:text-sm text-gray-300 leading-relaxed">{t("wounds.p1")}</p>
           </div>
 
           <div className="bg-[#141210] border border-[#D97706]/30 rounded-2xl p-6 md:p-8 shadow-lg">
             <h3 className="text-lg font-serif font-bold mb-3 text-[#D97706]">
-              The Fracturing and Loss of Identity
+              {t("identity.title")}
             </h3>
-            <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-              Perhaps the most insidious wound was the assault on our collective identity. Displaced, fractured, and hunted, surviving family members were forced into hiding or assimilation, terrified to practice native customs, or wear traditional clothing openly. 
-            </p>
+            <p className="text-xs md:text-sm text-gray-300 leading-relaxed">{t("identity.p1")}</p>
             <p className="text-xs md:text-sm text-gray-300 leading-relaxed mt-3">
-              Our history, oral traditions, and shared memory nearly faded into the shadows. This memorial stands as our fierce vow against that erasure: a sacred promise that our identity will never be extinguished.
+              {t("identity.p2")}
             </p>
           </div>
         </div>
@@ -161,45 +154,44 @@ export default function MemorialPage() {
         <section className="bg-[#141210] border border-[#D97706]/40 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-xl">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D97706]/15 via-transparent to-transparent pointer-events-none"></div>
           <h2 className="text-xl md:text-2xl font-serif font-bold mb-6 text-[#D97706]">
-            Words of Remembrance
+            {t("remembrance.title")}
           </h2>
           <div className="space-y-3 font-serif italic text-base md:text-lg text-gray-200 mb-8">
-            <p>&ldquo;We remember your names.&rdquo;</p>
-            <p>&ldquo;We carry your dreams.&rdquo;</p>
-            <p>&ldquo;Your lives, cut short, continue through our work, our knowledge, and our kindness.&rdquo;</p>
+            <p>{t("remembrance.q1")}</p>
+            <p>{t("remembrance.q2")}</p>
+            <p>{t("remembrance.q3")}</p>
           </div>
           <div className="text-xs md:text-sm text-gray-400 font-mono space-y-1">
-            <p>May Allah have mercy on your souls and grant you Jannah.</p>
-            <p>May He grant your families patience and peace.</p>
+            <p>{t("remembrance.d1")}</p>
+            <p>{t("remembrance.d2")}</p>
           </div>
         </section>
-
       </div>
 
       {/* Tribute Submission Banner */}
       <div className="max-w-4xl mx-auto mt-16 bg-gradient-to-b from-[#161514] to-[#12100e] border border-[#D97706]/40 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D97706]/10 via-transparent to-transparent pointer-events-none"></div>
         <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3 relative z-10">
-          Want to Honor an Ancestor?
+          {t("banner.title")}
         </h2>
         <p className="text-gray-300 text-xs md:text-sm font-light max-w-xl mx-auto mb-8 relative z-10">
-          Submit historical notes, photographs, or memorial entries to be included in our community registry.
+          {t("banner.text")}
         </p>
         <button
           onClick={() => setIsModalOpen(true)}
           className="inline-block px-8 py-3.5 bg-[#D97706] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-transparent hover:text-[#D97706] hover:border-[#D97706] border border-transparent transition-all shadow-[0_0_25px_rgba(217,119,6,0.3)] relative z-10 cursor-pointer"
         >
-          Submit a Tribute &rarr;
+          {t("banner.button")}
         </button>
       </div>
 
       {/* FOOTER NAV RETURN */}
       <footer className="mt-28 text-center pt-10 border-t border-[#222]">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-xs font-mono tracking-widest uppercase border border-[#D97706]/40 bg-[#141210] hover:bg-[#D97706] hover:text-black hover:border-[#D97706] transition-all duration-300 cursor-pointer no-underline shadow-lg"
         >
-          <span>←</span> Return to Home Chronicle
+          <span>←</span> {t("back")}
         </Link>
       </footer>
 
@@ -215,19 +207,18 @@ export default function MemorialPage() {
             >
               <button
                 onClick={() => setIsModalOpen(false)}
+                aria-label={t("modal.close")}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white font-mono text-sm cursor-pointer"
               >
                 ✕
               </button>
 
-              <h3 className="text-xl font-serif font-bold text-white mb-2">Submit an Ancestor&apos;s Tribute</h3>
-              <p className="text-xs text-gray-400 mb-6 font-light">
-                Share a memory, historical note, or name to preserve their legacy in our community archives.
-              </p>
+              <h3 className="text-xl font-serif font-bold text-white mb-2">{t("modal.title")}</h3>
+              <p className="text-xs text-gray-400 mb-6 font-light">{t("modal.intro")}</p>
 
               {submitted ? (
                 <div className="bg-[#D97706]/15 border border-[#D97706]/50 rounded-xl p-6 text-center text-[#D97706] font-mono text-xs">
-                  Thank you. Your tribute has been securely saved to the Supabase registry for review.
+                  {t("modal.success")}
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -238,37 +229,43 @@ export default function MemorialPage() {
                   )}
 
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-300 mb-1">Ancestor&apos;s Full Name</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-300 mb-1">
+                      {t("modal.nameLabel")}
+                    </label>
                     <input
                       required
                       type="text"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="e.g., Turio Wario"
+                      placeholder={t("modal.namePlaceholder")}
                       className="w-full bg-[#0f0e0e] border border-[#D97706]/40 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D97706]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-300 mb-1">Role or Historical Context</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-300 mb-1">
+                      {t("modal.roleLabel")}
+                    </label>
                     <input
                       required
                       type="text"
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
-                      placeholder="e.g., Elder / Merchant / Student Lost in 1969 E.C."
+                      placeholder={t("modal.rolePlaceholder")}
                       className="w-full bg-[#0f0e0e] border border-[#D97706]/40 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D97706]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-300 mb-1">Historical Notes or Memory</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-300 mb-1">
+                      {t("modal.notesLabel")}
+                    </label>
                     <textarea
                       required
                       rows={4}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Describe their life, contributions, or story..."
+                      placeholder={t("modal.notesPlaceholder")}
                       className="w-full bg-[#0f0e0e] border border-[#D97706]/40 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-[#D97706] resize-none"
                     ></textarea>
                   </div>
@@ -278,7 +275,7 @@ export default function MemorialPage() {
                     disabled={loading}
                     className="w-full py-3.5 bg-[#D97706] text-black font-serif font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-transparent hover:text-[#D97706] hover:border-[#D97706] border border-transparent transition-all shadow-[0_0_20px_rgba(217,119,6,0.3)] cursor-pointer mt-2 disabled:opacity-50"
                   >
-                    {loading ? "Submitting to Registry..." : "Submit to Registry \u2192"}
+                    {loading ? t("modal.submitting") : t("modal.submit")}
                   </button>
                 </form>
               )}
@@ -286,7 +283,6 @@ export default function MemorialPage() {
           </div>
         )}
       </AnimatePresence>
-
     </main>
   );
 }
