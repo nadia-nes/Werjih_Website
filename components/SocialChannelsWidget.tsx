@@ -1,46 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Reveal from "@/components/Reveal";
 
+// Names, descriptions and badges are translated in messages "Social.channels.<key>"
 const socialChannels = [
   {
-    name: "Telegram",
+    key: "telegram",
     handle: "@WerjihSociety",
-    description: "Daily announcements & community discussions.",
     icon: "✈️",
     link: "https://t.me/+b14galHOAIs3ZmY0",
-    badge: "Primary Hub",
   },
   {
-    name: "YouTube",
+    key: "youtube",
     handle: "The Werjih Society",
-    description: "Documentaries & oral history archives.",
     icon: "▶",
     link: "https://youtube.com/@thewerjih?si=Wg9C1T6k0DpZox-b",
-    badge: "Video Vault",
   },
   {
-    name: "Instagram",
+    key: "instagram",
     handle: "@werjih.society",
-    description: "Visual cultural landmarks & snapshots.",
     icon: "📸",
     link: "#",
-    badge: "Gallery",
   },
   {
-    name: "TikTok",
+    key: "tiktok",
     handle: "@werjih_heritage",
-    description: "Short-form cultural proverbs & reels.",
     icon: "🎵",
     link: "#",
-    badge: "Reels",
   },
 ];
 
 export default function SocialChannelsWidget() {
-  const [activeSocial, setActiveSocial] = useState(socialChannels[0]);
+  const t = useTranslations("Social");
+  const [activeKey, setActiveKey] = useState(socialChannels[0].key);
+
+  const activeSocial = socialChannels.find((c) => c.key === activeKey) ?? socialChannels[0];
   const socialComingSoon = !activeSocial.link || activeSocial.link === "#";
+  const channelName = (key: string) => t(`channels.${key}.name`);
 
   return (
     <section
@@ -58,12 +56,14 @@ export default function SocialChannelsWidget() {
       <Reveal direction="zoom">
         <div className="relative text-center mb-7">
           <span className="text-[10px] font-bold text-[#d07f05] uppercase tracking-[0.25em] bg-[#d07f05]/10 px-3 py-1 rounded-full border border-[#d07f05]/20">
-            Network Hub
+            {t("badge")}
           </span>
           <h2 className="text-2xl md:text-3xl font-bold text-white mt-3 mb-1.5">
-            Connect Across <span className="text-[#d07f05]">Platforms</span>
+            {t.rich("heading", {
+              hl: (chunks) => <span className="text-[#d07f05]">{chunks}</span>,
+            })}
           </h2>
-          <p className="text-gray-400 text-xs">Tap a channel to see its details and join.</p>
+          <p className="text-gray-400 text-xs">{t("hint")}</p>
         </div>
 
         <div className="relative rounded-2xl border border-[#d07f05]/30 bg-[#141313]/90 backdrop-blur-md shadow-2xl overflow-hidden">
@@ -72,14 +72,14 @@ export default function SocialChannelsWidget() {
           {/* Icon dock */}
           <div className="flex items-start justify-center gap-3 sm:gap-5 px-4 pt-6 pb-5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {socialChannels.map((channel) => {
-              const isSelected = activeSocial.name === channel.name;
+              const isSelected = activeSocial.key === channel.key;
               return (
                 <button
-                  key={channel.name}
+                  key={channel.key}
                   type="button"
-                  onClick={() => setActiveSocial(channel)}
+                  onClick={() => setActiveKey(channel.key)}
                   aria-pressed={isSelected}
-                  aria-label={channel.name}
+                  aria-label={channelName(channel.key)}
                   className="group shrink-0 flex flex-col items-center gap-2 cursor-pointer focus:outline-none"
                 >
                   <span
@@ -96,7 +96,7 @@ export default function SocialChannelsWidget() {
                       isSelected ? "text-[#d07f05]" : "text-gray-500 group-hover:text-gray-300"
                     }`}
                   >
-                    {channel.name}
+                    {channelName(channel.key)}
                   </span>
                 </button>
               );
@@ -105,26 +105,26 @@ export default function SocialChannelsWidget() {
 
           {/* Details strip */}
           <div
-            key={activeSocial.name}
+            key={activeSocial.key}
             className="social-in border-t border-[#d07f05]/20 bg-[#1a1919]/80 px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-4"
           >
             <div className="min-w-0 text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-[#d07f05]/10 border border-[#d07f05]/30 text-[#d07f05] text-[10px] font-bold uppercase tracking-wider">
-                  {activeSocial.badge}
+                  {t(`channels.${activeSocial.key}.badge`)}
                 </span>
                 <span className="text-xs font-mono text-gray-400 truncate">
                   {activeSocial.handle}
                 </span>
               </div>
               <p className="mt-1.5 text-gray-300 text-xs font-light leading-relaxed line-clamp-2 max-w-md">
-                {activeSocial.description}
+                {t(`channels.${activeSocial.key}.description`)}
               </p>
             </div>
 
             {socialComingSoon ? (
               <span className="shrink-0 px-5 py-2.5 rounded-full border border-dashed border-[#d07f05]/40 text-[#d07f05]/80 text-[11px] font-mono uppercase tracking-widest">
-                Coming soon
+                {t("comingSoon")}
               </span>
             ) : (
               <a
@@ -133,7 +133,7 @@ export default function SocialChannelsWidget() {
                 rel="noopener noreferrer"
                 className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 bg-[#d07f05] text-black font-bold text-[11px] uppercase tracking-widest rounded-full hover:bg-[#e8921a] transition-all duration-300 shadow-lg"
               >
-                Join {activeSocial.name} <span>&rarr;</span>
+                {t("join", { name: channelName(activeSocial.key) })}
               </a>
             )}
           </div>

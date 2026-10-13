@@ -400,7 +400,10 @@
     "loading": "Loading Visual Archive...",
     "empty": "No visual heritage slides found.",
     "counter": "Visual Archive ({current} of {total})",
-    "goTo": "Go to slide {n}"
+    "goTo": "Go to slide {n}",
+    "eyebrow": "Gallery",
+    "title": "Visual Heritage Slideshow",
+    "subtitle": "Glimpses into our ancestral artifacts, gatherings, and historical landmarks dynamically fetched from the archive database."
   },
   "Roots": {
     "badge": "Ancestral Geography & Legacy",
@@ -906,5 +909,59 @@
         "detail": "<b>Detailed Record:</b> Following succession disputes and the incorporation of Salale into Empress Menen’s personal gult, the modern footprint stabilized. Census tracking registers the population between 13,000 and 20,500 people."
       }
     }
+  },
+  "Social": {
+    "badge": "Network Hub",
+    "heading": "Connect Across <hl>Platforms</hl>",
+    "hint": "Tap a channel to see its details and join.",
+    "comingSoon": "Coming soon",
+    "join": "Join {name} →",
+    "channels": {
+      "telegram": {
+        "name": "Telegram",
+        "description": "Daily announcements & community discussions.",
+        "badge": "Primary Hub"
+      },
+      "youtube": {
+        "name": "YouTube",
+        "description": "Documentaries & oral history archives.",
+        "badge": "Video Vault"
+      },
+      "instagram": {
+        "name": "Instagram",
+        "description": "Visual cultural landmarks & snapshots.",
+        "badge": "Gallery"
+      },
+      "tiktok": {
+        "name": "TikTok",
+        "description": "Short-form cultural proverbs & reels.",
+        "badge": "Reels"
+      }
+    }
+  },
+  "Footer": {
+    "ariaLabel": "Footer",
+    "badge": "✦ Sanctuary & Legacy ✦",
+    "about": "Preserving our history, honoring our ancestral trade routes, and uniting our global community across generations with enduring pride.",
+    "exploreTitle": "Explore",
+    "takePartTitle": "Take Part",
+    "copyright": "© {year} The Werjih Society. All rights reserved.",
+    "built": "Built with pride, heritage, and lineage.",
+    "nav": {
+      "home": "Home",
+      "unfold": "Unfold History",
+      "lineage": "History & Lineage",
+      "heroes": "Heroes & Figures",
+      "archive": "Digital Archive",
+      "relatives": "Find Your Relatives",
+      "contribute": "Contribute to the Archive",
+      "gathering": "Annual Gathering"
+    }
+  },
+  "Ticker": {
+    "p1": "GLOBAL GATHERING EVERY JUNE 22ND",
+    "p2": "PRESERVING OUR IDENTITY & HISTORY",
+    "p3": "THE UNBROKEN GENERATIONAL SHIELD",
+    "p4": "TRADE ROOTS & ANCESTRAL LEGACY"
   }
 }

@@ -1,17 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 import Reveal from "@/components/Reveal";
 
 interface Slide {
   id: string;
   title: string;
+  title_am?: string | null; // optional new Supabase columns
   image_url: string;
   description?: string;
+  description_am?: string | null;
 }
 
 export default function VisualHeritageSlideshow() {
+  const t = useTranslations("Slideshow");
+  const locale = useLocale();
+
   const [slides, setSlides] = useState<Slide[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -29,7 +35,7 @@ export default function VisualHeritageSlideshow() {
               const { data: publicUrlData } = supabase.storage
                 .from("heritage")
                 .getPublicUrl(imgPath);
-              
+
               imgPath = publicUrlData.publicUrl;
             }
 
@@ -61,61 +67,63 @@ export default function VisualHeritageSlideshow() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
+  const slide = slides[currentIndex];
+  const title = slide ? (locale === "am" && slide.title_am) || slide.title : "";
+  const description = slide
+    ? (locale === "am" && slide.description_am) || slide.description
+    : "";
+
   return (
     <section className="py-20 px-6 bg-[#0a0806] border-t border-[#d07f05]/20">
       <Reveal>
         <div className="text-center mb-10">
           <span className="text-xs font-mono tracking-[0.3em] text-[#d07f05] uppercase">
-            Gallery
+            {t("eyebrow")}
           </span>
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mt-2">
-            Visual Heritage Slideshow
+            {t("title")}
           </h2>
           <p className="text-gray-400 text-sm mt-1 max-w-xl mx-auto font-light">
-            Glimpses into our ancestral artifacts, gatherings, and historical landmarks
-            dynamically fetched from the archive database.
+            {t("subtitle")}
           </p>
         </div>
 
         {loading ? (
           <div className="w-full max-w-4xl mx-auto h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
-            Loading Visual Archive...
+            {t("loading")}
           </div>
         ) : slides.length === 0 ? (
           <div className="w-full max-w-4xl mx-auto h-[450px] flex items-center justify-center bg-[#121212] rounded-2xl border border-[#d07f05]/20 text-xs font-mono text-gray-400">
-            No visual heritage slides found.
+            {t("empty")}
           </div>
         ) : (
           <div className="w-full max-w-4xl mx-auto">
             <div className="relative w-full h-[450px] bg-[#121212] rounded-2xl border border-[rgba(214,189,19,0.35)] overflow-hidden shadow-2xl flex items-center justify-center">
-              
               {/* Blurred background atmospheric image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={slides[currentIndex].image_url} 
+              <img
+                src={slide.image_url}
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-40 scale-110"
               />
 
               {/* Main uncropped image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={slides[currentIndex].image_url}
-                alt={slides[currentIndex].title}
+              <img
+                src={slide.image_url}
+                alt={title}
                 className="relative z-10 max-h-full max-w-full object-contain shadow-lg"
               />
 
               {/* Slide Info Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 z-20 pointer-events-none">
                 <span className="text-[10px] font-mono text-[#d07f05] tracking-widest uppercase mb-1">
-                  Visual Archive ({currentIndex + 1} of {slides.length})
+                  {t("counter", { current: currentIndex + 1, total: slides.length })}
                 </span>
-                <h3 className="text-lg md:text-xl font-bold text-white mb-1">
-                  {slides[currentIndex].title}
-                </h3>
-                {slides[currentIndex].description && (
+                <h3 className="text-lg md:text-xl font-bold text-white mb-1">{title}</h3>
+                {description && (
                   <p className="text-gray-300 text-xs md:text-sm font-light line-clamp-2 max-w-2xl">
-                    {slides[currentIndex].description}
+                    {description}
                   </p>
                 )}
               </div>
@@ -130,7 +138,7 @@ export default function VisualHeritageSlideshow() {
                     className={`h-1.5 rounded-full transition-all duration-300 ${
                       currentIndex === idx ? "w-6 bg-[#d07f05]" : "w-1.5 bg-white/40 hover:bg-white"
                     }`}
-                    aria-label={`Go to slide ${idx + 1}`}
+                    aria-label={t("goTo", { n: idx + 1 })}
                   />
                 ))}
               </div>

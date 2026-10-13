@@ -1,17 +1,19 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
+// Labels are translated in messages "Footer.nav.<key>"
 const footerExplore = [
-  { href: "/", label: "Home" },
-  { href: "/#unfold-history", label: "Unfold History" },
-  { href: "/#leadership", label: "History & Lineage" },
-  { href: "/heroes", label: "Heroes & Figures" },
-  { href: "/archive", label: "Digital Archive" },
+  { href: "/", key: "home" },
+  { href: "/#unfold-history", key: "unfold" },
+  { href: "/#leadership", key: "lineage" },
+  { href: "/heroes", key: "heroes" },
+  { href: "/archive", key: "archive" },
 ];
 
 const footerTakePart = [
-  { href: "/#community", label: "Find Your Relatives" },
-  { href: "/#contribution-portal", label: "Contribute to the Archive" },
-  { href: "/#gatherings-events", label: "Annual Gathering" },
+  { href: "/#community", key: "relatives" },
+  { href: "/#contribution-portal", key: "contribute" },
+  { href: "/#gatherings-events", key: "gathering" },
 ];
 
 const FooterItem = ({ href, label }: { href: string; label: string }) => (
@@ -32,6 +34,8 @@ const FooterItem = ({ href, label }: { href: string; label: string }) => (
 );
 
 export default function Footer() {
+  const t = useTranslations("Footer");
+
   return (
     <footer className="relative mt-16 md:mt-24 overflow-hidden border-t border-[#d07f05]/20 bg-gradient-to-b from-[#080605] to-[#020101] font-serif text-gray-400">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-[#d07f05]/60 to-transparent" />
@@ -52,7 +56,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-6 space-y-4">
             <span className="inline-flex items-center text-[9px] font-mono tracking-[0.3em] uppercase text-[#d07f05] bg-[#d07f05]/10 px-3.5 py-1 rounded-full border border-[#d07f05]/25">
-              ✦ Sanctuary &amp; Legacy ✦
+              {t("badge")}
             </span>
             <div className="text-2xl md:text-3xl font-normal text-white tracking-wide leading-tight">
               THE{" "}
@@ -61,31 +65,30 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-xs font-sans font-light text-[#ab9f94] leading-relaxed max-w-sm">
-              Preserving our history, honoring our ancestral trade routes, and uniting our
-              global community across generations with enduring pride.
+              {t("about")}
             </p>
           </div>
 
           {/* Lists */}
-          <nav aria-label="Footer" className="md:col-span-6 grid grid-cols-2 gap-8">
+          <nav aria-label={t("ariaLabel")} className="md:col-span-6 grid grid-cols-2 gap-8">
             <div>
               <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05] mb-3">
-                Explore
+                {t("exploreTitle")}
               </h4>
               <ul className="font-sans text-sm">
                 {footerExplore.map((item) => (
-                  <FooterItem key={item.href} {...item} />
+                  <FooterItem key={item.href} href={item.href} label={t(`nav.${item.key}`)} />
                 ))}
               </ul>
             </div>
 
             <div>
               <h4 className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#d07f05] mb-3">
-                Take Part
+                {t("takePartTitle")}
               </h4>
               <ul className="font-sans text-sm">
                 {footerTakePart.map((item) => (
-                  <FooterItem key={item.href} {...item} />
+                  <FooterItem key={item.href} href={item.href} label={t(`nav.${item.key}`)} />
                 ))}
               </ul>
             </div>
@@ -94,9 +97,9 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 pt-5 border-t border-[#221c17] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-sans text-[#8c7e72]">
-          <p>&copy; {new Date().getFullYear()} The Werjih Society. All rights reserved.</p>
+          <p>{t("copyright", { year: new Date().getFullYear() })}</p>
           <p className="font-mono text-[10px] uppercase tracking-widest text-[#d07f05]/80">
-            Built with pride, heritage, and lineage.
+            {t("built")}
           </p>
         </div>
       </div>

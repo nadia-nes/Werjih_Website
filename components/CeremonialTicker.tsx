@@ -1,15 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
-const tickerPhrases = [
-  "GLOBAL GATHERING EVERY Jne 22'nd",
-  "PRESERVING OUR IDENTITY & HISTORY",
-  "THE UNBROKEN GENERATIONAL SHIELD",
-  "TRADE ROOTS & ANCESTRAL LEGACY",
-];
+const PHRASE_KEYS = ["p1", "p2", "p3", "p4"] as const;
 
 export default function CeremonialTicker() {
+  const t = useTranslations("Ticker");
   const [isPaused, setIsPaused] = useState(false);
 
   const tickerMask = {
@@ -35,10 +32,10 @@ export default function CeremonialTicker() {
                 animationPlayState: isPaused ? "paused" : "running",
               }}
             >
-              {tickerPhrases.map((phrase, index) => (
-                <div key={`${copy}-${index}`} className="flex items-center space-x-10">
+              {PHRASE_KEYS.map((key) => (
+                <div key={`${copy}-${key}`} className="flex items-center space-x-10">
                   <span className="text-xs font-mono tracking-[0.25em] uppercase text-[#d07f05]/90 font-medium">
-                    {phrase}
+                    {t(key)}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#d07f05] animate-pulse" />
                 </div>
