@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 import Reveal from "@/components/Reveal";
 
@@ -9,10 +10,14 @@ interface HeroItem {
   id: string;
   name?: string;
   title?: string;
+  title_am?: string | null; // optional new Supabase column
   image_url?: string;
 }
 
 export default function HeroesPreview() {
+  const t = useTranslations("HeroesPreview");
+  const locale = useLocale();
+
   const [heroes, setHeroes] = useState<HeroItem[]>([]);
 
   useEffect(() => {
@@ -55,14 +60,11 @@ export default function HeroesPreview() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="space-y-2 max-w-xl">
               <div className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#d07f05]">
-                ★ Werjih Heroes &amp; Historical Figures
+                {t("eyebrow")}
               </div>
-              <h3 className="text-2xl sm:text-3xl font-serif text-[#f7f3ed]">
-                Explore Our Documented Lineage &amp; Sacrifices
-              </h3>
+              <h3 className="text-2xl sm:text-3xl font-serif text-[#f7f3ed]">{t("title")}</h3>
               <p className="text-[#ab9f94] text-sm font-sans font-light leading-relaxed">
-                Discover the documented profiles, heroic sacrifices, and lifelong contributions
-                of leaders who shaped our society.
+                {t("text")}
               </p>
             </div>
 
@@ -78,7 +80,7 @@ export default function HeroesPreview() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={hero.image_url}
-                          alt={hero.title || "Hero"}
+                          alt={(locale === "am" && hero.title_am) || hero.title || t("alt")}
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -87,7 +89,7 @@ export default function HeroesPreview() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs font-mono text-[#ab9f94]">Loading...</div>
+                  <div className="text-xs font-mono text-[#ab9f94]">{t("loading")}</div>
                 )}
               </div>
 
@@ -95,7 +97,7 @@ export default function HeroesPreview() {
                 href="/heroes"
                 className="inline-flex items-center space-x-2 text-xs font-mono uppercase tracking-widest text-[#d07f05] border border-[#d07f05]/40 hover:border-[#d07f05] px-5 py-3 rounded-xl transition-all duration-300 hover:bg-[#d07f05]/10 whitespace-nowrap"
               >
-                <span>View Full Archive</span>
+                <span>{t("cta")}</span>
                 <span>→</span>
               </Link>
             </div>

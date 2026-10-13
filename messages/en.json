@@ -958,10 +958,19 @@
       "gathering": "Annual Gathering"
     }
   },
+
   "Ticker": {
     "p1": "GLOBAL GATHERING EVERY JULY 22",
     "p2": "PRESERVING OUR IDENTITY & HISTORY",
     "p3": "THE UNBROKEN GENERATIONAL SHIELD",
     "p4": "TRADE ROOTS & ANCESTRAL LEGACY"
+  },
+    "HeroesPreview": {
+    "eyebrow": "★ Werjih Heroes & Historical Figures",
+    "title": "Explore Our Documented Lineage & Sacrifices",
+    "text": "Discover the documented profiles, heroic sacrifices, and lifelong contributions of leaders who shaped our society.",
+    "loading": "Loading...",
+    "cta": "View Full Archive",
+    "alt": "Hero"
   }
 }
