@@ -64,7 +64,7 @@ export default function Hero() {
         <div className="w-full max-w-[21rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none p-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
           
           {/* Heading */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.35rem] sm:text-[3.9rem] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8] whitespace-nowrap">
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.35rem] sm:text-[3.9rem] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               {t("title")}
             </span>
