@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useSyncExternalStore, useTransition } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
 
 type Locale = "en" | "am";
 
@@ -12,23 +11,17 @@ const hasChosen = () => document.cookie.includes("NEXT_LOCALE=");
 
 export default function LanguageSwitcher() {
   const locale = useLocale() as Locale;
-  const router = useRouter();
-  const [, startTransition] = useTransition();
 
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const chosen = useSyncExternalStore(subscribe, hasChosen, () => true);
   const [dismissed, setDismissed] = useState(false);
 
   const setLocale = (l: Locale) => {
-    // 1. Properly set cookie with standard casing & max age
     document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; SameSite=Lax`;
     setDismissed(true);
-
-    // 2. Refresh Next router state and trigger reload for mobile browsers
-    startTransition(() => {
-      router.refresh();
-      window.location.reload();
-    });
+    
+    // Force a full browser reload so the server reads the new cookie
+    window.location.reload();
   };
 
   const showModal = mounted && !chosen && !dismissed;
