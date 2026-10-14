@@ -47,9 +47,9 @@ export default function MemorialPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#D97706] selection:text-black py-10 px-6 relative">
+    <main className="min-h-screen bg-[#0f0e0e] text-white selection:bg-[#D97706] selection:text-black pt-28 md:pt-36 pb-16 px-6 relative">
       {/* Hero Header */}
-      <div className="max-w-4xl mx-auto text-center mb-16">
+      <div className="max-w-4xl mx-auto text-center mb-16 scroll-mt-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

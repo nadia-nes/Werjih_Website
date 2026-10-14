@@ -67,7 +67,7 @@ export default function ProgramsAndEventsPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="min-h-screen bg-[#070605] text-[#e8dfd3] font-serif selection:bg-[#D97706] selection:text-black py-20 px-4 sm:px-12 relative overflow-hidden"
+      className="min-h-screen bg-[#070605] text-[#e8dfd3] font-serif selection:bg-[#D97706] selection:text-black pt-28 sm:pt-36 pb-20 px-4 sm:px-12 relative overflow-hidden"
     >
       {/* Ambient Background Glows */}
       <div className="absolute top-10 left-1/4 w-[35rem] h-[35rem] bg-[#D97706]/8 rounded-full blur-[130px] pointer-events-none" />
@@ -75,7 +75,7 @@ export default function ProgramsAndEventsPage() {
 
       <div className="max-w-4xl mx-auto space-y-20 relative z-10">
         {/* Header / Breadcrumb */}
-        <div className="space-y-6 border-b border-[#2d2722] pb-10 text-center sm:text-left">
+        <div className="space-y-6 border-b border-[#2d2722] pb-10 text-center sm:text-left scroll-mt-32">
           <div className="inline-flex items-center space-x-2 text-[10px] font-mono tracking-[0.35em] uppercase text-[#D97706] bg-[#D97706]/10 px-3 py-1 rounded-full border border-[#D97706]/30">
             <span>{t("crumbArchive")}</span>
             <span>/</span>

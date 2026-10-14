@@ -37,9 +37,9 @@ export default function MarriageTraditionPage() {
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#D66D13]/5 blur-[160px] rounded-full" />
       </div>
 
-      <div className="max-w-3xl mx-auto px-6 py-24 relative z-10">
+      <div className="max-w-3xl mx-auto px-6 pt-28 md:pt-36 pb-24 relative z-10">
         {/* EDITORIAL HEADER */}
-        <header className="text-center mb-20">
+        <header className="text-center mb-20 scroll-mt-32">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#121212] border border-[#D66D13]/20 text-[#D66D13] text-[11px] font-mono tracking-[0.2em] uppercase mb-8 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D66D13] animate-pulse" />
             {t('badge')}

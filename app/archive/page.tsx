@@ -103,14 +103,14 @@ export default function ArchiveHubPage() {
       : items.filter((item) => item.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-[#070605] text-[#e8dfd3] font-serif py-24 px-5 sm:px-12 relative overflow-hidden selection:bg-[#d07f05] selection:text-black">
+    <div className="min-h-screen bg-[#070605] text-[#e8dfd3] font-serif pt-28 sm:pt-36 pb-24 px-5 sm:px-12 relative overflow-hidden selection:bg-[#d07f05] selection:text-black">
       {/* Immersive Background Architectural Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[50rem] h-[25rem] bg-gradient-to-b from-[#d07f05]/10 via-[#d07f05]/3 to-transparent blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 left-1/10 w-[30rem] h-[30rem] bg-[#d07f05]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto space-y-16 relative z-10">
         {/* Modern Classic Header */}
-        <div className="space-y-6 text-center max-w-3xl mx-auto">
+        <div className="space-y-6 text-center max-w-3xl mx-auto scroll-mt-32">
           <div className="inline-flex items-center space-x-2 text-[10px] font-mono tracking-[0.4em] uppercase text-[#d07f05] bg-[#d07f05]/10 px-4 py-1.5 rounded-full border border-[#d07f05]/25 shadow-inner">
             <Sparkles className="w-3 h-3 text-[#d07f05]" />
             <span>{t("badge")}</span>

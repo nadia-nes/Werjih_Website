@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <section className="relative h-auto min-h-[78svh] lg:min-h-[100dvh] w-full overflow-hidden bg-[#0b0a09] text-[#f1e9d8] flex items-center">
       
-      {/* Background Image Container with Container-Level Blend Mode */}
+      {/* Background Image Container with Container-Level Blend Mode (Mobile/Tablet) */}
       <div className="absolute inset-0 z-0 lg:hidden">
         <div className="relative w-full h-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -30,10 +30,14 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Split Desktop Background (40 / 60 ratio) */}
       <div className="absolute inset-0 hidden lg:grid grid-cols-12 items-center">
-        <div className="col-span-6 h-full w-full bg-[#0b0a09]" />
+        {/* Dark Left Side (~40%) */}
+        <div className="col-span-5 h-full w-full bg-[#0b0a09]" />
+        
+        {/* Image Right Side (~60%) */}
         <motion.div
-          className="col-span-6 h-full relative overflow-hidden"
+          className="col-span-7 h-full relative overflow-hidden"
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: reduce ? 0 : 2.2, ease }}
@@ -60,7 +64,7 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        {/* Glass container using a fluid max-width for safe scaling on middle screens */}
+        {/* Glass container */}
         <div className="w-full max-w-full sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
           
           {/* Heading */}
