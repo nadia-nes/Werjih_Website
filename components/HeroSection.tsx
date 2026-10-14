@@ -55,23 +55,23 @@ export default function Hero() {
 
       {/* Content Container */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 pt-44 sm:pt-44 pb-10 sm:pb-16 lg:pt-20"
+        className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 pt-44 sm:pt-44 pb-10 sm:pb-16 lg:pt-20"
         initial={{ opacity: 0, y: reduce ? 0 : 24, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
-        {/* Glass container on mobile/tablet; transparent clean layout on desktop */}
-        <div className="w-full max-w-[22.5rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none px-3.5 py-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
+        {/* Glass container using a fluid max-width for safe scaling on middle screens */}
+        <div className="w-full max-w-full sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
           
-          {/* Heading - clamp keeps it single-line on all mobile screens */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(1rem,4.8vw,1.35rem)] sm:text-[3.9rem] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8] whitespace-nowrap">
+          {/* Heading */}
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(1.2rem,3.5vw,3.9rem)] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8] whitespace-nowrap">
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               {t("title")}
             </span>
           </h1>
 
           {/* Description */}
-          <p className="mt-2 sm:mt-3 lg:mt-4 font-[family-name:var(--font-cormorant)] text-[12px] sm:text-[19px] lg:text-[18px] leading-[1.5] sm:leading-[1.6] tracking-normal sm:tracking-wide text-[#cfc6b3]">
+          <p className="mt-2 sm:mt-3 lg:mt-4 font-[family-name:var(--font-cormorant)] text-[14px] sm:text-[19px] lg:text-[18px] leading-[1.5] sm:leading-[1.6] tracking-normal sm:tracking-wide text-[#cfc6b3]">
             {t("description")}
           </p>
 
