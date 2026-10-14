@@ -61,10 +61,10 @@ export default function Hero() {
         transition={{ duration: reduce ? 0 : 1.4, delay: reduce ? 0 : 0.4, ease }}
       >
         {/* Glass container on mobile/tablet; transparent clean layout on desktop */}
-        <div className="w-full max-w-[21rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none p-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
+        <div className="w-full max-w-[22.5rem] sm:max-w-xl lg:max-w-xl bg-black/45 backdrop-blur-[6px] lg:bg-transparent lg:backdrop-blur-none px-3.5 py-4 sm:p-8 lg:p-0 rounded-2xl lg:rounded-none border border-white/15 lg:border-none shadow-2xl lg:shadow-none">
           
-          {/* Heading */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[1.35rem] sm:text-[3.9rem] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8]">
+          {/* Heading - clamp keeps it single-line on all mobile screens */}
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[clamp(1rem,4.8vw,1.35rem)] sm:text-[3.9rem] lg:text-[3.4rem] font-light leading-[1.1] tracking-[0.01em] text-[#f1e9d8] whitespace-nowrap">
             <span className="relative inline-block pr-1 font-normal italic text-[#e88d22]">
               {t("title")}
             </span>
