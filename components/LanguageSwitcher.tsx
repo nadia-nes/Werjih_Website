@@ -20,8 +20,8 @@ export default function LanguageSwitcher() {
     document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; SameSite=Lax`;
     setDismissed(true);
     
-    // Force a full browser reload so the server reads the new cookie
-    window.location.reload();
+    // Force a cache-busting reload so mobile browsers and Vercel fetch the correct language
+    window.location.href = window.location.pathname + "?t=" + Date.now();
   };
 
   const showModal = mounted && !chosen && !dismissed;
