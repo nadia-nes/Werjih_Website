@@ -1,66 +1,64 @@
-"use client";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Noto_Sans_Ethiopic } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import Navbar from "@/components/Navbar";
+import ScrollThumb from "@/components/ScrollToTop";
+import "./globals.css";
 
-import { useState, useSyncExternalStore } from "react";
-import { createPortal } from "react-dom";
-import { useLocale } from "next-intl";
+// FORCE DYNAMIC: Prevents Vercel from caching static HTML at the edge,
+// ensuring the server reads the NEXT_LOCALE cookie fresh on every request.
+export const dynamic = 'force-dynamic';
 
-type Locale = "en" | "am";
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
-const subscribe = () => () => {};
-const hasChosen = () => document.cookie.includes("NEXT_LOCALE=");
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
-export default function LanguageSwitcher() {
-  const locale = useLocale() as Locale;
+const ethiopic = Noto_Sans_Ethiopic({
+  variable: "--font-ethiopic",
+  subsets: ["ethiopic"],
+  display: "swap",
+});
 
-  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
-  const chosen = useSyncExternalStore(subscribe, hasChosen, () => true);
-  const [dismissed, setDismissed] = useState(false);
+export const metadata: Metadata = {
+  title: "The Werjih Society",
+  description: "Ancient Heritage & Legacy",
+};
 
-  const setLocale = (l: Locale) => {
-    document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; SameSite=Lax`;
-    setDismissed(true);
-    
-    // Force a cache-busting reload so mobile browsers and Vercel fetch the correct language
-    window.location.href = window.location.pathname + "?t=" + Date.now();
-  };
+export const viewport: Viewport = {
+  themeColor: "#0c0a09",
+};
 
-  const showModal = mounted && !chosen && !dismissed;
-
-  const modal = (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-[#d07f05]/40 bg-[#121212] p-8 text-center">
-        <h2 className="text-2xl text-white mb-1">Choose your language</h2>
-        <h2 className="text-2xl text-white mb-6">ቋንቋዎን ይምረጡ</h2>
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={() => setLocale("en")}
-            className="flex-1 rounded-full bg-[#d07f05] py-3 font-semibold text-black hover:bg-white transition-colors"
-          >
-            English
-          </button>
-          <button
-            type="button"
-            onClick={() => setLocale("am")}
-            className="flex-1 rounded-full bg-[#d07f05] py-3 font-semibold text-black hover:bg-white transition-colors"
-          >
-            አማርኛ
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const locale = await getLocale();
+  const messages = await getMessages();
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={() => setLocale(locale === "en" ? "am" : "en")}
-        className="rounded-full border border-[#d07f05]/50 px-3 py-2 text-xs font-semibold text-[#d07f05] transition-colors hover:bg-[#d07f05] hover:text-black"
-      >
-        {locale === "en" ? "አማርኛ" : "English"}
-      </button>
-      {showModal && createPortal(modal, document.body)}
-    </>
+    <html
+      lang={locale}
+      translate="no"
+      className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} h-full antialiased`}
+    >
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#0c0a09] text-white">
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <ScrollThumb />
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
