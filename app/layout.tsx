@@ -25,6 +25,10 @@ const ethiopic = Noto_Sans_Ethiopic({
 export const metadata: Metadata = {
   title: "The Werjih Society",
   description: "Ancient Heritage & Legacy",
+  // Stops Google Chrome from auto-translating proper names and pages
+  other: {
+    google: "notranslate",
+  },
 };
 
 export const viewport: Viewport = {
@@ -42,6 +46,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      translate="no"
       className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0c0a09] text-white">
