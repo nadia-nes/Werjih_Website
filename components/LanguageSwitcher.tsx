@@ -20,9 +20,15 @@ export default function LanguageSwitcher() {
   const [dismissed, setDismissed] = useState(false);
 
   const setLocale = (l: Locale) => {
-    document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; samesite=lax`;
+    // 1. Properly set cookie with standard casing & max age
+    document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; SameSite=Lax`;
     setDismissed(true);
-    startTransition(() => router.refresh());
+
+    // 2. Refresh Next router state and trigger reload for mobile browsers
+    startTransition(() => {
+      router.refresh();
+      window.location.reload();
+    });
   };
 
   const showModal = mounted && !chosen && !dismissed;
@@ -34,12 +40,14 @@ export default function LanguageSwitcher() {
         <h2 className="text-2xl text-white mb-6">ቋንቋዎን ይምረጡ</h2>
         <div className="flex gap-3">
           <button
+            type="button"
             onClick={() => setLocale("en")}
             className="flex-1 rounded-full bg-[#d07f05] py-3 font-semibold text-black hover:bg-white transition-colors"
           >
             English
           </button>
           <button
+            type="button"
             onClick={() => setLocale("am")}
             className="flex-1 rounded-full bg-[#d07f05] py-3 font-semibold text-black hover:bg-white transition-colors"
           >
