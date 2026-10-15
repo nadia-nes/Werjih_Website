@@ -63,7 +63,11 @@ export default async function RootLayout({
       translate={locale === "am" ? "no" : undefined}
       className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} ${cormorant.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0c0a09] text-white">
+      <body
+        className={`min-h-full flex flex-col bg-[#0c0a09] text-white ${
+          locale === "am" ? "notranslate" : ""
+        }`}
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
           <main className="flex-1">{children}</main>
