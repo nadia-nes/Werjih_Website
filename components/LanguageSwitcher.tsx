@@ -7,8 +7,7 @@ import { useLocale } from "next-intl";
 type Locale = "en" | "am";
 
 const subscribe = () => () => {};
-const hasChosen = () =>
-  typeof document !== "undefined" && document.cookie.includes("NEXT_LOCALE=");
+const hasChosen = () => document.cookie.includes("NEXT_LOCALE=");
 
 export default function LanguageSwitcher() {
   const locale = useLocale() as Locale;
@@ -18,9 +17,19 @@ export default function LanguageSwitcher() {
   const [dismissed, setDismissed] = useState(false);
 
   const setLocale = (l: Locale) => {
-    document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; SameSite=Lax`;
-    setDismissed(true);
-    window.location.href = window.location.pathname + "?t=" + Date.now();
+    document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; samesite=lax`;
+
+    // Remove the old Google Translate widget cookie if it is still in the browser
+    const gone = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    document.cookie = gone;
+    document.cookie = `${gone}; domain=${location.hostname}`;
+
+    if (l === locale) {
+      setDismissed(true);
+      return;
+    }
+    // Full reload so the page (and its lang attribute) loads in one consistent language
+    window.location.reload();
   };
 
   const showModal = mounted && !chosen && !dismissed;
@@ -32,14 +41,12 @@ export default function LanguageSwitcher() {
         <h2 className="text-2xl text-white mb-6">ቋንቋዎን ይምረጡ</h2>
         <div className="flex gap-3">
           <button
-            type="button"
             onClick={() => setLocale("en")}
             className="flex-1 rounded-full bg-[#d07f05] py-3 font-semibold text-black hover:bg-white transition-colors"
           >
             English
           </button>
           <button
-            type="button"
             onClick={() => setLocale("am")}
             className="flex-1 rounded-full bg-[#d07f05] py-3 font-semibold text-black hover:bg-white transition-colors"
           >

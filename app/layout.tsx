@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Noto_Sans_Ethiopic } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Noto_Sans_Ethiopic,
+  Cormorant_Garamond,
+} from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import Navbar from "@/components/Navbar";
@@ -22,14 +27,23 @@ const ethiopic = Noto_Sans_Ethiopic({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "The Werjih Society",
-  description: "Ancient Heritage & Legacy",
-  // Stops Google Chrome from auto-translating proper names and pages
-  other: {
-    google: "notranslate",
-  },
-};
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return {
+    title: "The Werjih Society",
+    description: "Ancient Heritage & Legacy",
+    // Stops Chrome from auto-translating the Amharic page back into English
+    other: locale === "am" ? { google: "notranslate" } : {},
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0c0a09",
@@ -46,8 +60,8 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      translate="no"
-      className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} h-full antialiased`}
+      translate={locale === "am" ? "no" : undefined}
+      className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0c0a09] text-white">
         <NextIntlClientProvider locale={locale} messages={messages}>
