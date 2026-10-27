@@ -36,12 +36,13 @@ const cormorant = Cormorant_Garamond({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
   return {
     title: "The Werjih Society",
     description: "Ancient Heritage & Legacy",
-    // Stops Chrome from auto-translating the Amharic page back into English
-    other: locale === "am" ? { google: "notranslate" } : {},
+    // Prevents mobile auto-translate engines from interfering with next-intl
+    other: {
+      google: "notranslate",
+    },
   };
 }
 
@@ -60,14 +61,10 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      translate={locale === "am" ? "no" : undefined}
-      className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} ${cormorant.variable} h-full antialiased`}
+      translate="no"
+      className={`${geistSans.variable} ${geistMono.variable} ${ethiopic.variable} ${cormorant.variable} notranslate h-full antialiased`}
     >
-      <body
-        className={`min-h-full flex flex-col bg-[#0c0a09] text-white ${
-          locale === "am" ? "notranslate" : ""
-        }`}
-      >
+      <body className="min-h-full flex flex-col bg-[#0c0a09] text-white notranslate">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
           <main className="flex-1">{children}</main>
