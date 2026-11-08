@@ -21,13 +21,7 @@ interface AncestralRecord {
 
 type ScoredRecord = AncestralRecord & { score: number };
 
-const clansList = [
-  "WERJIH", "ABDILABO", "SHANKOLI", "KEKU", "ALI-SHITO", "JELDU", "HANBISO",
-  "HAJI-MOHAMEDO", "AWLIJAN", "KELILO", "AWASO", "ISLAMEDIN", "EMERDIN",
-  "SHEKRA", "SIMENE", "WEDEFERE", "ABDELO", "MAMEDASH", "WEKREBI", "SERBO",
-  "AKOBI", "AL-KEBA", "HAJI-ALIY", "SHUMREDA", "DINGAY-ZERO",
-];
-
+const clansList = ["ABDELO", "ABDILABO", "AKOBI", "ALI-SHITO", "AL-KEBA", "AWASO", "AWLIJAN", "DINGAY-ZERO", "EMERDIN", "HAJI-ALIY", "HAJI-MOHAMEDO", "HANBISO", "ISLAMEDIN", "JELDU", "KEKU", "KELILO", "MAMEDASH", "SERBO", "SHANKOLI", "SHEKRA", "SHUMREDA", "SIMENE", "WEDEFERE", "WEKREBI", "WERJIH"];
 const STEP_KEYS = ["you", "father", "mother", "connect"] as const;
 const COLLAPSED_CLANS = 10;
 
