@@ -110,15 +110,15 @@ function HeroItem({
           transition={{ duration: 0.4 }}
           className="mt-6 space-y-8 pt-6 border-t border-[#3a332d]/60 font-sans"
         >
-          {/* Hero Portrait & Audio Grid if available */}
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
-            <div className="sm:col-span-5 relative aspect-square rounded-xl overflow-hidden border border-[#3a332d] bg-[#121110]">
+          {/* Hero Portrait & Audio Grid if available - Fixed alignment & aspect sizing */}
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-start pt-2">
+            <div className="sm:col-span-4 relative w-full h-72 sm:h-80 rounded-xl overflow-hidden border border-[#3a332d] bg-[#121110]">
               {hero.image_url ? (
                 <Image
                   src={hero.image_url}
                   alt={title || t("imageAlt")}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-[#736a61] space-y-2">
@@ -130,7 +130,7 @@ function HeroItem({
               )}
             </div>
 
-            <div className="sm:col-span-7 space-y-4">
+            <div className="sm:col-span-8 space-y-4">
               <h3 className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#d07f05]">
                 {t("biography")}
               </h3>
