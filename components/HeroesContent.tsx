@@ -38,6 +38,14 @@ const BASE_HEROES: Hero[] = [
     image_url: "",
     audio_url: "",
   },
+    {
+    id: "fekahmed-negash-nuru",
+    key: "fekahmed",
+    matchTitle: "Fekahmed Negash",
+    amharicName: "ፈቃህመድ ነጋሽ ኑሩ",
+    image_url: "",
+    audio_url: "",
+  }
 ];
 
 function HeroItem({
